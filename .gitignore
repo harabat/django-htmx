@@ -13,3 +13,6 @@ venv/
 
 # Static folder at project root
 /static/
+
+# Emacs
+.dir-locals.el
