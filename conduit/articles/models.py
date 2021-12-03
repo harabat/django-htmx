@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 
-
 # Create your models here.
 class Article(models.Model):
     # the title of the article
@@ -12,7 +11,9 @@ class Article(models.Model):
 
     # the author of the article
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="articles"
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        # related_name="articles"
     )
 
     # A timestamp representing when this object was created.
