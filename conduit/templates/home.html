@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+    <!-- banner -->
+    <div class="banner">
+        <h1 class="logo-font">conduit</h1>
+        <p>A place to share your knowledge.</p>
+    </div>
+    <div class="home-page">
+        {% for article in articles %}
+            <!-- preview author, created_at, title, description for each article -->
+            <div class="article-preview">
+                <div class="article-meta">
+                    <div class="info">
+                        {{  article.author }}
+                        <span class="date">
+                            {{ article.created_at|date:"D M d Y" }}
+                        </span>
+                    </div>
+                </div>
+                <a href="" rel="prefetch" class="preview-link">
+                    <h1>{{ article.title }}</h1>
+                    <p>{{ article.description }}</p>
+                    <span>Read more...</span>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,16 +1,23 @@
-<!-- <!doctype html>
-     <html lang="en">
-     <head>
-     <meta charset="utf-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-     <link rel="shortcut icon" href="icons/favicon.ico">
-     <link rel="stylesheet" href="//demo.productionready.io/main.css">
-     <link href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
-     <link href="//fonts.googleapis.com/css?family=Titillium+Web:700|Source+Serif+Pro:400,700|Merriweather+Sans:400,700|Source+Sans+Pro:400,300,600,700,300italic,400italic,600italic,700italic&display=swap" rel="stylesheet" type="text/css">
-     <title>Conduit: Django + HTMX</title>
-     </head>
-     <body>
-     <div id="root"></div>
-     </body>
-     </html> -->
+<!doctype html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- favicon -->
+        <link rel="icon" href="{%  static '/icons/favicon.ico' %}">
+        <!-- Thinkster's CSS -->
+        <link rel="stylesheet" href="https://demo.productionready.io/main.css">
+        <!-- icons for later -->
+        <link href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
+        <!-- fonts -->
+        <link href="//fonts.googleapis.com/css?family=Titillium+Web:700|Source+Serif+Pro:400,700|Merriweather+Sans:400,700|Source+Sans+Pro:400,300,600,700,300italic,400italic,600italic,700italic&display=swap" rel="stylesheet" type="text/css">
+        <title>Conduit: Django + HTMX</title>
+    </head>
+    <body>
+        <main class="container">
+            {% block content %}
+            {% endblock %}
+        </main>
+    </body>
+</html>
