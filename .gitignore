@@ -1,3 +1,6 @@
+# git
+.gitignore
+
 # Python
 *.pyc
 *~
@@ -16,3 +19,6 @@ venv/
 
 # Emacs
 .dir-locals.el
+
+# tutorial
+tutorial/
