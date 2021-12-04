@@ -3,8 +3,11 @@ from django.conf import settings
 
 # Create your models here.
 class Article(models.Model):
+    # slug for the article, for urls
+    slug = models.SlugField(db_index=True, max_length=255, unique=True)
+
     # the title of the article
-    title = models.CharField(db_index=True, max_length=100)
+    title = models.CharField(max_length=100)
 
     # the text of the article
     body = models.TextField()
