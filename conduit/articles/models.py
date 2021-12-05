@@ -1,11 +1,15 @@
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
+import uuid
 
 
 class Article(models.Model):
-    # slug for the article, for urls
-    # slug = models.SlugField(db_index=True, max_length=100, unique=True, editable=True)
+    # slug for the article, for URLs
+    slug = models.SlugField(max_length=255, editable=False)
+
+    # UUID
+    uuid_field = models.UUIDField(default=uuid.uuid4, editable=False)
 
     # the title of the article
     title = models.CharField(max_length=100)
@@ -31,5 +35,4 @@ class Article(models.Model):
 
     # will be helpful in the admin app later on
     def get_absolute_url(self):
-        return reverse("article_detail", kwargs={"pk": self.pk})
-        # return reverse("article_detail", kwargs={"slug": self.slug})
+        return reverse("article_detail", kwargs={"slug": self.slug})
