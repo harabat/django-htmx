@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="article-page">
+        <div class="banner">
+            <div class="container">
+                <h1>{{ article.title }}</h1>
+                <div class="article-meta">
+                    <div class="info">
+                        {{ article.author }}
+                        <span class="date">
+                            {{ article.created_at|date:"F d, Y" }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container page">
+            <div class="row article-content">
+                <div class="col-xs-12">
+                    <div>
+                        {{ article.body|linebreaks }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
