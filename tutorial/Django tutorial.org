@@ -1,0 +1,577 @@
+:PROPERTIES:
+:ID:       a35b9773-9529-41fd-bbc3-3c2b071047e4
+#+PROPERTY: header-args :eval no
+:END:
+#+title: Django tutorial
+
+* Introduction
+We'll build the [[https://github.com/gothinkster/django-realworld-example-app.git][Thinkster's Django RealWorld Example App]] from the ground up. The app is called Conduit and is a Medium clone.
+
+Instead of only building the backend in Django, we'll do both frontend and backend, to show that SSR is still going strong.
+
+We'll be following a simplified version of the [[https://github.com/cookiecutter/cookiecutter-django/][cookiecutter/cookiecutter-django]] architecture (made famous by the excellent book [[https://www.feldroy.com/books/two-scoops-of-django-3-x][Two Scoops of Django 3.x]]), but you don't need to have read it to follow.
+* Pre-requisites
+** [[https://github.com/DjangoGirls/tutorial][DjangoGirls tutorial]]
+You should have followed the [[https://github.com/DjangoGirls/tutorial][DjangoGirls tutorial]] before starting this one: it is excellent for getting you up to speed, and covers most of the introductory material you'll need, like HTML, CSS, and, of course, Django. We'll assume you have completed that tutorial and won't go into the specifics of anything that has already been covered there.
+** Python 3.9
+** Django 3.2
+** Changes compared to django-realworld-example-app
+- The =core.TimestampedModel= mostly exists to allow default ordering, which is [[https://docs.djangoproject.com/en/3.2/ref/models/options/#ordering][not recommended]], so we'll do without.
+** conda or pyvenv for virtual environments
+** git
+* Virtual environment
+We're working with =conda=, but you can work with =python3-venv=.
+
+#+begin_example shell
+conda create --name django
+conda activate django
+conda install django
+#+end_example
+* Git
+We assume that you know the basics of git. You should =git commit= at the end of every chapter.
+* Creating a project
+Let's create a folder for our project.
+
+The folder will be =Django_tutorial= and the project will be =conduit=.
+
+#+begin_example shell
+(django) ~$ mkdir django_tutorial
+(django) ~$ cd django_tutorial
+(django) django_tutorial$ django-admin startproject conduit
+#+end_example
+* Change settings
+** TODO PostgreSQL
+Following the arguments of [[https://htmx-django.com/blog/a-minimalistic-modern-django-boilerplate#docker][A Minimalistic Modern Django Boilerplate]]
+* Create a database
+Make the migrations and start the server:
+
+#+begin_example shell
+(django) django_tutorial$ python manage.py migrate
+(django) django_tutorial$ python manage.py runserver
+#+end_example
+
+Our app, Conduit, is online!
+* App folder structure
+We'll create apps for core, articles, and profiles because there is a Our app will have a lot of moving parts (articles, profiles, tags, etc.). To keep the structure of our app clear, we'll host the logic for each of these parts in separate folders.
+
+We'll build Conduit step by step.
+The most basic function that the app should have is the ability to post and read articles. Let's start with that (you'll notice that this part is basically a repeat of Django Girls tutorial's blog app).
+
+#+begin_example shell
+(django) django_tutorial$ cd conduit
+(django) conduit$ django-admin startapp articles
+(django) conduit$ cd articles
+#+end_example
+
+Our folder structure now looks like this:
+
+#+begin_example shell
+django_tutorial
+├── conduit
+│   ├── articles
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── __init__.py
+│   │   ├── migrations
+│   │   │   └── __init__.py
+│   │   ├── models.py
+│   │   ├── tests.py
+│   │   └── views.py
+│   ├── asgi.py
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── db.sqlite3
+└── manage.py
+#+end_example
+
+We change the =name= line in the file =apps.py= in the =articles= folder:
+
+#+begin_example python
+from django.apps import AppConfig
+
+
+class ArticlesConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'conduit.articles'
+#+end_example
+
+We also add the line ='conduit.articles',= to INSTALLED_APPS in =settings.py=:
+
+#+begin_example python
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
+    'conduit.articles', # add this line
+]
+#+end_example
+* Article model
+** Model
+We'll start by making a model for our articles.
+The articles need a title, a body (the text), a description, an author, and a creation date.
+
+#+begin_example python
+from django.db import models
+from django.conf import settings
+
+
+class Article(models.Model):
+    # the title of the article
+    title = models.CharField(db_index=True, max_length=255)
+
+    # a short description of the content
+    description = models.TextField(max_length=2000)
+
+    # the text of the article
+    body = models.TextField()
+
+    # the author of the article
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
+    )
+
+    # a timestamp representing when this object was created.
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+    # will be helpful in the admin app later on
+    def get_absolute_url(self):
+        return reverse("article_detail", kwargs={"pk": self.pk})
+#+end_example
+
+Let's sync the database again:
+
+#+begin_example shell
+python manage.py makemigrations
+python manage.py migrate articles
+#+end_example
+** Django admin
+In order to have something to work with for the rest of the tutorial, we need to create some posts. Because we can't yet do it through Conduit, we will do so through Django admin.
+
+First, register the =Article= model in =articles/admin.py= by adding the following line:
+
+#+begin_example python
+from django.contrib import admin
+from .models import Article
+
+admin.site.register(Article)            # new
+#+end_example
+
+Now, create a superuser in the terminal with:
+
+#+begin_example shell
+(django) django_tutorial$ python manage.py createsuperuser
+#+end_example
+
+The server should still be running (otherwise restart it). Log in as the superuser you just created and create 3 articles.
+* Lists of Articles
+** Home view
+The default view that the unauthenticated user has is the global feed, or the list of all articles.
+
+We add the following line in =django_tutorial/conduit/urls.py=, so that the project-level =urls.py= is aware of the urls defined in =articles/urls.py=:
+
+#+begin_example python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('conduit.articles.urls')),                         #new
+]
+#+end_example
+
+Let's create a =urls.py= file in the =articles= folder, and add the following:
+
+#+begin_example python
+from django.urls import path
+from . import views
+
+urlpatterns = [path("", views.home, name="home")]
+#+end_example
+
+In =views.py=, we add the following:
+
+#+begin_example python
+from django.shortcuts import render
+from .models import Article
+
+
+class
+
+def home(request):
+    """all published articles"""
+    articles = Article.objects.order_by("-created_at")
+    return render(request, "home.html", {"articles": articles})
+#+end_example
+** Templates folder
+We need a template now, but before this we need to create a folder for templates and for static files (icons, CSS, etc.).
+
+It's easier to have all templates in one place, instead of in each separate app, and the same is true for static files. Let's create the =templates= and =static= folders:
+
+#+begin_example shell
+(django) conduit$ mkdir templates
+(django) conduit$ mkdir static
+#+end_example
+
+We need to modify =settings.py= so Django is aware of our project's architecture.
+Let's define the APPS_DIR below BASE_DIR first:
+
+#+begin_example python
+BASE_DIR = Path(__file__).resolve().parent.parent
+APPS_DIR = BASE_DIR / "conduit"
+#+end_example
+
+Let's change the =DIRS= line in the =TEMPLATES= section in =settings.py= like this:
+
+#+begin_example python
+"DIRS": [APPS_DIR / "templates"], # changed from "DIRS": []
+#+end_example
+
+Similarly, let's define the =STATIC_ROOT= directory below the =STATIC= line like this:
+
+#+begin_example python
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [APPS_DIR / "static"]
+#+end_example
+
+** Base template
+Let's create the base template now.
+
+#+begin_example shell
+(django) conduit$ touch templates/base.html
+#+end_example
+
+This template will contain the following:
+
+#+begin_example html
+<!doctype html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="icon" href="{%  static '/icons/favicon.ico' %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- favicon -->
+        <!-- Thinkster's CSS -->
+        <link rel="stylesheet" href="//demo.productionready.io/main.css">
+        <!-- icons for later -->
+        <link href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
+        <!-- fonts -->
+        <link href="//fonts.googleapis.com/css?family=Titillium+Web:700|Source+Serif+Pro:400,700|Merriweather+Sans:400,700|Source+Sans+Pro:400,300,600,700,300italic,400italic,600italic,700italic&display=swap" rel="stylesheet" type="text/css">
+        <title>Conduit: Django + HTMX</title>
+    </head>
+    <body>
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+    </body>
+</html>
+#+end_example
+
+We'll also download the favicon referenced in our template: download the file located at the URL below to =conduit/articles/static/icons/favicon.ico=:
+https://github.com/gothinkster/react-redux-realworld-example-app/blob/master/public/favicon.ico
+** Home template
+Now we'll make the =home.html= template, which for now only needs to display our "global feed".
+# Because we know that there will be a lot stuff contained in view later ("Your feed", tag feed, "Popular tags"), we might as well take that into account and make our templates as modular as possible.
+Let's create the template  and add the following to it:
+
+#+begin_example html
+{% extends 'base.html' %}
+{% block content %}
+    <div class="home-page">
+        <!-- banner -->
+        <div class="banner">
+            <div class="container">
+                <h1 class="logo-font">conduit</h1>
+                <p>A place to share your knowledge.</p>
+            </div>
+        </div>
+        <div class="container page">
+            <div class="row">
+                <div class="col-md-9">
+                    {% for article in articles %}
+                        <!-- preview "author", "created_at", "title", "description" for each article -->
+                        <div class="article-preview">
+                            <div class="article-meta">
+                                <div class="info">
+                                    {{  article.author }}
+                                    <span class="date">
+                                        {{ article.created_at|date:"D M d Y" }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="preview-link">
+                                <h1>{{ article.title }}</h1>
+                                <p>{{ article.description }}</p>
+                                <span>Read more...</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+#+end_example
+
+The HTML is adapted from other realworld projects, especially the [[https://github.com/sveltejs/realworld/][SvelteKit implementation of the RealWorld app]], because it's unexpectedly close to Django's templating language.
+Because the HTML is little more than a copy-paste, we won't explain its structure and classes: suffice it to say that this is required to have something that looks like the actual Realworld app.
+
+#+ATTR_ORG: :width 400
+[[./Screenshots/1 - Home with global feed.png]]
+[[./Screenshots/1 - Home with global feed - realworld.png]]
+
+It's starting to look like something.
+* Article views, templates, etc.
+** Article view
+Next we'll implement the article view.
+
+First, we create a view in =views.py=:
+
+#+begin_example python
+from django.views.generic import TemplateView, DetailView
+
+
+class ArticleDetailView(DetailView):
+    """detail view for individual articles"""
+
+    model = Article
+    template_name = "article_detail.html"
+#+end_example
+
+Then, we modify the =articles/urls.py= file:
+
+#+begin_example python
+from .views import Home, ArticleDetailView
+
+urlpatterns = [
+    path("", Home.as_view(), name="home"),
+    path("article/<int:pk>", ArticleDetailView.as_view(), name="article_detail"),
+]
+#+end_example
+
+** Article template
+Now, we create the =article_detail.html= file in our =templates= folder and add the following to it:
+
+#+begin_example html
+{% extends 'base.html' %}
+{% block content %}
+    <div class="article-page">
+        <div class="banner">
+            <div class="container">
+                <h1>{{ article.title }}</h1>
+                <div class="article-meta">
+                    <div class="info">
+                        {{ article.author }}
+                        <span class="date">
+                            {{ article.created_at|date:"F d, Y" }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container page">
+            <div class="row article-content">
+                <div class="col-xs-12">
+                    <div>
+                        {{ article.body|linebreaks }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+#+end_example
+
+Finally, we modify =home.html= so that article previews redirect to articles:
+
+#+begin_example html
+...
+<a href="{{ article.get_absolute_url }}" rel="prefetch" class="preview-link">   <!-- new -->
+   <h1>{{ article.title }}</h1>
+   <p>{{ article.description }}</p>
+   <span>Read more...</span>
+</a>                                                                            <!-- new -->
+...
+#+end_example
+
+Let's see what it looks like:
+
+#+ATTR_ORG: :width 400
+[[./Screenshots/2 - Article.png]]
+[[./Screenshots/2 - Article - realworld.png]]
+
+** Slugs
+We want our article URLs to include slugs, which are easier to read than IDs.
+
+We want the slugs to be unique, but some articles might have the same titles, which would generate the same slugs. One solution to this problem is to combine slugs with UUIDs.
+
+*** Defining a slug and a UUID in the model
+First, we need to modify our =Article= model to include a slug, and to update the =get_absolute_url= method:
+
+#+begin_example python
+class Article(models.Model):
+    ...
+    # slug for the article                                              # new
+    slug = models.SlugField(                                            # new
+         max_length=255,                                                # new
+         editable=False                                                 # new
+    )                                                                   # new
+
+    # UUID
+    uuid_field = models.UUIDField(default=uuid.uuid4, editable=False)   # new
+    ...
+    def get_absolute_url(self):
+        return reverse("article_detail", kwargs={"slug": self.slug})    # new
+
+#+end_example
+
+After modifying the model, we need to sync the database, but this will return a warning.
+
+#+begin_example shell
+(django) django_tutorial$ python manage.py makemigrations
+You are trying to add a non-nullable field 'slug' to article without a default; we can't do that (the database needs something to populate existing rows).
+Please select a fix:
+ 1) Provide a one-off default now (will be set on all existing rows with a null value for this column)
+ 2) Quit, and let me add a default in models.py
+Select an option:
+#+end_example
+
+We can't select =1= because a default is by definition non-unique. We select =2= to abort and add the =null=True= arg to the slug field, so as to be able to migrate and then modify the slug manually through the Django admin app:
+
+#+begin_example python
+class Article(models.Model):
+    ...
+    slug = models.SlugField(max_length=100, null=True)
+    ...
+#+end_example
+
+We then run =makemigrations= and =migrate=, then set a unique slug for each =Article= through the Django admin app manually. Once we're done, we remove the =null=True= arg and add the =editable=False= arg:
+
+#+begin_example python
+class Article(models.Model):
+    ...
+    slug = models.SlugField(        # new
+         max_length=255,            # new
+         editable=False              # new
+    )                               # new
+    ...
+#+end_example
+
+When we migrate, we get a warning:
+
+#+begin_example
+(django) django_tutorial$ python manage.py makemigrations
+You are trying to change the nullable field 'slug' on article to non-nullable without a default; we can't do that (the database needs something to populate existing rows).
+Please select a fix:
+ 1) Provide a one-off default now (will be set on all existing rows with a null value for this column)
+ 2) Ignore for now, and let me handle existing rows with NULL myself (e.g. because you added a RunPython or RunSQL operation to handle NULL values in a previous data migration)
+ 3) Quit, and let me add a default in models.py
+Select an option:
+#+end_example
+
+You can safely select =2=, as we already have taken care of the slug fields through the Django admin app.
+
+*** Generate unique slug automatically
+We want to avoid manually entering the slugs for every article: the generation of a unique slug should be triggered automatically every time an Article is saved.
+
+Let's create a =utils.py= file in the =conduit= folder and add the following methods to it:
+
+#+begin_example python
+from django.utils.text import slugify
+import uuid
+
+def unique_slug_generator(instance):
+    """generate a unique slug for Articles from the title and a UUID"""
+
+    ArticleClass = instance.__class__
+
+    # get max length of =slug= as defined in the Article model
+    max_length = ArticleClass._meta.get_field('slug').max_length
+
+    # create slug_uuid by concatenating slugified title and UUID
+    slug = "{slug_field}-{uuid_field}".format(
+        slug_field = slugify(instance.title)[:max_length-36-1],
+        uuid_field = str(instance.uuid_field)
+    )
+
+    # if the slug exists, make another one
+    if ArticleClass.objects.filter(slug=slug).exists():
+        return unique_slug_generator(instance)
+
+    return slug
+#+end_example
+*** Signals
+We will now use a signal, a Django utility that allows linking events with actions, to call our =unique_slug_generator= every time an Article is created. We could override the =Article= model's =save= method instead: this is a common method, but not [[https://teddit.ggc-project.de/r/django/comments/p3pgr/overriding_save_vs_presave_signals_which_is/][best practice]].
+
+We create a =signals.py= file in =articles/= and add the following method to it:
+
+#+begin_example python
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from .models import Article
+from conduit.utils import unique_slug_generator
+
+@receiver(pre_save, sender=Article)
+def pre_save_receiver(sender, instance, *args, **kwargs):
+   if not instance.slug:
+       instance.slug = unique_slug_generator(instance)
+#+end_example
+
+In order to activate this signal, we will add the following line to =articles/apps.py=:
+
+#+begin_example
+class ArticlesConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "conduit.articles"
+
+    def ready(self):                                # new
+        import conduit.articles.signals             # new
+#+end_example
+
+Let's also change our =urlpatterns= in =articles/urls.py=:
+
+#+begin_example python
+from django.urls import path
+from .views import Home, ArticleDetailView                                          # new
+
+urlpatterns = [
+    path("", Home.as_view(), name="home"),
+    path("article/<slug:slug>", ArticleDetailView.as_view(), name="article_detail"),   # new
+]
+#+end_example
+
+Let's try creating an Article through the Django admin app.
+
+When going back to http://localhost:8000/ (where your app is running), you will see that your new article has a slug consisting of its slugified title and a UUID:
+
+#+ATTR_ORG: :width 400
+[[./Screenshots/3 - Article - slug.png]]
+* Creating, editing, and deleting Articles
+** TODO Creating Articles
+** TODO Editing Articles
+** TODO Deleting Articles
+* Profiles
+** TODO django_allauth
+From [[https://htmx-django.com/blog/a-minimalistic-modern-django-boilerplate#user][A Minimalistic Modern Django Boilerplate]]
+** TODO jwt
+To abide by Realworld's API spec, the authentication should be implemented with jwt [[https://github.com/gothinkster/react-redux-realworld-example-app#functionality-overview][gothinkster/react-redux-realworld-example-app: Exemplary real world ...]]
+* Observations
+- =Nav=
+- home.html
+  + =banner= if user is not authenticated
+  + =tabs= ('Global feed', 'Your feed', tag if the user's looking at a tag feed)
+  + =ArticleList= w
+    * =ArticlePreview=
+  + =Pagination=
+  + =Popular tags=
