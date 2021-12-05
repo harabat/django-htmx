@@ -1,19 +1,20 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 
-# Create your models here.
+
 class Article(models.Model):
     # slug for the article, for urls
-    slug = models.SlugField(db_index=True, max_length=255, unique=True)
+    # slug = models.SlugField(db_index=True, max_length=100, unique=True, editable=True)
 
     # the title of the article
     title = models.CharField(max_length=100)
 
-    # the text of the article
-    body = models.TextField()
-
     # a short description of the content
     description = models.TextField(max_length=300)
+
+    # the text of the article
+    body = models.TextField()
 
     # the author of the article
     author = models.ForeignKey(
@@ -22,8 +23,13 @@ class Article(models.Model):
         # related_name="articles"
     )
 
-    # A timestamp representing when this object was created
+    # a timestamp representing when this object was created
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
+
+    # will be helpful in the admin app later on
+    def get_absolute_url(self):
+        return reverse("article_detail", kwargs={"pk": self.pk})
+        # return reverse("article_detail", kwargs={"slug": self.slug})

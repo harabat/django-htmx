@@ -17,6 +17,9 @@ venv/
 # Static folder at project root
 /static/
 
+# migrations
+migrations
+
 # Emacs
 .dir-locals.el
 
