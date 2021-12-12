@@ -1,0 +1,16 @@
+<form
+    method="POST"
+    action="{% url 'editor_delete' slug=article.slug %}"
+    style="display:inline"
+>
+    {% csrf_token %}
+    <button
+        class="btn btn-outline-danger btn-sm"
+        value="DELETE"
+        onclick="return confirm('Are you sure you want to delete {{ article.title }}?')"
+    >
+        <i class="ion-trash-a">
+            Delete Article
+        </i>
+    </button>
+</form>

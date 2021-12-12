@@ -194,7 +194,7 @@ Let's create a =urls.py= file in the =articles= folder, and add the following:
 from django.urls import path
 from . import views
 
-urlpatterns = [path("", views.home, name="home")]
+urlpatterns = [path("", Home.as_view(), name="home")]
 #+end_example
 
 In =views.py=, we add the following:
@@ -204,12 +204,15 @@ from django.shortcuts import render
 from .models import Article
 
 
-class
-
-def home(request):
+class Home(TemplateView):
     """all published articles"""
-    articles = Article.objects.order_by("-created_at")
-    return render(request, "home.html", {"articles": articles})
+
+    template_name = "home.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["articles"] = Article.objects.order_by("-created_at")
+        return context
 #+end_example
 ** Templates folder
 We need a template now, but before this we need to create a folder for templates and for static files (icons, CSS, etc.).
@@ -310,11 +313,11 @@ Let's create the template  and add the following to it:
                                     </span>
                                 </div>
                             </div>
-                            <div class="preview-link">
+                            <a href="{{ article.get_absolute_url }}" rel="prefetch" class="preview-link">
                                 <h1>{{ article.title }}</h1>
                                 <p>{{ article.description }}</p>
                                 <span>Read more...</span>
-                            </div>
+                            </a>
                         </div>
                     {% endfor %}
                 </div>
@@ -335,6 +338,8 @@ It's starting to look like something.
 * Article views, templates, etc.
 ** Article view
 Next we'll implement the article view.
+
+We'll be working with Class-Based Views: the /Django Girls/ tutorial only presents Function-Based Views, which are arguably a more intuitive option, but CBVs are considered to be best practice, at least according to /Two Scoops of Django/, and simplify a lot of work.
 
 First, we create a view in =views.py=:
 
@@ -360,6 +365,7 @@ urlpatterns = [
 ]
 #+end_example
 
+*** TODO create "article_list.html", {% include 'article_list.html' with tab=tab %}
 ** Article template
 Now, we create the =article_detail.html= file in our =templates= folder and add the following to it:
 
@@ -372,7 +378,9 @@ Now, we create the =article_detail.html= file in our =templates= folder and add 
                 <h1>{{ article.title }}</h1>
                 <div class="article-meta">
                     <div class="info">
-                        {{ article.author }}
+                        <span class="author">
+                            {{ article.author }}
+                        </span>
                         <span class="date">
                             {{ article.created_at|date:"F d, Y" }}
                         </span>
@@ -557,15 +565,374 @@ When going back to http://localhost:8000/ (where your app is running), you will 
 
 #+ATTR_ORG: :width 400
 [[./Screenshots/3 - Article - slug.png]]
+*** TODO add =primary_key=True= to =uuid_field=, then add =query_pk_and_slug=True= in relevant views
+* Navbar
+Let's create a simple navigation bar. Because we have yet to implement authentication and profiles, the navbar will just contain a link to =Home=.
+
+Let's add the following lines to =base.html=:
+
+#+begin_example html
+    <body>
+        <!-- navbar -->                     <!-- new -->
+        {% include 'nav.html' %}            <!-- new -->
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+#+end_example
+
+Let's create =nav.html= in out =templates= folder and add the following to it:
+
+#+begin_example html
+<nav class="navbar navbar-light">
+    <div class="container">
+        <a rel="prefetch" class="navbar-brand" href="/">conduit</a>
+        <ul class="nav navbar-nav pull-xs-right">
+            <li class="nav-item">
+                <a rel="prefetch" class="nav-link" href="{% url 'home' %}">
+                    Home
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+#+end_example
 * Creating, editing, and deleting Articles
-** TODO Creating Articles
-** TODO Editing Articles
-** TODO Deleting Articles
+We have implemented the features that allow to view articles, but we need to allow users to create, edit, and delete them as well. We'll first implement this functionality, and modify it later to take into account user authentication.
+** Creating Articles
+Let's allow users to create articles.
+
+We define the =EditorCreateView= view in =views.py=:
+
+#+begin_example python
+from django.shortcuts import render
+from django.views.generic import (
+     TemplateView,
+     DetailView,
+     CreateView                         # new
+)
+from .models import Article
+
+# class Home...
+# class ArticleDetailView...
+
+class EditorCreateView(CreateView):     # new
+    """create article"""                # new
+
+    model = Article                     # new
+    fields = ['title', 'description', 'body']
+    template_name = "editor.html"
+#+end_example
+
+We add the following to =urls.py=:
+
+#+begin_example python
+from django.urls import path
+from .views import Home, ArticleDetailView, EditorCreateView                # new
+
+urlpatterns = [
+    path("", Home.as_view(), name="home"),
+    path("article/<slug:slug>", ArticleDetailView.as_view(), name="article_detail"),
+    path("editor", EditorCreateView.as_view(), name="editor_create"),       # new
+]
+#+end_example
+
+We add a =New article= button to the Nav bar in =nav.html=:
+
+#+begin_example html
+        <ul class="nav navbar-nav pull-xs-right">
+            <li class="nav-item">
+                <a rel="prefetch" class="nav-link" href="{% url 'home' %}">
+                    Home
+                </a>
+            </li>
+            <li class="nav-item">                                                       <!-- new -->
+                <a rel="prefetch" href="{% url 'editor_create' %}" class="nav-link">    <!-- new -->
+                    <i class="ion-compose"> New Post </i>                               <!-- new -->
+                </a>                                                                    <!-- new -->
+            </li>                                                                       <!-- new -->
+        </ul>
+#+end_example
+
+Now, we can create the template =editor_create.html=:
+
+#+begin_example html
+{% extends 'base.html' %}
+{% block content %}
+    <div class="editor-page">
+        <div class="container page">
+            <div class="row">
+                <div class="col-md-10 offset-md-1 col-xs-12">
+                    <form
+                        action="{% url 'editor_create' %}"
+                        method="post"
+                    >
+                        {% csrf_token %}
+                        <fieldset>
+                            <fieldset class="form-group">
+                                <input
+                                    class="form-control form-control-lg"
+                                    type="text"
+                                    placeholder="Article Title"
+                                    name='title'
+                                />
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="What's this article about?"
+                                    name='description'
+                                />
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <textarea
+                                    class="form-control"
+                                    rows="8"
+                                    placeholder="Write your article (in markdown)"
+                                    name='body'
+                                ></textarea>
+                            </fieldset>
+                            <button class="btn btn-lg pull-xs-right btn-primary">
+                                Publish Article
+                            </button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+#+end_example
+
+Try to create an article in your app. When you hit "Publish", you'll get an error:
+
+#+begin_example
+IntegrityError at /editor
+NOT NULL constraint failed: articles_article.author_id
+#+end_example
+
+That's because the form doesn't know who the author is, and author is a required field in our model.
+Let's override the =EditorCreateView= view's =form_valid= method in our =views.py= file: before we save the form, we'll set the logged in user (=admin=, for now) as the =author=:
+
+#+begin_example python
+class EditorCreateView(CreateView):
+    """create article"""
+
+    model = Article
+    fields = ["title", "description", "body"]
+    template_name = "editor.html"
+
+    def form_valid(self, form):                     # new
+        self.object = form.save(commit=False)       # new
+        self.object.author = self.request.user      # new
+        self.object.save()                          # new
+        return super().form_valid(form)             # new
+#+end_example
+
+Once this is done, try creating another article: it should work.
+** Editing Articles
+We will now implement the editing feature.
+
+In =views.py=, add the following:
+
+#+begin_example python
+# other imports
+from django.views.generic import (
+    TemplateView,
+    DetailView,
+    CreateView,
+    UpdateView,                                     # new
+)
+
+# class Home
+# class ArticleDetailView
+# class EditorCreateView
+
+class EditorUpdateView(UpdateView):                 # new
+    """edit article"""                              # new
+
+    model = Article                                 # new
+    fields = ["title", "description", "title"]      # new
+    template_name = "editor.html"                   # new
+#+end_example
+
+We're using the same template for creating and editing articles.
+In =urls.py=, add:
+
+#+begin_example python
+from django.urls import path
+from .views import (
+    Home,
+    ArticleDetailView,
+    EditorCreateView,
+    EditorUpdateView                                                                # new
+)
+
+urlpatterns = [
+    path("", Home.as_view(), name="home"),
+    path("article/<slug:slug>", ArticleDetailView.as_view(), name="article_detail"),
+    path("editor", EditorCreateView.as_view(), name="editor_create"),
+    path("editor/<slug:slug>", EditorUpdateView.as_view(), name="editor_update"),   # new
+]
+#+end_example
+
+In =article_detail.html=, we add a button for editing the article and pass =article.slug= as an argument to the url (see [[https://docs.djangoproject.com/en/3.2/ref/templates/builtins/#url][the documentation for =url= tag]]), given that our URL expects a slug (=editor/<slug:slug>=). The documentation for ):
+
+#+begin_example python
+                <div class="article-meta">
+                    <div class="info">
+                        <span class="author">
+                            {{ article.author }}
+                        </span>
+                        <span class="date">
+                            {{ article.created_at|date:"F d, Y" }}
+                        </span>
+                    </div>
+                    <span>                                                              <!-- new -->
+                        <a                                                              <!-- new -->
+                            href="{% url 'editor_update' slug=article.slug %}"          <!-- new -->
+                            class="btn btn-outline-secondary btn-sm"                    <!-- new -->
+                        >                                                               <!-- new -->
+                            <i class="ion-edit">                                        <!-- new -->
+                                Edit Article                                            <!-- new -->
+                            </i>                                                        <!-- new -->
+                        </a>                                                            <!-- new -->
+                    </span>                                                             <!-- new -->
+                </div>
+#+end_example
+
+In the =editor.html= template, we want to have the form fields prepopulated with the relevant values. When using =UpdateView=, we have access to the object being updated. Let's add the following to the =editor.html= template:
+
+#+begin_example html
+                        <fieldset>
+                            <fieldset class="form-group">
+                                <input
+                                    class="form-control form-control-lg"
+                                    type="text"
+                                    placeholder="Article Title"
+                                    name="title"
+                                    value="{{ article.title|default_if_none:'' }}"          <!-- new -->
+                                />
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <input
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="What's this article about?"
+                                    name="description"
+                                    value="{{ article.description|default_if_none:'' }}"    <!-- new -->
+                                />
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <textarea
+                                    class="form-control"
+                                    rows="8"
+                                    placeholder="Write your article (in markdown)"
+                                    name="body"
+                                />{{ article.body|default_if_none:'' }}</textarea>          <!-- new -->
+                            </fieldset>
+                            <button class="btn btn-lg pull-xs-right btn-primary">
+                                Publish Article
+                            </button>
+                        </fieldset>
+#+end_example
+
+Try editing an article: all the values should be prepopulated.
+** Deleting Articles
+In =views.py=, we create a =ArticleDeleteView=:
+
+#+begin_example python
+# other imports
+from django.views.generic import (
+    TemplateView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,                                 # new
+)
+from django.urls import reverse_lazy            # new
+
+# other classes
+
+
+class EditorDeleteView(DeleteView):             # new
+    """delete article"""                        # new
+
+    model = Article                             # new
+    success_url = reverse_lazy("home")          # new
+    template_name = "article_detail.html"       # new
+#+end_example
+
+Notice that we're using the =article_detail.html= template. We could use a separate one, but that would require to load a new page, which seems unnecessary: we'll in a second how we're making this work.
+
+In =urls.py=:
+
+#+begin_example python
+# other imports
+from .views import (
+    Home,
+    ArticleDetailView,
+    EditorCreateView,
+    EditorUpdateView,
+    EditorDeleteView,                                                                       # new
+)
+
+urlpatterns = [
+    # other paths
+    path("editor/<slug:slug>/delete", EditorDeleteView.as_view(), name="editor_delete"),    # new
+]
+#+end_example
+
+Now, create an =article_delete.html= file: this will hold the form for deleteing the article.
+
+#+begin_example html
+<form                                                                                       <!-- new  -->
+    method="POST"                                                                           <!-- new  -->
+    action="{% url 'editor_delete' slug=article.slug %}"                                    <!-- new  -->
+    style="display:inline"                                                                  <!-- new  -->
+>                                                                                           <!-- new  -->
+    {% csrf_token %}                                                                        <!-- new  -->
+    <button                                                                                 <!-- new  -->
+        class="btn btn-outline-danger btn-sm"                                               <!-- new  -->
+        value="DELETE"                                                                      <!-- new  -->
+        onclick="return confirm('Are you sure you want to delete {{ article.title }}?')"    <!-- new  -->
+    >                                                                                       <!-- new  -->
+        <i class="ion-trash-a">                                                             <!-- new  -->
+            Delete Article                                                                  <!-- new  -->
+        </i>                                                                                <!-- new  -->
+    </button>                                                                               <!-- new  -->
+</form>                                                                                     <!-- new  -->
+#+end_example
+
+Now, we want to load this template in =article_detail.html= directly, which we achieve with an =include= tag:
+
+#+begin_example html
+<span>
+    <a
+        href="{% url 'editor_update' slug=article.slug %}"
+        class="btn btn-outline-secondary btn-sm"
+    >
+        <i class="ion-edit">
+            Edit Article
+        </i>
+    </a>
+    {% include 'article_delete.html' %}             <!-- new -->
+</span>
+#+end_example
+
+Try deleting an article: you should get a nice confirmation message while still on the =article_detail.html= template, before the article is deleted.
+* Comments
 * Profiles
 ** TODO django_allauth
 From [[https://htmx-django.com/blog/a-minimalistic-modern-django-boilerplate#user][A Minimalistic Modern Django Boilerplate]]
 ** TODO jwt
 To abide by Realworld's API spec, the authentication should be implemented with jwt [[https://github.com/gothinkster/react-redux-realworld-example-app#functionality-overview][gothinkster/react-redux-realworld-example-app: Exemplary real world ...]]
+* Follows, favorites, and tags
+* UI stuff
+** TODO class:active
+*** [[https://stackoverflow.com/questions/340888/navigation-in-django/341748#341748][Navigation in django - Stack Overflow]]
+*** [[https://stackoverflow.com/questions/340888/navigation-in-django/477719#477719][Navigation in django - Stack Overflow]]
 * Observations
 - =Nav=
 - home.html
@@ -575,3 +942,12 @@ To abide by Realworld's API spec, the authentication should be implemented with 
     * =ArticlePreview=
   + =Pagination=
   + =Popular tags=
+- article.html
+  + banner
+    * article.title
+    * ArticleMeta
+  + article.body
+  + article.tagList
+  + CommentContainer
+    * CommentInput
+    * Comment
