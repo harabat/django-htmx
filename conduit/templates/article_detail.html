@@ -6,11 +6,24 @@
                 <h1>{{ article.title }}</h1>
                 <div class="article-meta">
                     <div class="info">
-                        {{ article.author }}
+                        <span class="author">
+                            {{ article.author }}
+                        </span>
                         <span class="date">
                             {{ article.created_at|date:"F d, Y" }}
                         </span>
                     </div>
+                    <span>
+                        <a
+                            href="{% url 'editor_update' slug=article.slug %}"
+                            class="btn btn-outline-secondary btn-sm"
+                        >
+                            <i class="ion-edit">
+                                Edit Article
+                            </i>
+                        </a>
+                        {% include 'article_delete.html' %}
+                    </span>
                 </div>
             </div>
         </div>
