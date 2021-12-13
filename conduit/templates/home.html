@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="home-page">
-        <!-- banner -->
         <div class="banner">
             <div class="container">
                 <h1 class="logo-font">conduit</h1>
@@ -12,11 +11,12 @@
             <div class="row">
                 <div class="col-md-9">
                     {% for article in articles %}
-                        <!-- preview "author", "created_at", "title", "description" for each article -->
                         <div class="article-preview">
                             <div class="article-meta">
                                 <div class="info">
-                                    {{  article.author }}
+                                    <span class="author">
+                                        {{ article.author }}
+                                    </span>
                                     <span class="date">
                                         {{ article.created_at|date:"D M d Y" }}
                                     </span>

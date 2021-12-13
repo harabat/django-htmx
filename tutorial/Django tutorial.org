@@ -122,27 +122,17 @@ from django.conf import settings
 
 
 class Article(models.Model):
-    # the title of the article
     title = models.CharField(db_index=True, max_length=255)
-
-    # a short description of the content
     description = models.TextField(max_length=2000)
-
-    # the text of the article
     body = models.TextField()
-
-    # the author of the article
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="articles"
     )
-
-    # a timestamp representing when this object was created.
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
 
-    # will be helpful in the admin app later on
     def get_absolute_url(self):
         return reverse("article_detail", kwargs={"pk": self.pk})
 #+end_example
@@ -292,7 +282,6 @@ Let's create the template  and add the following to it:
 {% extends 'base.html' %}
 {% block content %}
     <div class="home-page">
-        <!-- banner -->
         <div class="banner">
             <div class="container">
                 <h1 class="logo-font">conduit</h1>
@@ -303,11 +292,12 @@ Let's create the template  and add the following to it:
             <div class="row">
                 <div class="col-md-9">
                     {% for article in articles %}
-                        <!-- preview "author", "created_at", "title", "description" for each article -->
                         <div class="article-preview">
                             <div class="article-meta">
                                 <div class="info">
-                                    {{  article.author }}
+                                    <span class="author">
+                                        {{ article.author }}
+                                    </span>
                                     <span class="date">
                                         {{ article.created_at|date:"D M d Y" }}
                                     </span>
@@ -923,12 +913,132 @@ Now, we want to load this template in =article_detail.html= directly, which we a
 
 Try deleting an article: you should get a nice confirmation message while still on the =article_detail.html= template, before the article is deleted.
 * Comments
+Now that we have articles, we need comments.
+** Model
+A comment needs a related article, an author, a body, and a date.
+Let's create a =Comment= model in =models.py=:
+
+#+begin_example python
+class Comment(models.Model):
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        related_name="comments",
+        to_field="slug",
+    )
+    body = models.TextField()
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="comments",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.body[:60] + "..."
+#+end_example
+
+Let's =makemigrations= and =migrate=. You should get the following error:
+
+#+begin_example
+SystemCheckError: System check identified some issues:
+
+ERRORS:
+articles.Comment.article: (fields.E311) 'Article.slug' must be unique because it is referenced by a foreign key.
+        HINT: Add unique=True to this field or add a UniqueConstraint (without condition) in the model Meta.constraints.
+#+end_example
+
+That's because we're using articles' slugs as ForeignKeys for the comments (so that we can filter our comments by the attached articles' slugs instead of their UUIDs). This error is easily corrected by adding =unique=True= as an argument to the =slug= field in the =Article= model in =models.py=. You should be able to =makemigrations= and =migrate= after that.
+
+Now, we need to register our model in =admin.py=:
+
+#+begin_example python
+from django.contrib import admin
+from .models import Article, Comment        # new
+
+admin.site.register(Article)
+admin.site.register(Comment)                # new
+#+end_example
+
+When this is done, go to your admin app and create a few comments for a couple articles.
+** Viewing comments
+We want to be able to view the comments in our =article_detail.html= template.
+
+In =article_detail.html=:
+
+#+begin_example html
+<div class="container page">
+    <div class="row article-content">
+        <div class="col-xs-12">
+            <div>
+                {{ article.body|linebreaks }}
+            </div>
+        </div>
+    </div>
+    <hr />                                  <!-- new -->
+    <div class="row">                       <!-- new -->
+        {% include 'comments.html' %}       <!-- new -->
+    </div>                                  <!-- new -->
+</div>
+#+end_example
+
+Now create =comments.html= in the =templates= folder and add the following:
+
+#+begin_example html
+<div class="col-xs-12 col-md-8 offset-md-2">
+    {% for comment in article.comments.order_by %}
+        <div class="card">
+            <div class="card-block">
+                <p class="card-text">
+                    {{ comment.body }}
+                </p>
+            </div>
+            <div class="card-footer">
+                <span class="comment-author">
+                    {{ comment.author }}
+                </span>
+                <span class="date-posted">
+                    {{ comment.created_at|date:"D M d Y" }}
+                </span>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+#+end_example
+** Creating comments
+We will now start allowing our users to leave comments on the website.
+
+#+begin_example python
+# other imports
+from .models import Article, Comment
+
+# other models
+class CommentCreateView(CreateView):
+    """create comment"""
+
+    model = Comment
+    fields = ["body"]
+    template_name = "article_detail.html"
+#+end_example
+
+In =comments.html=:
+
+#+begin_example html
+#+end_example
+
+Create =comments.html=:
+
+#+begin_example html
+
+#+end_example
+** Editing comments
+** Deleting comments
+* Follows, favorites, and tags
 * Profiles
 ** TODO django_allauth
 From [[https://htmx-django.com/blog/a-minimalistic-modern-django-boilerplate#user][A Minimalistic Modern Django Boilerplate]]
 ** TODO jwt
 To abide by Realworld's API spec, the authentication should be implemented with jwt [[https://github.com/gothinkster/react-redux-realworld-example-app#functionality-overview][gothinkster/react-redux-realworld-example-app: Exemplary real world ...]]
-* Follows, favorites, and tags
 * UI stuff
 ** TODO class:active
 *** [[https://stackoverflow.com/questions/340888/navigation-in-django/341748#341748][Navigation in django - Stack Overflow]]

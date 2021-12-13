@@ -15,8 +15,8 @@
                     </div>
                     <span>
                         <a
-                            href="{% url 'editor_update' slug=article.slug %}"
-                            class="btn btn-outline-secondary btn-sm"
+    href="{% url 'editor_update' slug=article.slug %}"
+    class="btn btn-outline-secondary btn-sm"
                         >
                             <i class="ion-edit">
                                 Edit Article
@@ -34,6 +34,10 @@
                         {{ article.body|linebreaks }}
                     </div>
                 </div>
+            </div>
+            <hr />
+            <div class="row">
+                {% include 'comments.html' %}
             </div>
         </div>
     </div>
