@@ -1,8 +1,5 @@
 from django.contrib import admin
-from .models import Article
-
-# only works in Django admin app
-# class ArticleAdmin(admin.ModelAdmin):
-#     prepopulated_fields = {"slug": ("title",)}
+from .models import Article, Comment
 
 admin.site.register(Article)
+admin.site.register(Comment)

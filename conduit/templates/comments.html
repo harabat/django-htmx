@@ -1,0 +1,19 @@
+<div class="col-xs-12 col-md-8 offset-md-2">
+    {% for comment in article.comments.order_by %}
+        <div class="card">
+            <div class="card-block">
+                <p class="card-text">
+                    {{ comment.body }}
+                </p>
+            </div>
+            <div class="card-footer">
+                <span class="comment-author">
+                    {{ comment.author }}
+                </span>
+                <span class="date-posted">
+                    {{ comment.created_at|date:"D M d Y" }}
+                </span>
+            </div>
+        </div>
+    {% endfor %}
+</div>

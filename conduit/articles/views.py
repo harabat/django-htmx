@@ -5,9 +5,11 @@ from django.views.generic import (
     CreateView,
     UpdateView,
     DeleteView,
+    ListView,
 )
 from django.urls import reverse_lazy
-from .models import Article
+from .models import Article, Comment
+from django.shortcuts import get_object_or_404
 
 
 class Home(TemplateView):
@@ -21,11 +23,26 @@ class Home(TemplateView):
         return context
 
 
+class ArticleListView(ListView):
+    """list articles"""
+
+    model = Article
+    template_name = "home.html"
+
+    def get_queryset(self):
+        return super().get_queryset()
+
+
 class ArticleDetailView(DetailView):
     """detail view for individual articles"""
 
     model = Article
     template_name = "article_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["slug"] = self.model.slug
+        return context
 
 
 class EditorCreateView(CreateView):
@@ -55,5 +72,12 @@ class EditorDeleteView(DeleteView):
 
     model = Article
     success_url = reverse_lazy("home")
-    # template_name = "editor_delete.html"
     template_name = "article_detail.html"
+
+
+class CommentCreateView(CreateView):
+    """create comment"""
+
+    model = Comment
+    fields = ["body"]
+    template_name = "comments.html"
