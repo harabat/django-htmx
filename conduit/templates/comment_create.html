@@ -1,20 +1,33 @@
-<form
-    method="post"
-    action="{% url 'comment_create' slug=form.article.slug %}"
-    class="card comment-form"
->
-    {% csrf_token %}
-    <div class="card-block">
-        <textarea
-            class="form-control"
-            rows="3"
-            placeholder="Write a comment..."
-            name="{{ form.body.name }}"
-        >{{ form.body.value|default_if_none:'' }}</textarea>
+{% extends 'base.html' %}
+{% block content %}
+    <div class="article-page">
+        <div class="container page">
+            <div class="row">
+                <div class="col-xs-12 col-md-8 offset-md-2">
+                    <div>
+                        <form
+                            method="post"
+                            class="card comment-form"
+                            action="{#% url 'comment_create' slug=form.article.slug %#}"
+                        >
+                            {% csrf_token %}
+                            <div class="card-block">
+                                <textarea
+                                    class="form-control"
+                                    rows="3"
+                                    placeholder="Write a comment..."
+                                    name="{{ form.body.name }}"
+                                >{{ form.body.value|default_if_none:'' }}</textarea>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-sm btn-primary" type="submit">
+                                    Post Comment
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="card-footer">
-        <button class="btn btn-sm btn-primary" type="submit">
-            Post Comment
-        </button>
-    </div>
-</form>
+{% endblock %}
