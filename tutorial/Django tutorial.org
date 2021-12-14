@@ -962,7 +962,7 @@ Now create =comments.html= in the =templates= folder and add the following:
 
 #+begin_example html
 <div class="col-xs-12 col-md-8 offset-md-2">
-    {% for comment in article.comments.order_by %}
+    {% for comment in article.comments.all|dictsortreversed:'created_at' %}
         <div class="card">
             <div class="card-block">
                 <p class="card-text">
@@ -1027,7 +1027,6 @@ Create =comments.html=:
 #+begin_example html
 
 #+end_example
-** Editing comments
 ** Deleting comments
 * Follows, favorites, and tags
 * Profiles

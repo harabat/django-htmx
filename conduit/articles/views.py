@@ -75,23 +75,23 @@ class EditorDeleteView(DeleteView):
     template_name = "article_detail.html"
 
 
-class CommentCreateView(CreateView):
-    """create comment"""
+# class CommentCreateView(CreateView):
+#     """create comment"""
 
-    model = Comment
-    fields = ["body"]
-    template_name = "comments.html"
+#     model = Comment
+#     fields = ["body"]
+#     template_name = "comment_create.html"
 
-    def form_valid(self, form):
-        self.instance = form.save(commit=False)
-        self.instance.article = Article.objects.filter(
-            slug=self.kwargs.get("slug")
-        ).first()
-        self.instance.author = self.request.user
-        self.instance.save()
-        return super().form_valid(form)
+#     def form_valid(self, form):
+#         # self.instance = form.save(commit=False)
+#         self.instance.article = Article.objects.filter(
+#             slug=self.kwargs.get("slug")
+#         ).first()
+#         self.instance.author = self.request.user
+#         # self.instance.save()
+#         return super().form_valid(form)
 
-    def get_success_url(self):
-        return resolve_url("home")
+#     # def get_success_url(self):
+#     #     return resolve_url("home")
 
-    # success_url = reverse_lazy("home")
+#     # success_url = reverse_lazy("home")
