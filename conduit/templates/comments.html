@@ -1,8 +1,8 @@
 <div class="col-xs-12 col-md-8 offset-md-2">
     <div>
-        {% include "comment_create.html" %}
+        {#% include "comment_create.html" %#}
     </div>
-    {% for comment in article.comments.order_by %}
+    {% for comment in article.comments.all|dictsortreversed:'created_at' %}
         <div class="card">
             <div class="card-block">
                 <p class="card-text">
