@@ -7,9 +7,9 @@ from django.views.generic import (
     DeleteView,
     ListView,
 )
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from .models import Article, Comment
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, resolve_url
 
 
 class Home(TemplateView):
@@ -81,3 +81,17 @@ class CommentCreateView(CreateView):
     model = Comment
     fields = ["body"]
     template_name = "comments.html"
+
+    def form_valid(self, form):
+        self.instance = form.save(commit=False)
+        self.instance.article = Article.objects.filter(
+            slug=self.kwargs.get("slug")
+        ).first()
+        self.instance.author = self.request.user
+        self.instance.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return resolve_url("home")
+
+    # success_url = reverse_lazy("home")

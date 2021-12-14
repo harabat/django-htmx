@@ -1,0 +1,19 @@
+<form
+    method="post"
+    class="card comment-form"
+>
+    {% csrf_token %}
+    <div class="card-block">
+        <textarea
+            class="form-control"
+            rows="3"
+            placeholder="Write a comment..."
+            name="{{ form.body.name }}"
+        >{{ form.body.value|default_if_none:'' }}</textarea>
+    </div>
+    <div class="card-footer">
+        <button class="btn btn-sm btn-primary" type="submit">
+            Post Comment
+        </button>
+    </div>
+</form>
