@@ -419,16 +419,11 @@ First, we need to modify our =Article= model to include a slug, and to update th
 
 #+begin_example python
 class Article(models.Model):
-    ...
-    # slug for the article                                              # new
-    slug = models.SlugField(                                            # new
-         max_length=255,                                                # new
-         editable=False                                                 # new
-    )                                                                   # new
-
-    # UUID
+    # ...
+    slug = models.SlugField(max_length=255, editable=False)             # new
     uuid_field = models.UUIDField(default=uuid.uuid4, editable=False)   # new
-    ...
+
+    # ...
     def get_absolute_url(self):
         return reverse("article_detail", kwargs={"slug": self.slug})    # new
 
@@ -449,21 +444,18 @@ We can't select =1= because a default is by definition non-unique. We select =2=
 
 #+begin_example python
 class Article(models.Model):
-    ...
+    # ...
     slug = models.SlugField(max_length=100, null=True)
-    ...
+    # ...
 #+end_example
 
 We then run =makemigrations= and =migrate=, then set a unique slug for each =Article= through the Django admin app manually. Once we're done, we remove the =null=True= arg and add the =editable=False= arg:
 
 #+begin_example python
 class Article(models.Model):
-    ...
-    slug = models.SlugField(        # new
-         max_length=255,            # new
-         editable=False              # new
-    )                               # new
-    ...
+    # ...
+    slug = models.SlugField(max_length=255, editable=False)             # new
+    # ...
 #+end_example
 
 When we migrate, we get a warning:
@@ -479,7 +471,6 @@ Select an option:
 #+end_example
 
 You can safely select =2=, as we already have taken care of the slug fields through the Django admin app.
-
 *** Generate unique slug automatically
 We want to avoid manually entering the slugs for every article: the generation of a unique slug should be triggered automatically every time an Article is saved.
 
@@ -526,9 +517,12 @@ def pre_save_receiver(sender, instance, *args, **kwargs):
        instance.slug = unique_slug_generator(instance)
 #+end_example
 
-In order to activate this signal, we will add the following line to =articles/apps.py=:
+In order to activate this signal, we will modify =articles/apps.py=:
 
 #+begin_example
+from django.apps import AppConfig
+
+
 class ArticlesConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "conduit.articles"
@@ -540,12 +534,12 @@ class ArticlesConfig(AppConfig):
 Let's also change our =urlpatterns= in =articles/urls.py=:
 
 #+begin_example python
-from django.urls import path
-from .views import Home, ArticleDetailView                                          # new
+# other imports
+from .views import Home, ArticleDetailView
 
 urlpatterns = [
-    path("", Home.as_view(), name="home"),
-    path("article/<slug:slug>", ArticleDetailView.as_view(), name="article_detail"),   # new
+    # other paths
+    path("article/<slug:slug>", ArticleDetailView.as_view(), name="article_detail"),
 ]
 #+end_example
 
@@ -595,21 +589,18 @@ Let's allow users to create articles.
 We define the =EditorCreateView= view in =views.py=:
 
 #+begin_example python
-from django.shortcuts import render
+# other imports
 from django.views.generic import (
-     TemplateView,
-     DetailView,
-     CreateView                         # new
+     # other views
+     CreateView
 )
-from .models import Article
 
-# class Home...
-# class ArticleDetailView...
+# other views
 
-class EditorCreateView(CreateView):     # new
-    """create article"""                # new
+class EditorCreateView(CreateView):
+    """create article"""
 
-    model = Article                     # new
+    model = Article
     fields = ['title', 'description', 'body']
     template_name = "editor.html"
 #+end_example
@@ -617,13 +608,12 @@ class EditorCreateView(CreateView):     # new
 We add the following to =urls.py=:
 
 #+begin_example python
-from django.urls import path
-from .views import Home, ArticleDetailView, EditorCreateView                # new
+# other imports
+from .views import Home, ArticleDetailView, EditorCreateView
 
 urlpatterns = [
-    path("", Home.as_view(), name="home"),
-    path("article/<slug:slug>", ArticleDetailView.as_view(), name="article_detail"),
-    path("editor", EditorCreateView.as_view(), name="editor_create"),       # new
+    # other paths
+    path("editor", EditorCreateView.as_view(), name="editor_create"),
 ]
 #+end_example
 
@@ -729,41 +719,33 @@ In =views.py=, add the following:
 #+begin_example python
 # other imports
 from django.views.generic import (
-    TemplateView,
-    DetailView,
-    CreateView,
-    UpdateView,                                     # new
+    # other views
+    UpdateView,
 )
 
-# class Home
-# class ArticleDetailView
-# class EditorCreateView
+# other views
 
-class EditorUpdateView(UpdateView):                 # new
-    """edit article"""                              # new
+class EditorUpdateView(UpdateView):
+    """edit article"""
 
-    model = Article                                 # new
-    fields = ["title", "description", "title"]      # new
-    template_name = "editor.html"                   # new
+    model = Article
+    fields = ["title", "description", "title"]
+    template_name = "editor.html"
 #+end_example
 
 We're using the same template for creating and editing articles.
 In =urls.py=, add:
 
 #+begin_example python
-from django.urls import path
+# other imports
 from .views import (
-    Home,
-    ArticleDetailView,
-    EditorCreateView,
-    EditorUpdateView                                                                # new
+    # other views
+    EditorUpdateView
 )
 
 urlpatterns = [
-    path("", Home.as_view(), name="home"),
-    path("article/<slug:slug>", ArticleDetailView.as_view(), name="article_detail"),
-    path("editor", EditorCreateView.as_view(), name="editor_create"),
-    path("editor/<slug:slug>", EditorUpdateView.as_view(), name="editor_update"),   # new
+    # other paths
+    path("editor/<slug:slug>", EditorUpdateView.as_view(), name="editor_update"),
 ]
 #+end_example
 
@@ -835,23 +817,18 @@ In =views.py=, we create a =ArticleDeleteView=:
 #+begin_example python
 # other imports
 from django.views.generic import (
-    TemplateView,
-    DetailView,
-    CreateView,
-    UpdateView,
-    DeleteView,                                 # new
+    # other views
+    DeleteView,
 )
-from django.urls import reverse_lazy            # new
+from django.urls import reverse_lazy
 
 # other classes
+class EditorDeleteView(DeleteView):
+    """delete article"""
 
-
-class EditorDeleteView(DeleteView):             # new
-    """delete article"""                        # new
-
-    model = Article                             # new
-    success_url = reverse_lazy("home")          # new
-    template_name = "article_detail.html"       # new
+    model = Article
+    success_url = reverse_lazy("home")
+    template_name = "article_detail.html"
 #+end_example
 
 Notice that we're using the =article_detail.html= template. We could use a separate one, but that would require to load a new page, which seems unnecessary: we'll in a second how we're making this work.
@@ -861,16 +838,13 @@ In =urls.py=:
 #+begin_example python
 # other imports
 from .views import (
-    Home,
-    ArticleDetailView,
-    EditorCreateView,
-    EditorUpdateView,
-    EditorDeleteView,                                                                       # new
+    # other views
+    EditorDeleteView,
 )
 
 urlpatterns = [
     # other paths
-    path("editor/<slug:slug>/delete", EditorDeleteView.as_view(), name="editor_delete"),    # new
+    path("editor/<slug:slug>/delete", EditorDeleteView.as_view(), name="editor_delete"),
 ]
 #+end_example
 
@@ -919,6 +893,8 @@ A comment needs a related article, an author, a body, and a date.
 Let's create a =Comment= model in =models.py=:
 
 #+begin_example python
+# other models
+
 class Comment(models.Model):
     article = models.ForeignKey(
         Article,
@@ -1019,6 +995,26 @@ class CommentCreateView(CreateView):
     model = Comment
     fields = ["body"]
     template_name = "article_detail.html"
+#+end_example
+
+In =urls.py=:
+
+#+begin_example python
+# other imports
+from .views import (
+    # other views
+    CommentCreateView,
+)
+
+urlpatterns = [
+    # other paths
+    path(
+        "article/<slug:slug>/comment",
+        CommentCreateView.as_view(),
+        name="comment_create",
+    ),
+
+]
 #+end_example
 
 In =comments.html=:
