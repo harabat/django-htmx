@@ -5,7 +5,7 @@ from .views import (
     EditorCreateView,
     EditorUpdateView,
     EditorDeleteView,
-    # CommentCreateView,
+    CommentCreateView,
 )
 
 urlpatterns = [
@@ -14,9 +14,9 @@ urlpatterns = [
     path("editor", EditorCreateView.as_view(), name="editor_create"),
     path("editor/<slug:slug>", EditorUpdateView.as_view(), name="editor_update"),
     path("editor/<slug:slug>/delete", EditorDeleteView.as_view(), name="editor_delete"),
-    # path(
-    #     "article/<slug:slug>/comment/",
-    #     CommentCreateView.as_view(),
-    #     name="comment_create",
-    # ),
+    path(
+        "article/<slug:slug>/comment/",
+        CommentCreateView.as_view(),
+        name="comment_create",
+    ),
 ]
