@@ -30,19 +30,92 @@ conda install django
 * Git
 We assume that you know the basics of git. You should =git commit= at the end of every chapter.
 * Creating a project
-Let's create a folder for our project.
+** Project layout
+We'll be following the folder structure presented as best practice in /Two Scoops of Django/, which will yield something like the following:
 
-The folder will be =Django_tutorial= and the project will be =conduit=.
+#+begin_example
+folder_name
+├── config/
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings/
+│   ├── urls.py
+│   └── wsgi.py
+├── project_name/
+│   ├── app_1/
+│   ├── app_2/
+│   ├── static/
+│   └── templates/
+├── .gitignore
+├── manage.py
+└── db.sqlite3
+#+end_example
+
+Let's create a folder for our project: we'll name it =django_tutorial=.
 
 #+begin_example shell
-(django) ~$ mkdir django_tutorial
-(django) ~$ cd django_tutorial
-(django) django_tutorial$ django-admin startproject conduit
+(django) ~$ mkdir conduit
 #+end_example
-* Change settings
-** TODO PostgreSQL
+
+Let's create our project =conduit=
+#+begin_example shell
+(django) ~$ cd conduit
+(django) django_tutorial$ django-admin startproject conduit .
+#+end_example
+
+Our folder structure looks like this now:
+
+#+begin_example
+django_tutorial
+├── conduit
+│   ├── asgi.py
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── db.sqlite3
+└── manage.py
+#+end_example
+
+We'll move all the files in the =conduit= folder into the =django_tutorial/config= folder, as we explained above. The project layout should now be:
+
+#+begin_example
+.
+├── conduit
+│── config
+│   ├── asgi.py
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── manage.py
+#+end_example
+** Change settings
+*** settings.py
+Because we're deviating from Django's generic project layout, we'll have to update some lines.
+
+You might wonder why we have to fiddle with the settings before even starting to code, but this small effort has the benefit of making the structure of our project easier to understand and of separating the config from the code, which is a good rule of thumb.
+
+In =asgi.py= and =wsgi.py=:
+
+#+begin_example python
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+# from os.environ.setdefault("DJANGO_SETTINGS_MODULE", "conduit.settings")
+#+end_example
+
+
+In =settings.py=:
+
+#+begin_example python
+ROOT_URLCONF = "config.urls"
+# from ROOT_URLCONF = "conduit.urls"
+
+WSGI_APPLICATION = "config.wsgi.application"
+# from WSGI_APPLICATION = "conduit.wsgi.application"
+#+end_example
+*** TODO PostgreSQL
 Following the arguments of [[https://htmx-django.com/blog/a-minimalistic-modern-django-boilerplate#docker][A Minimalistic Modern Django Boilerplate]]
-* Create a database
+** Create a database
 Make the migrations and start the server:
 
 #+begin_example shell
@@ -51,8 +124,8 @@ Make the migrations and start the server:
 #+end_example
 
 Our app, Conduit, is online!
-* App folder structure
-We'll create apps for core, articles, and profiles because there is a Our app will have a lot of moving parts (articles, profiles, tags, etc.). To keep the structure of our app clear, we'll host the logic for each of these parts in separate folders.
+** App folder structure
+Our app will have a lot of moving parts (articles, profiles, tags, etc.). To keep the structure of our app clear, we'll host the logic for each of these parts in separate folders.
 
 We'll build Conduit step by step.
 The most basic function that the app should have is the ability to post and read articles. Let's start with that (you'll notice that this part is basically a repeat of Django Girls tutorial's blog app).
@@ -77,6 +150,7 @@ django_tutorial
 │   │   ├── models.py
 │   │   ├── tests.py
 │   │   └── views.py
+├── config
 │   ├── asgi.py
 │   ├── __init__.py
 │   ├── settings.py
@@ -140,8 +214,8 @@ class Article(models.Model):
 Let's sync the database again:
 
 #+begin_example shell
-python manage.py makemigrations
-python manage.py migrate articles
+(django) django_tutorial$ python manage.py makemigrations
+(django) django_tutorial$ python manage.py migrate
 #+end_example
 ** Django admin
 In order to have something to work with for the rest of the tutorial, we need to create some posts. Because we can't yet do it through Conduit, we will do so through Django admin.
@@ -509,7 +583,7 @@ We create a =signals.py= file in =articles/= and add the following method to it:
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from .models import Article
-from conduit.utils import unique_slug_generator
+from config.utils import unique_slug_generator
 
 @receiver(pre_save, sender=Article)
 def pre_save_receiver(sender, instance, *args, **kwargs):
@@ -1073,6 +1147,7 @@ urlpatterns = [
         ArticleCommentView.as_view(),
         name="article_detail",
     ),
+    # instead of =path("article/<slug:slug>", ArticleCommentView.as_view(), name="article_detail")=
 ]
 #+end_example
 
@@ -1129,8 +1204,9 @@ class CommentDeleteView(DeleteView):
     model = Comment
     template_name = "article_detail.html"
 
+    # redirect to attached article's detail page upon success
     def get_success_url(self):
-        return reverse("article_detail", kwargs={"slug": self.kwargs.get("slug")})
+        return reverse("article_detail", kwargs={"slug": self.object.article.slug})
 #+end_example
 
 In =urls.py=:
@@ -1145,6 +1221,8 @@ urlpatterns = [
     ),
 ]
 #+end_example
+
+We require =pk= as an argument because that's what the =CommentDeleteView= needs to know which comment to delete. The =<slug:slug>= part is unnecessary, but it makes the path more logical, I find.
 
 In =comments.html=:
 
@@ -1185,12 +1263,12 @@ Create =comment_delete.html=:
     </form>
 {% endblock %}
 #+end_example
-* Follows, favorites, and tags
 * Profiles
 ** TODO django_allauth
 From [[https://htmx-django.com/blog/a-minimalistic-modern-django-boilerplate#user][A Minimalistic Modern Django Boilerplate]]
 ** TODO jwt
 To abide by Realworld's API spec, the authentication should be implemented with jwt [[https://github.com/gothinkster/react-redux-realworld-example-app#functionality-overview][gothinkster/react-redux-realworld-example-app: Exemplary real world ...]]
+* Follows, favorites, and tags
 * UI stuff
 ** TODO class:active
 *** [[https://stackoverflow.com/questions/340888/navigation-in-django/341748#341748][Navigation in django - Stack Overflow]]

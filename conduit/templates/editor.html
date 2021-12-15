@@ -8,7 +8,6 @@
                         {% csrf_token %}
                         <fieldset>
                             <fieldset class="form-group">
-                                {{ form.title.errors }}
                                 <input
                                     class="form-control form-control-lg"
                                     type="text"
@@ -18,7 +17,6 @@
                                 />
                             </fieldset>
                             <fieldset class="form-group">
-                                {{ form.description.errors }}
                                 <input
                                     class="form-control"
                                     type="text"
@@ -28,7 +26,6 @@
                                 />
                             </fieldset>
                             <fieldset class="form-group">
-                                {{ form.body.errors }}
                                 <textarea
                                     class="form-control"
                                     rows="8"
