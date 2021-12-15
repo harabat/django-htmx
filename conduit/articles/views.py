@@ -6,10 +6,11 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
     ListView,
+    View,
 )
 from django.urls import reverse_lazy, reverse
 from .models import Article, Comment
-from django.shortcuts import get_object_or_404, resolve_url
+import pudb
 
 
 class Home(TemplateView):
@@ -39,9 +40,14 @@ class ArticleDetailView(DetailView):
     model = Article
     template_name = "article_detail.html"
 
+    # def get_object(self):
+    #     obj = super().get_object()
+    #     obj.save()
+    #     return obj
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["slug"] = self.model.slug
+        context["form"] = CommentCreateView().get_form_class()
         return context
 
 
@@ -80,17 +86,37 @@ class CommentCreateView(CreateView):
 
     model = Comment
     fields = ["body"]
-    template_name = "comment_create.html"
+    template_name = "article_detail.html"
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.article = Article.objects.filter(
+        form.instance.author = self.request.user
+        form.instance.article = Article.objects.filter(
             slug=self.kwargs.get("slug")
         ).first()
-        self.object.author = self.request.user
-        self.object.save()
         return super().form_valid(form)
 
-    # def get_success_url(self):
-    #     return resolve_url("home")
-    # success_url = reverse_lazy("article_detail", kw={"slug": })
+    def get_success_url(self):
+        return reverse("article_detail", kwargs={"slug": self.object.article.slug})
+
+
+class ArticleCommentView(View):
+    """view article and post comments"""
+
+    def get(self, request, *args, **kwargs):
+        view = ArticleDetailView.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = CommentCreateView.as_view()
+        return view(request, *args, **kwargs)
+
+
+class CommentDeleteView(DeleteView):
+    """delete comment"""
+
+    model = Comment
+    template_name = "article_detail.html"
+
+    def get_success_url(self):
+        # self.kwargs.get("slug") == self.object.article.slug
+        return reverse("article_detail", kwargs={"slug": self.kwargs.get("slug")})

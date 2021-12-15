@@ -1,16 +1,6 @@
 <div class="col-xs-12 col-md-8 offset-md-2">
     <div>
-        <div class="card comment-form">
-            <div class="card-footer">
-                <a
-                    href="{% url 'comment_create' slug=article.slug %}"
-                    class="btn btn-sm btn-primary"
-                >
-                    Post Comment
-                </a>
-            </div>
-        </div>
-        {#% include "comment_create.html" %#}
+        {% include 'comment_create.html' %}
     </div>
     {% for comment in article.comments.all|dictsortreversed:'created_at' %}
         <div class="card">
@@ -26,6 +16,7 @@
                 <span class="date-posted">
                     {{ comment.created_at|date:"D M d Y" }}
                 </span>
+                {% include 'comment_delete.html' %}
             </div>
         </div>
     {% endfor %}
