@@ -1,7 +1,7 @@
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from .models import Article
-from conduit.utils import unique_slug_generator
+from config.utils import unique_slug_generator
 
 
 @receiver(pre_save, sender=Article)
