@@ -11,7 +11,7 @@
             </div>
             <div class="card-footer">
                 <span class="comment-author">
-                    {{ comment.author }}
+                    {{ comment.author.user.username }}
                 </span>
                 <span class="date-posted">
                     {{ comment.created_at|date:"D M d Y" }}

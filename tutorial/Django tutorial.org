@@ -17,6 +17,8 @@ You should have followed the [[https://github.com/DjangoGirls/tutorial][DjangoGi
 ** Django 3.2
 ** Changes compared to django-realworld-example-app
 - The =core.TimestampedModel= mostly exists to allow default ordering, which is [[https://docs.djangoproject.com/en/3.2/ref/models/options/#ordering][not recommended]], so we'll do without.
+- We can implement the whole app without building a REST API, so we won't.
+- Because we don't use REST API, we don't need to implement JWT authentication.
 ** conda or pyvenv for virtual environments
 ** git
 * Virtual environment
@@ -90,8 +92,7 @@ We'll move all the files in the =conduit= folder into the =django_tutorial/confi
 │   └── wsgi.py
 └── manage.py
 #+end_example
-** Change settings
-*** settings.py
+
 Because we're deviating from Django's generic project layout, we'll have to update some lines.
 
 You might wonder why we have to fiddle with the settings before even starting to code, but this small effort has the benefit of making the structure of our project easier to understand and of separating the config from the code, which is a good rule of thumb.
@@ -113,17 +114,9 @@ ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
 # from WSGI_APPLICATION = "conduit.wsgi.application"
 #+end_example
+** Database
 *** TODO PostgreSQL
 Following the arguments of [[https://htmx-django.com/blog/a-minimalistic-modern-django-boilerplate#docker][A Minimalistic Modern Django Boilerplate]]
-** Create a database
-Make the migrations and start the server:
-
-#+begin_example shell
-(django) django_tutorial$ python manage.py migrate
-(django) django_tutorial$ python manage.py runserver
-#+end_example
-
-Our app, Conduit, is online!
 ** App folder structure
 Our app will have a lot of moving parts (articles, profiles, tags, etc.). To keep the structure of our app clear, we'll host the logic for each of these parts in separate folders.
 
@@ -185,6 +178,100 @@ INSTALLED_APPS = [
     'conduit.articles', # add this line
 ]
 #+end_example
+** User model
+[[https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#substituting-a-custom-user-model][The Django docs warn you]]: "/If you’re starting a new project, it’s highly recommended to set up a custom user model, even if the default User model is sufficient for you. [...] Changing AUTH_USER_MODEL after you’ve created database tables is significantly more difficult [...]. This change can’t be done automatically and requires manually fixing your schema, moving your data from the old user table, and possibly manually reapplying some migrations./". Scary stuff. Let's just follow the advice.
+
+First, we need to create the app where we'll do everything that has to do with users.
+
+#+begin_example shell
+(django) conduit$ django-admin startapp users
+#+end_example
+
+We then change the =name= line in the file =apps.py= in the =articles= folder:
+
+#+begin_example python
+from django.apps import AppConfig
+
+
+class UsersConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'conduit.users'
+#+end_example
+
+Now, in =users/models.py=, add the following:
+
+#+begin_example python
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+
+class User(AbstractUser):
+    """User model"""
+
+    pass
+#+end_example
+
+What we're doing here is take the =AbstractUser= model and save it as is. This way, we can add any modifications we need later on.
+
+# You'll notice that we didn't take the =AbstractUser= model, as explained in the docs. The reason is that the default Django User model (the one we'd be subclassing with =AbstractUser=) has fields that we don't need (=field_name=, =last_name=), etc., while =AbstractBaseUser= is a clean slate.
+
+In =users/models.py= we also need to create a =Profile= model: we'll explain it in more detail later, but suffice it to say that the =Profile= will deal with the everything about our users that is not authentication (logging in and out).
+
+#+begin_example python
+class Profile(models.Model):
+    """Profile model"""
+
+    user = models.OneToOneField(User)
+#+end_example
+
+Now, create a superuser in the terminal, so as to be able to access Django's admin app later on:
+
+#+begin_example shell
+(django) django_tutorial$ python manage.py createsuperuser
+#+end_example
+
+And one last dark magic trick that you just need to do without asking why (detailed explanations will be provided in a later section, promise): in your terminal, in the =django_tutorial= folder, run the following commands:
+
+#+begin_example
+(django) django_tutorial$ python manage.py shell
+#+end_example
+
+And once you're in the IPython shell:
+
+#+begin_example python
+Python 3.9.7 | packaged by conda-forge | (default, Sep 29 2021, 19:20:46)
+Type 'copyright', 'credits' or 'license' for more information
+IPython 7.30.1 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: from conduit.users.models import User, Profile
+
+In [2]: user = User.objects.get(username='admin')
+
+In [3]: user.profile = Profile.objects.create(user=user)
+#+end_example
+
+Finally, we need to tell Django that we're not using the default User model. In =settings.py=, add your =users= app to =INSTALLED_APPS= and point =AUTH_USER_MODEL= to it:
+
+#+begin_example python
+# other settings
+
+INSTALLED_APPS = [
+    # other apps
+    'conduit.users'                  # new
+]
+
+AUTH_USER_MODEL = 'users.User'    # new
+#+end_example
+** Create a database
+Make the migrations and start the server:
+
+#+begin_example shell
+(django) django_tutorial$ python manage.py makemigrations
+(django) django_tutorial$ python manage.py migrate
+(django) django_tutorial$ python manage.py runserver
+#+end_example
+
+Our app, Conduit, is online!
 * Article model
 ** Model
 We'll start by making a model for our articles.
@@ -200,7 +287,9 @@ class Article(models.Model):
     description = models.TextField(max_length=2000)
     body = models.TextField()
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="articles"
+        "users.Profile",
+        on_delete=models.CASCADE,
+        related_name="articles",
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -210,6 +299,10 @@ class Article(models.Model):
     def get_absolute_url(self):
         return reverse("article_detail", kwargs={"pk": self.pk})
 #+end_example
+
+The =ForeignKey= allows us to have multiple articles for every user.
+=on_delete=models.CASCADE) means that the article will be deleted if the user is deleted.
+=related_name="articles"= allows us to access a user's articles through an =articles= attribute.
 
 Let's sync the database again:
 
@@ -227,12 +320,6 @@ from django.contrib import admin
 from .models import Article
 
 admin.site.register(Article)            # new
-#+end_example
-
-Now, create a superuser in the terminal with:
-
-#+begin_example shell
-(django) django_tutorial$ python manage.py createsuperuser
 #+end_example
 
 The server should still be running (otherwise restart it). Log in as the superuser you just created and create 3 articles.
@@ -370,7 +457,7 @@ Let's create the template  and add the following to it:
                             <div class="article-meta">
                                 <div class="info">
                                     <span class="author">
-                                        {{ article.author }}
+                                        {{ article.author.user.username }}
                                     </span>
                                     <span class="date">
                                         {{ article.created_at|date:"D M d Y" }}
@@ -443,7 +530,7 @@ Now, we create the =article_detail.html= file in our =templates= folder and add 
                 <div class="article-meta">
                     <div class="info">
                         <span class="author">
-                            {{ article.author }}
+                            {{ article.author.user.username }}
                         </span>
                         <span class="date">
                             {{ article.created_at|date:"F d, Y" }}
@@ -702,7 +789,7 @@ We add a =New article= button to the Nav bar in =nav.html=:
             </li>
             <li class="nav-item">                                                       <!-- new -->
                 <a rel="prefetch" href="{% url 'editor_create' %}" class="nav-link">    <!-- new -->
-                    <i class="ion-compose"> New Post </i>                               <!-- new -->
+                    <span class="ion-compose"> New Post </span>                            <!-- new -->
                 </a>                                                                    <!-- new -->
             </li>                                                                       <!-- new -->
         </ul>
@@ -723,6 +810,17 @@ Now, we can create the template =editor_create.html=:
                     >
                         {% csrf_token %}
                         <fieldset>
+                            {% if form.errors %}
+                                <ul>
+                                    {% for key, value in form.errors.items %}
+                                        <li>
+                                            <strong>
+                                                {{ key }}: {{ value }}
+                                            </strong>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
                             <fieldset class="form-group">
                                 <input
                                     class="form-control form-control-lg"
@@ -777,11 +875,11 @@ class EditorCreateView(CreateView):
     fields = ["title", "description", "body"]
     template_name = "editor.html"
 
-    def form_valid(self, form):                     # new
-        self.object = form.save(commit=False)       # new
-        self.object.author = self.request.user      # new
-        self.object.save()                          # new
-        return super().form_valid(form)             # new
+    def form_valid(self, form):                         # new
+        self.object = form.save(commit=False)           # new
+        self.object.author = self.request.user.profile  # new
+        self.object.save()                              # new
+        return super().form_valid(form)                 # new
 #+end_example
 
 Once this is done, try creating another article: it should work.
@@ -840,9 +938,9 @@ In =article_detail.html=, we add a button for editing the article and pass =arti
                             href="{% url 'editor_update' slug=article.slug %}"          <!-- new -->
                             class="btn btn-outline-secondary btn-sm"                    <!-- new -->
                         >                                                               <!-- new -->
-                            <i class="ion-edit">                                        <!-- new -->
+                            <span class="ion-edit">                                    <!-- new -->
                                 Edit Article                                            <!-- new -->
-                            </i>                                                        <!-- new -->
+                            </span>                                                    <!-- new -->
                         </a>                                                            <!-- new -->
                     </span>                                                             <!-- new -->
                 </div>
@@ -936,9 +1034,9 @@ Now, create an =article_delete.html= file: this will hold the form for deleteing
         value="DELETE"                                                                      <!-- new  -->
         onclick="return confirm('Are you sure you want to delete {{ article.title }}?')"    <!-- new  -->
     >                                                                                       <!-- new  -->
-        <i class="ion-trash-a">                                                             <!-- new  -->
+        <span class="ion-trash-a">                                                         <!-- new  -->
             Delete Article                                                                  <!-- new  -->
-        </i>                                                                                <!-- new  -->
+        </span>                                                                                <!-- new  -->
     </button>                                                                               <!-- new  -->
 </form>                                                                                     <!-- new  -->
 #+end_example
@@ -1048,7 +1146,7 @@ Now create =comments.html= in the =templates= folder and add the following:
             </div>
             <div class="card-footer">
                 <span class="comment-author">
-                    {{ comment.author }}
+                    {{ comment.author.user.username }}
                 </span>
                 <span class="date-posted">
                     {{ comment.created_at|date:"D M d Y" }}
@@ -1080,7 +1178,7 @@ class CommentCreateView(CreateView):
     template_name = "article_detail.html"
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        form.instance.author = self.request.user.profile
         form.instance.article = Article.objects.filter(
             slug=self.kwargs.get("slug")
         ).first()
@@ -1263,11 +1361,133 @@ Create =comment_delete.html=:
     </form>
 {% endblock %}
 #+end_example
-* Profiles
-** TODO django_allauth
-From [[https://htmx-django.com/blog/a-minimalistic-modern-django-boilerplate#user][A Minimalistic Modern Django Boilerplate]]
-** TODO jwt
-To abide by Realworld's API spec, the authentication should be implemented with jwt [[https://github.com/gothinkster/react-redux-realworld-example-app#functionality-overview][gothinkster/react-redux-realworld-example-app: Exemplary real world ...]]
+* Users and Profiles
+Time to work on our users and profiles.
+
+[[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#specifying-a-custom-user-model][The Django docs say]] "/it may be more suitable to store app-specific user information in a model that has a relation with your custom user model. That allows each app to specify its own user data requirements without potentially conflicting or breaking assumptions by other apps. It also means that you would keep your user model as simple as possible, focused on authentication, and following the minimum requirements Django expects custom user models to meet./".
+
+This is why we'll have the authentication logic in a =User= model and the profile logic in a =Profile= model.
+** User model
+*** User
+The =User= model will contain everything related to authentication.
+
+We need an email, a username, and a password. Let's add the following to the =User= model in =users/models.py=:
+
+#+begin_example python
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+
+class User(AbstractUser):
+    """User model"""
+
+    username = models.CharField(max_length=255, unique=True)
+    email = models.EmailField(unique=True)
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
+
+    def __str__(self):
+        self.email
+#+end_example
+
+The =username= field is the unique human-readable identifier that we can represent users with in our app.
+The =email= field holds the email users will be logging in with. We specify this in =USERNAME_FIELD=.
+The =password= field is already provided by =AbstractUser=.
+=REQUIRED_FIELDS= is the list of field users will be prompted for at sign up: because the =USERNAME_FIELD= and the =password= are already required by Django, we only need to specify =username=.
+More information about the fields can be found in the docs for [[https://docs.djangoproject.com/en/4.0/ref/contrib/auth/][the default Django User model]].
+
+*** UserManager
+We also need a =UserManager=, [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#writing-a-manager-for-a-custom-user-model][as advised by the docs]]. In =models.py=, we add the following, BEFORE we define our =User= model:
+
+#+begin_example python
+# other imports
+from django.contrib.auth.models import AbstractUser, UserManager
+
+# other models
+class UserManager(UserManager):
+    """custom UserManager with unique identifier is email instead of username"""
+
+    def create_user(self, username, email, password=None):
+        """Create and return a User with username, email, and password"""
+
+        if email is None:
+            raise ValueError("Email is required.")
+        if username is None:
+            raise ValueError("Username is required")
+
+        email = self.normalize_email(email)
+        user = self.model(username=username, email=email)
+        user.set_password(password)
+        user.save()
+        return user
+
+    def create_superuser(self, username, email, password=None):
+        """Create and return a SuperUser with admin permissions."""
+
+        user.is_staff = True
+        user.is_superuser = True
+        user.is_active = True
+
+        user.save()
+
+        user = self.create_user(username, email, password)
+
+        return user
+#+end_example
+
+We now need to go back to the =User= model in =users/models.py= and indicate to Django that the =UserManager= defined above will manage objects of type =User=:
+
+#+begin_example python
+# other
+class User(AbstractUser):
+    """user model"""
+
+    username = models.charfield(max_length=255, unique=true)
+    email = models.emailfield(unique=true)
+
+    username_field = "email"
+    required_fields = ["username"]
+
+    objects = UserManager()                 # new
+#+end_example
+
+*** TODO admin.py
+We need to register this new =User= model in =users/admins.py=, to have access to it in our admin app. We'll just adapt [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model][what the docs say]]:
+
+#+begin_example python
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from .models import User, Profile
+
+
+class ProfileInline(admin.StackedInline):
+    model = Profile
+    can_delete = False
+    verbose_name_plural = "profile"
+
+class UserAdmin(BaseUserAdmin):
+    inlines = (ProfileInline,)
+
+
+# admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
+#+end_example
+** Profile model
+We are following the instructions in the Django docs about [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model][extending a User model]]. We need to store some information about our users in the database, so we'll create a model that will link to the =User= through a =OneToOneField=.
+
+Our =Profile= needs the following fields:
+- image
+- articles
+- comments
+
+We have already taken care of the two last fields in the =Article= and =Comment= models through the =related_name= args in the =author= fields.
+
+Let's define a =Profile= model in =users/models.py=:
+
+#+begin_example python
+
+#+end_example
 * Follows, favorites, and tags
 * UI stuff
 ** TODO class:active

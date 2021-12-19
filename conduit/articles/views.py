@@ -60,9 +60,12 @@ class EditorCreateView(CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object.author = self.request.user
+        self.object.author = self.request.user.profile
         self.object.save()
         return super().form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
 
 
 class EditorUpdateView(UpdateView):
@@ -89,7 +92,7 @@ class CommentCreateView(CreateView):
     template_name = "article_detail.html"
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        form.instance.author = self.request.user.profile
         form.instance.article = Article.objects.filter(
             slug=self.kwargs.get("slug")
         ).first()
