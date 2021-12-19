@@ -7,6 +7,17 @@
                     <form method="post">
                         {% csrf_token %}
                         <fieldset>
+                            {% if form.errors %}
+                                <ul>
+                                    {% for key, value in form.errors.items %}
+                                        <li>
+                                            <strong>
+                                                {{ key }}: {{ value }}
+                                            </strong>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
                             <fieldset class="form-group">
                                 <input
                                     class="form-control form-control-lg"

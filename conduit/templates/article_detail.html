@@ -7,7 +7,7 @@
                 <div class="article-meta">
                     <div class="info">
                         <span class="author">
-                            {{ article.author }}
+                            {{ article.author.user.username }}
                         </span>
                         <span class="date">
                             {{ article.created_at|date:"F d, Y" }}
@@ -18,9 +18,9 @@
     href="{% url 'editor_update' slug=article.slug %}"
     class="btn btn-outline-secondary btn-sm"
                         >
-                            <i class="ion-edit">
+                            <span class="ion-edit">
                                 Edit Article
-                            </i>
+                            </span>
                         </a>
                         {% include 'article_delete.html' %}
                     </span>

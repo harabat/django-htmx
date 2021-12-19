@@ -11,7 +11,7 @@ class Article(models.Model):
     description = models.TextField(max_length=300)
     body = models.TextField()
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        "users.Profile",
         on_delete=models.CASCADE,
         related_name="articles",
     )
@@ -33,7 +33,7 @@ class Comment(models.Model):
     )
     body = models.TextField()
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        "users.Profile",
         on_delete=models.CASCADE,
         related_name="comments",
     )

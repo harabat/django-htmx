@@ -15,7 +15,7 @@
                             <div class="article-meta">
                                 <div class="info">
                                     <span class="author">
-                                        {{ article.author }}
+                                        {{ article.author.user.username }}
                                     </span>
                                     <span class="date">
                                         {{ article.created_at|date:"D M d Y" }}
