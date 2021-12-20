@@ -9,6 +9,7 @@ from django.views.generic import (
     View,
 )
 from django.urls import reverse_lazy, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Article, Comment
 import pudb
 
@@ -51,7 +52,7 @@ class ArticleDetailView(DetailView):
         return context
 
 
-class EditorCreateView(CreateView):
+class EditorCreateView(LoginRequiredMixin, CreateView):
     """create article"""
 
     model = Article
@@ -68,7 +69,7 @@ class EditorCreateView(CreateView):
         return super().post(request, *args, **kwargs)
 
 
-class EditorUpdateView(UpdateView):
+class EditorUpdateView(LoginRequiredMixin, UpdateView):
     """edit article"""
 
     model = Article
@@ -76,7 +77,7 @@ class EditorUpdateView(UpdateView):
     template_name = "editor.html"
 
 
-class EditorDeleteView(DeleteView):
+class EditorDeleteView(LoginRequiredMixin, DeleteView):
     """delete article"""
 
     model = Article
@@ -84,7 +85,7 @@ class EditorDeleteView(DeleteView):
     template_name = "article_detail.html"
 
 
-class CommentCreateView(CreateView):
+class CommentCreateView(LoginRequiredMixin, CreateView):
     """create comment"""
 
     model = Comment
@@ -114,7 +115,7 @@ class ArticleCommentView(View):
         return view(request, *args, **kwargs)
 
 
-class CommentDeleteView(DeleteView):
+class CommentDeleteView(LoginRequiredMixin, DeleteView):
     """delete comment"""
 
     model = Comment
