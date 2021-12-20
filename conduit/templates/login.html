@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="auth-page">
+        <div class="container page">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 col-xs-12">
+                    <h1 class="text-xs-center">Sign In</h1>
+                    <p class="text-xs-center">
+                        <a href="{% url 'signup' %}">Need an account?</a>
+                    </p>
+                    {% if form.errors %}
+                        <ul>
+                            {% for key, value in form.errors.items %}
+                                <li>
+                                    <strong>
+                                        {{ key }}: {{ value }}
+                                    </strong>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <form method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        <fieldset class="form-group">
+                            <input
+                                class="form-control form-control-lg"
+                                type="email"
+                                placeholder="Email"
+                                name="{{ form.email.name }}"
+                                value="{{ form.email.value|default_if_none:'' }}"
+                            >
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <input
+                                class="form-control form-control-lg"
+                                type="password"
+                                placeholder="Password"
+                                name="{{ form.password.name }}"
+                                value="{{ form.password.value|default_if_none:'' }}">
+                        </fieldset>
+                        <button class="btn btn-lg btn-primary pull-xs-right" type="submit">
+                            Sign in
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

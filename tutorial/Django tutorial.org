@@ -1,6 +1,6 @@
 :PROPERTIES:
 :ID:       a35b9773-9529-41fd-bbc3-3c2b071047e4
-#+PROPERTY: header-args :eval no
+#+PROPERTY: header-args :eval never
 :END:
 #+title: Django tutorial
 
@@ -24,18 +24,18 @@ You should have followed the [[https://github.com/DjangoGirls/tutorial][DjangoGi
 * Virtual environment
 We're working with =conda=, but you can work with =python3-venv=.
 
-#+begin_example shell
+#+begin_src shell
 conda create --name django
 conda activate django
 conda install django
-#+end_example
+#+end_src
 * Git
 We assume that you know the basics of git. You should =git commit= at the end of every chapter.
 * Creating a project
 ** Project layout
 We'll be following the folder structure presented as best practice in /Two Scoops of Django/, which will yield something like the following:
 
-#+begin_example
+#+begin_src
 folder_name
 ├── config/
 │   ├── __init__.py
@@ -51,23 +51,23 @@ folder_name
 ├── .gitignore
 ├── manage.py
 └── db.sqlite3
-#+end_example
+#+end_src
 
 Let's create a folder for our project: we'll name it =django_tutorial=.
 
-#+begin_example shell
+#+begin_src shell
 (django) ~$ mkdir conduit
-#+end_example
+#+end_src
 
 Let's create our project =conduit=
-#+begin_example shell
+#+begin_src shell
 (django) ~$ cd conduit
 (django) django_tutorial$ django-admin startproject conduit .
-#+end_example
+#+end_src
 
 Our folder structure looks like this now:
 
-#+begin_example
+#+begin_src
 django_tutorial
 ├── conduit
 │   ├── asgi.py
@@ -77,11 +77,11 @@ django_tutorial
 │   └── wsgi.py
 ├── db.sqlite3
 └── manage.py
-#+end_example
+#+end_src
 
 We'll move all the files in the =conduit= folder into the =django_tutorial/config= folder, as we explained above. The project layout should now be:
 
-#+begin_example
+#+begin_src
 .
 ├── conduit
 │── config
@@ -91,7 +91,7 @@ We'll move all the files in the =conduit= folder into the =django_tutorial/confi
 │   ├── urls.py
 │   └── wsgi.py
 └── manage.py
-#+end_example
+#+end_src
 
 Because we're deviating from Django's generic project layout, we'll have to update some lines.
 
@@ -99,21 +99,21 @@ You might wonder why we have to fiddle with the settings before even starting to
 
 In =asgi.py= and =wsgi.py=:
 
-#+begin_example python
+#+begin_src python
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 # from os.environ.setdefault("DJANGO_SETTINGS_MODULE", "conduit.settings")
-#+end_example
+#+end_src
 
 
 In =settings.py=:
 
-#+begin_example python
+#+begin_src python
 ROOT_URLCONF = "config.urls"
 # from ROOT_URLCONF = "conduit.urls"
 
 WSGI_APPLICATION = "config.wsgi.application"
 # from WSGI_APPLICATION = "conduit.wsgi.application"
-#+end_example
+#+end_src
 ** Database
 *** TODO PostgreSQL
 Following the arguments of [[https://htmx-django.com/blog/a-minimalistic-modern-django-boilerplate#docker][A Minimalistic Modern Django Boilerplate]]
@@ -123,15 +123,15 @@ Our app will have a lot of moving parts (articles, profiles, tags, etc.). To kee
 We'll build Conduit step by step.
 The most basic function that the app should have is the ability to post and read articles. Let's start with that (you'll notice that this part is basically a repeat of Django Girls tutorial's blog app).
 
-#+begin_example shell
+#+begin_src shell
 (django) django_tutorial$ cd conduit
 (django) conduit$ django-admin startapp articles
 (django) conduit$ cd articles
-#+end_example
+#+end_src
 
 Our folder structure now looks like this:
 
-#+begin_example shell
+#+begin_src shell
 django_tutorial
 ├── conduit
 │   ├── articles
@@ -151,22 +151,22 @@ django_tutorial
 │   └── wsgi.py
 ├── db.sqlite3
 └── manage.py
-#+end_example
+#+end_src
 
 We change the =name= line in the file =apps.py= in the =articles= folder:
 
-#+begin_example python
+#+begin_src python
 from django.apps import AppConfig
 
 
 class ArticlesConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'conduit.articles'
-#+end_example
+#+end_src
 
 We also add the line ='conduit.articles',= to INSTALLED_APPS in =settings.py=:
 
-#+begin_example python
+#+begin_src python
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -177,30 +177,30 @@ INSTALLED_APPS = [
 
     'conduit.articles', # add this line
 ]
-#+end_example
+#+end_src
 ** User model
 [[https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#substituting-a-custom-user-model][The Django docs warn you]]: "/If you’re starting a new project, it’s highly recommended to set up a custom user model, even if the default User model is sufficient for you. [...] Changing AUTH_USER_MODEL after you’ve created database tables is significantly more difficult [...]. This change can’t be done automatically and requires manually fixing your schema, moving your data from the old user table, and possibly manually reapplying some migrations./". Scary stuff. Let's just follow the advice.
 
 First, we need to create the app where we'll do everything that has to do with users.
 
-#+begin_example shell
+#+begin_src shell
 (django) conduit$ django-admin startapp users
-#+end_example
+#+end_src
 
 We then change the =name= line in the file =apps.py= in the =articles= folder:
 
-#+begin_example python
+#+begin_src python
 from django.apps import AppConfig
 
 
 class UsersConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'conduit.users'
-#+end_example
+#+end_src
 
 Now, in =users/models.py=, add the following:
 
-#+begin_example python
+#+begin_src python
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -209,7 +209,7 @@ class User(AbstractUser):
     """User model"""
 
     pass
-#+end_example
+#+end_src
 
 What we're doing here is take the =AbstractUser= model and save it as is. This way, we can add any modifications we need later on.
 
@@ -217,28 +217,28 @@ What we're doing here is take the =AbstractUser= model and save it as is. This w
 
 In =users/models.py= we also need to create a =Profile= model: we'll explain it in more detail later, but suffice it to say that the =Profile= will deal with the everything about our users that is not authentication (logging in and out).
 
-#+begin_example python
+#+begin_src python
 class Profile(models.Model):
     """Profile model"""
 
     user = models.OneToOneField(User)
-#+end_example
+#+end_src
 
 Now, create a superuser in the terminal, so as to be able to access Django's admin app later on:
 
-#+begin_example shell
+#+begin_src shell
 (django) django_tutorial$ python manage.py createsuperuser
-#+end_example
+#+end_src
 
 And one last dark magic trick that you just need to do without asking why (detailed explanations will be provided in a later section, promise): in your terminal, in the =django_tutorial= folder, run the following commands:
 
-#+begin_example
+#+begin_src
 (django) django_tutorial$ python manage.py shell
-#+end_example
+#+end_src
 
 And once you're in the IPython shell:
 
-#+begin_example python
+#+begin_src python
 Python 3.9.7 | packaged by conda-forge | (default, Sep 29 2021, 19:20:46)
 Type 'copyright', 'credits' or 'license' for more information
 IPython 7.30.1 -- An enhanced Interactive Python. Type '?' for help.
@@ -248,11 +248,11 @@ In [1]: from conduit.users.models import User, Profile
 In [2]: user = User.objects.get(username='admin')
 
 In [3]: user.profile = Profile.objects.create(user=user)
-#+end_example
+#+end_src
 
 Finally, we need to tell Django that we're not using the default User model. In =settings.py=, add your =users= app to =INSTALLED_APPS= and point =AUTH_USER_MODEL= to it:
 
-#+begin_example python
+#+begin_src python
 # other settings
 
 INSTALLED_APPS = [
@@ -261,15 +261,15 @@ INSTALLED_APPS = [
 ]
 
 AUTH_USER_MODEL = 'users.User'    # new
-#+end_example
+#+end_src
 ** Create a database
 Make the migrations and start the server:
 
-#+begin_example shell
+#+begin_src shell
 (django) django_tutorial$ python manage.py makemigrations
 (django) django_tutorial$ python manage.py migrate
 (django) django_tutorial$ python manage.py runserver
-#+end_example
+#+end_src
 
 Our app, Conduit, is online!
 * Article model
@@ -277,7 +277,7 @@ Our app, Conduit, is online!
 We'll start by making a model for our articles.
 The articles need a title, a body (the text), a description, an author, and a creation date.
 
-#+begin_example python
+#+begin_src python
 from django.db import models
 from django.conf import settings
 
@@ -298,7 +298,7 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         return reverse("article_detail", kwargs={"pk": self.pk})
-#+end_example
+#+end_src
 
 The =ForeignKey= allows us to have multiple articles for every user.
 =on_delete=models.CASCADE) means that the article will be deleted if the user is deleted.
@@ -306,21 +306,21 @@ The =ForeignKey= allows us to have multiple articles for every user.
 
 Let's sync the database again:
 
-#+begin_example shell
+#+begin_src shell
 (django) django_tutorial$ python manage.py makemigrations
 (django) django_tutorial$ python manage.py migrate
-#+end_example
+#+end_src
 ** Django admin
 In order to have something to work with for the rest of the tutorial, we need to create some posts. Because we can't yet do it through Conduit, we will do so through Django admin.
 
 First, register the =Article= model in =articles/admin.py= by adding the following line:
 
-#+begin_example python
+#+begin_src python
 from django.contrib import admin
 from .models import Article
 
 admin.site.register(Article)            # new
-#+end_example
+#+end_src
 
 The server should still be running (otherwise restart it). Log in as the superuser you just created and create 3 articles.
 * Lists of Articles
@@ -329,7 +329,7 @@ The default view that the unauthenticated user has is the global feed, or the li
 
 We add the following line in =django_tutorial/conduit/urls.py=, so that the project-level =urls.py= is aware of the urls defined in =articles/urls.py=:
 
-#+begin_example python
+#+begin_src python
 from django.contrib import admin
 from django.urls import path, include
 
@@ -337,20 +337,20 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('conduit.articles.urls')),                         #new
 ]
-#+end_example
+#+end_src
 
 Let's create a =urls.py= file in the =articles= folder, and add the following:
 
-#+begin_example python
+#+begin_src python
 from django.urls import path
 from . import views
 
 urlpatterns = [path("", Home.as_view(), name="home")]
-#+end_example
+#+end_src
 
 In =views.py=, we add the following:
 
-#+begin_example python
+#+begin_src python
 from django.shortcuts import render
 from .models import Article
 
@@ -364,49 +364,49 @@ class Home(TemplateView):
         context = super().get_context_data(**kwargs)
         context["articles"] = Article.objects.order_by("-created_at")
         return context
-#+end_example
+#+end_src
 ** Templates folder
 We need a template now, but before this we need to create a folder for templates and for static files (icons, CSS, etc.).
 
 It's easier to have all templates in one place, instead of in each separate app, and the same is true for static files. Let's create the =templates= and =static= folders:
 
-#+begin_example shell
+#+begin_src shell
 (django) conduit$ mkdir templates
 (django) conduit$ mkdir static
-#+end_example
+#+end_src
 
 We need to modify =settings.py= so Django is aware of our project's architecture.
 Let's define the APPS_DIR below BASE_DIR first:
 
-#+begin_example python
+#+begin_src python
 BASE_DIR = Path(__file__).resolve().parent.parent
 APPS_DIR = BASE_DIR / "conduit"
-#+end_example
+#+end_src
 
 Let's change the =DIRS= line in the =TEMPLATES= section in =settings.py= like this:
 
-#+begin_example python
+#+begin_src python
 "DIRS": [APPS_DIR / "templates"], # changed from "DIRS": []
-#+end_example
+#+end_src
 
 Similarly, let's define the =STATIC_ROOT= directory below the =STATIC= line like this:
 
-#+begin_example python
+#+begin_src python
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [APPS_DIR / "static"]
-#+end_example
+#+end_src
 
 ** Base template
 Let's create the base template now.
 
-#+begin_example shell
+#+begin_src shell
 (django) conduit$ touch templates/base.html
-#+end_example
+#+end_src
 
 This template will contain the following:
 
-#+begin_example html
+#+begin_src html
 <!doctype html>
 {% load static %}
 <html lang="en">
@@ -430,7 +430,7 @@ This template will contain the following:
         </main>
     </body>
 </html>
-#+end_example
+#+end_src
 
 We'll also download the favicon referenced in our template: download the file located at the URL below to =conduit/articles/static/icons/favicon.ico=:
 https://github.com/gothinkster/react-redux-realworld-example-app/blob/master/public/favicon.ico
@@ -439,7 +439,7 @@ Now we'll make the =home.html= template, which for now only needs to display our
 # Because we know that there will be a lot stuff contained in view later ("Your feed", tag feed, "Popular tags"), we might as well take that into account and make our templates as modular as possible.
 Let's create the template  and add the following to it:
 
-#+begin_example html
+#+begin_src html
 {% extends 'base.html' %}
 {% block content %}
     <div class="home-page">
@@ -476,7 +476,7 @@ Let's create the template  and add the following to it:
         </div>
     </div>
 {% endblock %}
-#+end_example
+#+end_src
 
 The HTML is adapted from other realworld projects, especially the [[https://github.com/sveltejs/realworld/][SvelteKit implementation of the RealWorld app]], because it's unexpectedly close to Django's templating language.
 Because the HTML is little more than a copy-paste, we won't explain its structure and classes: suffice it to say that this is required to have something that looks like the actual Realworld app.
@@ -494,7 +494,7 @@ We'll be working with Class-Based Views: the /Django Girls/ tutorial only presen
 
 First, we create a view in =views.py=:
 
-#+begin_example python
+#+begin_src python
 from django.views.generic import TemplateView, DetailView
 
 
@@ -503,24 +503,24 @@ class ArticleDetailView(DetailView):
 
     model = Article
     template_name = "article_detail.html"
-#+end_example
+#+end_src
 
 Then, we modify the =articles/urls.py= file:
 
-#+begin_example python
+#+begin_src python
 from .views import Home, ArticleDetailView
 
 urlpatterns = [
     path("", Home.as_view(), name="home"),
     path("article/<int:pk>", ArticleDetailView.as_view(), name="article_detail"),
 ]
-#+end_example
+#+end_src
 
 *** TODO create "article_list.html", {% include 'article_list.html' with tab=tab %}
 ** Article template
 Now, we create the =article_detail.html= file in our =templates= folder and add the following to it:
 
-#+begin_example html
+#+begin_src html
 {% extends 'base.html' %}
 {% block content %}
     <div class="article-page">
@@ -550,11 +550,11 @@ Now, we create the =article_detail.html= file in our =templates= folder and add 
         </div>
     </div>
 {% endblock %}
-#+end_example
+#+end_src
 
 Finally, we modify =home.html= so that article previews redirect to articles:
 
-#+begin_example html
+#+begin_src html
 ...
 <a href="{{ article.get_absolute_url }}" rel="prefetch" class="preview-link">   <!-- new -->
    <h1>{{ article.title }}</h1>
@@ -562,7 +562,7 @@ Finally, we modify =home.html= so that article previews redirect to articles:
    <span>Read more...</span>
 </a>                                                                            <!-- new -->
 ...
-#+end_example
+#+end_src
 
 Let's see what it looks like:
 
@@ -578,7 +578,7 @@ We want the slugs to be unique, but some articles might have the same titles, wh
 *** Defining a slug and a UUID in the model
 First, we need to modify our =Article= model to include a slug, and to update the =get_absolute_url= method:
 
-#+begin_example python
+#+begin_src python
 class Article(models.Model):
     # ...
     slug = models.SlugField(max_length=255, editable=False)             # new
@@ -588,40 +588,40 @@ class Article(models.Model):
     def get_absolute_url(self):
         return reverse("article_detail", kwargs={"slug": self.slug})    # new
 
-#+end_example
+#+end_src
 
 After modifying the model, we need to sync the database, but this will return a warning.
 
-#+begin_example shell
+#+begin_src shell
 (django) django_tutorial$ python manage.py makemigrations
 You are trying to add a non-nullable field 'slug' to article without a default; we can't do that (the database needs something to populate existing rows).
 Please select a fix:
  1) Provide a one-off default now (will be set on all existing rows with a null value for this column)
  2) Quit, and let me add a default in models.py
 Select an option:
-#+end_example
+#+end_src
 
 We can't select =1= because a default is by definition non-unique. We select =2= to abort and add the =null=True= arg to the slug field, so as to be able to migrate and then modify the slug manually through the Django admin app:
 
-#+begin_example python
+#+begin_src python
 class Article(models.Model):
     # ...
     slug = models.SlugField(max_length=100, null=True)
     # ...
-#+end_example
+#+end_src
 
 We then run =makemigrations= and =migrate=, then set a unique slug for each =Article= through the Django admin app manually. Once we're done, we remove the =null=True= arg and add the =editable=False= arg:
 
-#+begin_example python
+#+begin_src python
 class Article(models.Model):
     # ...
     slug = models.SlugField(max_length=255, editable=False)             # new
     # ...
-#+end_example
+#+end_src
 
 When we migrate, we get a warning:
 
-#+begin_example
+#+begin_src
 (django) django_tutorial$ python manage.py makemigrations
 You are trying to change the nullable field 'slug' on article to non-nullable without a default; we can't do that (the database needs something to populate existing rows).
 Please select a fix:
@@ -629,7 +629,7 @@ Please select a fix:
  2) Ignore for now, and let me handle existing rows with NULL myself (e.g. because you added a RunPython or RunSQL operation to handle NULL values in a previous data migration)
  3) Quit, and let me add a default in models.py
 Select an option:
-#+end_example
+#+end_src
 
 You can safely select =2=, as we already have taken care of the slug fields through the Django admin app.
 *** Generate unique slug automatically
@@ -637,7 +637,7 @@ We want to avoid manually entering the slugs for every article: the generation o
 
 Let's create a =utils.py= file in the =conduit= folder and add the following methods to it:
 
-#+begin_example python
+#+begin_src python
 from django.utils.text import slugify
 import uuid
 
@@ -660,13 +660,13 @@ def unique_slug_generator(instance):
         return unique_slug_generator(instance)
 
     return slug
-#+end_example
+#+end_src
 *** Signals
 We will now use a signal, a Django utility that allows linking events with actions, to call our =unique_slug_generator= every time an Article is created. We could override the =Article= model's =save= method instead: this is a common method, but not [[https://teddit.ggc-project.de/r/django/comments/p3pgr/overriding_save_vs_presave_signals_which_is/][best practice]].
 
 We create a =signals.py= file in =articles/= and add the following method to it:
 
-#+begin_example python
+#+begin_src python
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from .models import Article
@@ -676,11 +676,11 @@ from config.utils import unique_slug_generator
 def pre_save_receiver(sender, instance, *args, **kwargs):
    if not instance.slug:
        instance.slug = unique_slug_generator(instance)
-#+end_example
+#+end_src
 
 In order to activate this signal, we will modify =articles/apps.py=:
 
-#+begin_example
+#+begin_src
 from django.apps import AppConfig
 
 
@@ -690,11 +690,11 @@ class ArticlesConfig(AppConfig):
 
     def ready(self):                                # new
         import conduit.articles.signals             # new
-#+end_example
+#+end_src
 
 Let's also change our =urlpatterns= in =articles/urls.py=:
 
-#+begin_example python
+#+begin_src python
 # other imports
 from .views import Home, ArticleDetailView
 
@@ -702,7 +702,7 @@ urlpatterns = [
     # other paths
     path("article/<slug:slug>", ArticleDetailView.as_view(), name="article_detail"),
 ]
-#+end_example
+#+end_src
 
 Let's try creating an Article through the Django admin app.
 
@@ -716,7 +716,7 @@ Let's create a simple navigation bar. Because we have yet to implement authentic
 
 Let's add the following lines to =base.html=:
 
-#+begin_example html
+#+begin_src html
     <body>
         <!-- navbar -->                     <!-- new -->
         {% include 'nav.html' %}            <!-- new -->
@@ -724,11 +724,11 @@ Let's add the following lines to =base.html=:
             {% block content %}
             {% endblock %}
         </main>
-#+end_example
+#+end_src
 
 Let's create =nav.html= in out =templates= folder and add the following to it:
 
-#+begin_example html
+#+begin_src html
 <nav class="navbar navbar-light">
     <div class="container">
         <a rel="prefetch" class="navbar-brand" href="/">conduit</a>
@@ -741,7 +741,7 @@ Let's create =nav.html= in out =templates= folder and add the following to it:
         </ul>
     </div>
 </nav>
-#+end_example
+#+end_src
 * Creating, editing, and deleting Articles
 We have implemented the features that allow to view articles, but we need to allow users to create, edit, and delete them as well. We'll first implement this functionality, and modify it later to take into account user authentication.
 ** Creating Articles
@@ -749,7 +749,7 @@ Let's allow users to create articles.
 
 We define the =EditorCreateView= view in =views.py=:
 
-#+begin_example python
+#+begin_src python
 # other imports
 from django.views.generic import (
      # other views
@@ -764,11 +764,11 @@ class EditorCreateView(CreateView):
     model = Article
     fields = ['title', 'description', 'body']
     template_name = "editor.html"
-#+end_example
+#+end_src
 
 We add the following to =urls.py=:
 
-#+begin_example python
+#+begin_src python
 # other imports
 from .views import Home, ArticleDetailView, EditorCreateView
 
@@ -776,11 +776,11 @@ urlpatterns = [
     # other paths
     path("editor", EditorCreateView.as_view(), name="editor_create"),
 ]
-#+end_example
+#+end_src
 
 We add a =New article= button to the Nav bar in =nav.html=:
 
-#+begin_example html
+#+begin_src html
         <ul class="nav navbar-nav pull-xs-right">
             <li class="nav-item">
                 <a rel="prefetch" class="nav-link" href="{% url 'home' %}">
@@ -793,11 +793,11 @@ We add a =New article= button to the Nav bar in =nav.html=:
                 </a>                                                                    <!-- new -->
             </li>                                                                       <!-- new -->
         </ul>
-#+end_example
+#+end_src
 
 Now, we can create the template =editor_create.html=:
 
-#+begin_example html
+#+begin_src html
 {% extends 'base.html' %}
 {% block content %}
     <div class="editor-page">
@@ -855,19 +855,19 @@ Now, we can create the template =editor_create.html=:
         </div>
     </div>
 {% endblock %}
-#+end_example
+#+end_src
 
 Try to create an article in your app. When you hit "Publish", you'll get an error:
 
-#+begin_example
+#+begin_src
 IntegrityError at /editor
 NOT NULL constraint failed: articles_article.author_id
-#+end_example
+#+end_src
 
 That's because the form doesn't know who the author is, and author is a required field in our model.
 Let's override the =EditorCreateView= view's =form_valid= method in our =views.py= file: before we save the form, we'll set the logged in user (=admin=, for now) as the =author=:
 
-#+begin_example python
+#+begin_src python
 class EditorCreateView(CreateView):
     """create article"""
 
@@ -880,7 +880,7 @@ class EditorCreateView(CreateView):
         self.object.author = self.request.user.profile  # new
         self.object.save()                              # new
         return super().form_valid(form)                 # new
-#+end_example
+#+end_src
 
 Once this is done, try creating another article: it should work.
 ** Editing Articles
@@ -888,7 +888,7 @@ We will now implement the editing feature.
 
 In =views.py=, add the following:
 
-#+begin_example python
+#+begin_src python
 # other imports
 from django.views.generic import (
     # other views
@@ -903,12 +903,12 @@ class EditorUpdateView(UpdateView):
     model = Article
     fields = ["title", "description", "title"]
     template_name = "editor.html"
-#+end_example
+#+end_src
 
 We're using the same template for creating and editing articles.
 In =urls.py=, add:
 
-#+begin_example python
+#+begin_src python
 # other imports
 from .views import (
     # other views
@@ -919,11 +919,11 @@ urlpatterns = [
     # other paths
     path("editor/<slug:slug>", EditorUpdateView.as_view(), name="editor_update"),
 ]
-#+end_example
+#+end_src
 
 In =article_detail.html=, we add a button for editing the article and pass =article.slug= as an argument to the url (see [[https://docs.djangoproject.com/en/3.2/ref/templates/builtins/#url][the documentation for =url= tag]]), given that our URL expects a slug (=editor/<slug:slug>=). The documentation for ):
 
-#+begin_example python
+#+begin_src python
                 <div class="article-meta">
                     <div class="info">
                         <span class="author">
@@ -944,11 +944,11 @@ In =article_detail.html=, we add a button for editing the article and pass =arti
                         </a>                                                            <!-- new -->
                     </span>                                                             <!-- new -->
                 </div>
-#+end_example
+#+end_src
 
 In the =editor.html= template, we want to have the form fields prepopulated with the relevant values. When using =UpdateView=, we have access to the object being updated. Let's add the following to the =editor.html= template:
 
-#+begin_example html
+#+begin_src html
                         <fieldset>
                             <fieldset class="form-group">
                                 <input
@@ -980,13 +980,13 @@ In the =editor.html= template, we want to have the form fields prepopulated with
                                 Publish Article
                             </button>
                         </fieldset>
-#+end_example
+#+end_src
 
 Try editing an article: all the values should be prepopulated.
 ** Deleting Articles
 In =views.py=, we create a =ArticleDeleteView=:
 
-#+begin_example python
+#+begin_src python
 # other imports
 from django.views.generic import (
     # other views
@@ -1001,13 +1001,13 @@ class EditorDeleteView(DeleteView):
     model = Article
     success_url = reverse_lazy("home")
     template_name = "article_detail.html"
-#+end_example
+#+end_src
 
 Notice that we're using the =article_detail.html= template. We could use a separate one, but that would require to load a new page, which seems unnecessary: we'll in a second how we're making this work.
 
 In =urls.py=:
 
-#+begin_example python
+#+begin_src python
 # other imports
 from .views import (
     # other views
@@ -1018,11 +1018,11 @@ urlpatterns = [
     # other paths
     path("editor/<slug:slug>/delete", EditorDeleteView.as_view(), name="editor_delete"),
 ]
-#+end_example
+#+end_src
 
 Now, create an =article_delete.html= file: this will hold the form for deleteing the article.
 
-#+begin_example html
+#+begin_src html
 <form                                                                                       <!-- new  -->
     method="POST"                                                                           <!-- new  -->
     action="{% url 'editor_delete' slug=article.slug %}"                                    <!-- new  -->
@@ -1039,11 +1039,11 @@ Now, create an =article_delete.html= file: this will hold the form for deleteing
         </span>                                                                                <!-- new  -->
     </button>                                                                               <!-- new  -->
 </form>                                                                                     <!-- new  -->
-#+end_example
+#+end_src
 
 Now, we want to load this template in =article_detail.html= directly, which we achieve with an =include= tag:
 
-#+begin_example html
+#+begin_src html
 <span>
     <a
         href="{% url 'editor_update' slug=article.slug %}"
@@ -1055,7 +1055,7 @@ Now, we want to load this template in =article_detail.html= directly, which we a
     </a>
     {% include 'article_delete.html' %}             <!-- new -->
 </span>
-#+end_example
+#+end_src
 
 Try deleting an article: you should get a nice confirmation message while still on the =article_detail.html= template, before the article is deleted.
 * Comments
@@ -1064,7 +1064,7 @@ Now that we have articles, we need comments.
 A comment needs a related article, an author, a body, and a date.
 Let's create a =Comment= model in =models.py=:
 
-#+begin_example python
+#+begin_src python
 # other models
 
 class Comment(models.Model):
@@ -1087,29 +1087,29 @@ class Comment(models.Model):
 
     def get_absolute_url(self):
         return reverse("article_detail", kwargs={"slug": self.article.slug})
-#+end_example
+#+end_src
 
 Let's =makemigrations= and =migrate=. You should get the following error:
 
-#+begin_example
+#+begin_src
 SystemCheckError: System check identified some issues:
 
 ERRORS:
 articles.Comment.article: (fields.E311) 'Article.slug' must be unique because it is referenced by a foreign key.
         HINT: Add unique=True to this field or add a UniqueConstraint (without condition) in the model Meta.constraints.
-#+end_example
+#+end_src
 
 That's because we're using articles' slugs as ForeignKeys for the comments (so that we can filter our comments by the attached articles' slugs instead of their UUIDs). This error is easily corrected by adding =unique=True= as an argument to the =slug= field in the =Article= model in =models.py=. You should be able to =makemigrations= and =migrate= after that.
 
 Now, we need to register our model in =admin.py=:
 
-#+begin_example python
+#+begin_src python
 from django.contrib import admin
 from .models import Article, Comment        # new
 
 admin.site.register(Article)
 admin.site.register(Comment)                # new
-#+end_example
+#+end_src
 
 When this is done, go to your admin app and create a few comments for a couple articles.
 ** Viewing comments
@@ -1117,7 +1117,7 @@ We want to be able to view the comments in our =article_detail.html= template.
 
 In =article_detail.html=:
 
-#+begin_example html
+#+begin_src html
 <div class="container page">
     <div class="row article-content">
         <div class="col-xs-12">
@@ -1131,11 +1131,11 @@ In =article_detail.html=:
         {% include 'comments.html' %}       <!-- new -->
     </div>                                  <!-- new -->
 </div>
-#+end_example
+#+end_src
 
 Now create =comments.html= in the =templates= folder and add the following:
 
-#+begin_example html
+#+begin_src html
 <div class="col-xs-12 col-md-8 offset-md-2">
     {% for comment in article.comments.all|dictsortreversed:'created_at' %}
         <div class="card">
@@ -1155,7 +1155,7 @@ Now create =comments.html= in the =templates= folder and add the following:
         </div>
     {% endfor %}
 </div>
-#+end_example
+#+end_src
 ** Creating comments
 We will now start allowing our users to leave comments on the website. We could do this like in the Django Girls tutorial: the =ArticleDetailView= would include a button that would direct to =CommentCreateView= on a separate page, and saving the comment would bring the user back to the =ArticleDetailView=. However, the =RealWorldApp= allows users to create and save their comments directly below the article, on the same page, so that's what we're going to try.
 
@@ -1165,7 +1165,7 @@ First, we'll create a =CommentCreateView= in =views.py=.
 We override the =form_valid= method because we need to specify the =author= and =article= fields required by the =Comment= model.
 We also override the =get_success_url= because we want the user to be redirected to the =ArticleDetailView= upon saving the comment.
 
-#+begin_example python
+#+begin_src python
 # other imports
 from .models import Article, Comment
 
@@ -1186,11 +1186,11 @@ class CommentCreateView(CreateView):
 
     def get_success_url(self):
         return reverse("article_detail", kwargs={"slug": self.object.article.slug})
-#+end_example
+#+end_src
 
 Now, we need to modify the =ArticleDetailView= to make the =CommentCreateView='s form available to the template =article_detail.html= through the =get_context_data= method:
 
-#+begin_example python
+#+begin_src python
 class ArticleDetailView(DetailView):
     """detail view for individual articles"""
 
@@ -1201,11 +1201,11 @@ class ArticleDetailView(DetailView):
         context = super().get_context_data(**kwargs)        # new
         context["form"] = CommentCreateView().get_form()    # new
         return context                                      # new
-#+end_example
+#+end_src
 
 Finally, we create a view that combines =ArticleDetailView= and =CommentCreateView=:
 
-#+begin_example python
+#+begin_src python
 # other imports
 from django.views.generic import (
     # other views
@@ -1225,13 +1225,13 @@ class ArticleCommentView(View):
     def post(self, request, *args, **kwargs):
         view = CommentCreateView.as_view()
         return view(request, *args, **kwargs)
-#+end_example
+#+end_src
 
 We want this new hybrid view to be the one returned by the =article/<slug:slug>= path: depending on whether the method is =GET= or =POST=, the new view will either return the =ArticleDetailView=, or the =CommentCreateView=.
 
 In =urls.py=, we replace the =article_detail= path by the following:
 
-#+begin_example python
+#+begin_src python
 # other imports
 from .views import (
     # other views
@@ -1247,13 +1247,13 @@ urlpatterns = [
     ),
     # instead of =path("article/<slug:slug>", ArticleCommentView.as_view(), name="article_detail")=
 ]
-#+end_example
+#+end_src
 
 Now that our views.py and urls.py are ready, we need to create the templates.
 
 Create =comment_create.html=, which corresponds to the =CommentCreateView='s form:
 
-#+begin_example html
+#+begin_src html
 {% block content %}
     <form
         class="card comment-form"
@@ -1276,18 +1276,18 @@ Create =comment_create.html=, which corresponds to the =CommentCreateView='s for
         </div>
     </form>
 {% endblock %}
-#+end_example
+#+end_src
 
 In =comments.html=, we include the =comment_create.html= template:
 
-#+begin_example html
+#+begin_src html
 <div class="col-xs-12 col-md-8 offset-md-2">
     <div>                                           <!-- new -->
         {% include 'comment_create.html' %}         <!-- new -->
     </div>                                          <!-- new -->
     {% for comment in article.comments.all|dictsortreversed:'created_at' %}
     <!-- ... -->
-#+end_example
+#+end_src
 
 Everything should be working now. Try to create some comments on an article.
 ** Deleting comments
@@ -1295,7 +1295,7 @@ We now want to be able to delete comments.
 
 In =views.py=, add the =CommentDeleteView=:
 
-#+begin_example python
+#+begin_src python
 class CommentDeleteView(DeleteView):
     """delete comment"""
 
@@ -1305,11 +1305,11 @@ class CommentDeleteView(DeleteView):
     # redirect to attached article's detail page upon success
     def get_success_url(self):
         return reverse("article_detail", kwargs={"slug": self.object.article.slug})
-#+end_example
+#+end_src
 
 In =urls.py=:
 
-#+begin_example python
+#+begin_src python
 urlpatterns = [
     # ...
     path(
@@ -1318,13 +1318,13 @@ urlpatterns = [
         name="comment_delete",
     ),
 ]
-#+end_example
+#+end_src
 
 We require =pk= as an argument because that's what the =CommentDeleteView= needs to know which comment to delete. The =<slug:slug>= part is unnecessary, but it makes the path more logical, I find.
 
 In =comments.html=:
 
-#+begin_example html
+#+begin_src html
 <div class="card-footer">
     <span class="comment-author">
         {{ comment.author }}
@@ -1334,11 +1334,11 @@ In =comments.html=:
     </span>
     {% include 'comment_delete.html' %}             <!-- new -->
 </div>
-#+end_example
+#+end_src
 
 Create =comment_delete.html=:
 
-#+begin_example html
+#+begin_src html
 {% block content %}
     <form
         method="post"
@@ -1360,7 +1360,7 @@ Create =comment_delete.html=:
         ></button>
     </form>
 {% endblock %}
-#+end_example
+#+end_src
 * Users and Profiles
 Time to work on our users and profiles.
 
@@ -1373,7 +1373,7 @@ The =User= model will contain everything related to authentication.
 
 We need an email, a username, and a password. Let's add the following to the =User= model in =users/models.py=:
 
-#+begin_example python
+#+begin_src python
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -1389,7 +1389,7 @@ class User(AbstractUser):
 
     def __str__(self):
         self.email
-#+end_example
+#+end_src
 
 The =username= field is the unique human-readable identifier that we can represent users with in our app.
 The =email= field holds the email users will be logging in with. We specify this in =USERNAME_FIELD=.
@@ -1400,7 +1400,7 @@ More information about the fields can be found in the docs for [[https://docs.dj
 *** UserManager
 We also need a =UserManager=, [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#writing-a-manager-for-a-custom-user-model][as advised by the docs]]. In =models.py=, we add the following, BEFORE we define our =User= model:
 
-#+begin_example python
+#+begin_src python
 # other imports
 from django.contrib.auth.models import AbstractUser, UserManager
 
@@ -1434,11 +1434,11 @@ class UserManager(UserManager):
         user = self.create_user(username, email, password)
 
         return user
-#+end_example
+#+end_src
 
 We now need to go back to the =User= model in =users/models.py= and indicate to Django that the =UserManager= defined above will manage objects of type =User=:
 
-#+begin_example python
+#+begin_src python
 # other
 class User(AbstractUser):
     """user model"""
@@ -1450,30 +1450,10 @@ class User(AbstractUser):
     required_fields = ["username"]
 
     objects = UserManager()                 # new
-#+end_example
+#+end_src
 
-*** TODO admin.py
-We need to register this new =User= model in =users/admins.py=, to have access to it in our admin app. We'll just adapt [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model][what the docs say]]:
-
-#+begin_example python
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import User, Profile
-
-
-class ProfileInline(admin.StackedInline):
-    model = Profile
-    can_delete = False
-    verbose_name_plural = "profile"
-
-class UserAdmin(BaseUserAdmin):
-    inlines = (ProfileInline,)
-
-
-# admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
-#+end_example
 ** Profile model
+*** Profile
 We are following the instructions in the Django docs about [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model][extending a User model]]. We need to store some information about our users in the database, so we'll create a model that will link to the =User= through a =OneToOneField=.
 
 Our =Profile= needs the following fields:
@@ -1483,11 +1463,142 @@ Our =Profile= needs the following fields:
 
 We have already taken care of the two last fields in the =Article= and =Comment= models through the =related_name= args in the =author= fields.
 
-Let's define a =Profile= model in =users/models.py=:
+We will allow users to specify a URL to their avatar. This is optional, so we make sure to have =blank=True=. Let's add the following to the =Profile= model in =users/models.py=:
 
-#+begin_example python
+#+begin_src python
+class Profile(models.Model):
+    """Profile model"""
 
-#+end_example
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.URLField(blank=True)                 # new
+#+end_src
+
+As always, whenever you change a model, you should =makemigrations= and =migrate=.
+*** signals.py
+Since we're defining the =Profile= outside of the =User= model, it won't be created automatically whenever a user signs up.
+
+Let's follow the docs and create a signal that creates a =Profile= at user sign-up.
+
+Create a =signals.py= in the =users= folder and add the following:
+
+#+begin_src python
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from .models import User, Profile
+
+
+@receiver(post_save, sender=User)
+def create_profile_for_user(sender, instance, created, *args, **kwargs):
+    if created:
+        instance.profile = Profile.objects.create(user=instance)
+#+end_src
+
+This signal runs whenever a =User= is saved. By checking for =created=, we make sure to only initiate a =Profile= for the =User= instance if the User has just been created, instead of whenever the instance is updated.
+*** admin.py
+We need to register this new =Profile= model in =users/admins.py=, to have access to it in our admin app.
+
+#+begin_src python
+from django.contrib import admin
+from .models import Profile
+
+admin.site.register(Profile)
+#+end_src
+
+You'll notice that this code is much shorter than [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model][what the docs say]]: we're trying to keep it simple.
+** Auth views
+In =users/views.py=, we take advantage of the generic =LoginView= and =LogoutView= to implement our authentication logic:
+
+#+begin_src python
+from django.shortcuts import render
+from django.contrib.auth.views import LoginView, LogoutView
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
+from .models import User
+
+
+class Login(LoginView):
+    template_name = "login.html"
+
+
+class Logout(LogoutView):
+    template_name = "logout.html"
+
+
+class SignUpView(CreateView):
+    template_name = "signup.html"
+    success_url = reverse_lazy("home")
+#+end_src
+** Auth urls
+Create =users/urls.py= and add the following:
+
+#+begin_src python
+from django.urls import path
+from .views import Login, Logout, SignUp
+
+
+urlpatterns = [
+    path("login", Login.as_view(), name="login"),
+    path("logout", Logout.as_view(), name="logout"),
+    path("signup", SignUp.as_view(), name="signup"),
+]
+#+end_src
+
+In =config/urls.py=, let Django know that it should look at the patterns we specify in =users/urls.py=:
+
+#+begin_src python
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("", include("conduit.articles.urls")),
+    path("", include("conduit.users.urls")),        # new
+]
+#+end_src
+
+We need to make our sign-in and sign-up templates.
+
+** Templates
+Let's create =registration.html= in the =templates= folder:
+
+#+begin_src html
+
+#+end_src
+** LoginRequiredMixin
+Some pages should only be accessible to authenticated users, and Django provides an easy way of doing so through mixins.
+Mixins are components that provide common extra functionality. They can be added to class-based views on the fly.
+In =articles/models.py=, add the following:
+
+#+begin_src python
+# other imports
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+class EditorCreateView(LoginRequiredMixin, CreateView):
+    # ...
+class EditorDeleteView(LoginRequiredMixin, DeleteView):
+    # ...
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    # ...
+class ArticleCommentView(LoginRequiredMixin, View):
+    # ...
+class CommentDeleteView(LoginRequiredMixin, DeleteView):
+    # ...
+#+end_src
+
+Notice that the =LoginRequiredMixin= should be at the leftmost position in the inheritance list: don't write =class EditorDeleteView(DeleteView, LoginRequiredMixin)= if you want to avoid errors.
+
+If you try creating a post from the app, you should get this error:
+
+[[./Screenshots/Users - login_url  error.png]]
+
+The cause of the problem is given in the line:
+
+#+begin_quote
+The current path, accounts/login/, didn’t match any of these.
+#+end_quote
+
+By default, the login url in Django is =accounts/login/=: while we changed our urls everywhere, the =LoginRequiredMixin= does not know that. To fix this, we need to add this line in =config/settings.py=:
+
+#+begin_src python
+LOGIN_URL = "login"
+#+end_src
 * Follows, favorites, and tags
 * UI stuff
 ** TODO class:active
