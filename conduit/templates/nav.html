@@ -7,11 +7,44 @@
                     Home
                 </a>
             </li>
-            <li class="nav-item">
-                <a rel="prefetch" href="{% url 'editor_create' %}" class="nav-link">
-                    <span class="ion-compose"> New Post </span>
-                </a>
-            </li>
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a rel="prefetch" href="{% url 'editor_create' %}" class="nav-link">
+                        <span class="ion-compose"> New Post </span>
+                    </a>
+                </li>
+                {% comment %}
+                    <li class="nav-item">
+                        <a
+                            rel="prefetch"
+                            href="{% url 'settings' username=user.username %}"
+                            class="nav-link">
+                            <i class="ion-gear-a" /> Settings
+                        </a>
+                    </li>
+                <li class="nav-item">
+                    <a rel="prefetch" href="{% url 'profile' username=user.username %}" class="nav-link">
+                        <img src="{{ user.image }}" class="user-pic" alt="{{ user.username }}">
+                        {{ user.username }}
+                    </a>
+                </li>
+                {% endcomment %}
+            {% else %}
+                <li class="nav-item">
+                    <a rel="prefetch" href="{% url 'login' %}" class="nav-link">
+                        Sign in
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a
+                        rel="prefetch"
+                        href="{% url 'signup' %}"
+                        class="nav-link"
+                    >
+                        Sign up
+                    </a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </nav>

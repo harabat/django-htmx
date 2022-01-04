@@ -4,9 +4,9 @@
         <div class="container page">
             <div class="row">
                 <div class="col-md-6 offset-md-3 col-xs-12">
-                    <h1 class="text-xs-center">Sign In</h1>
+                    <h1 class="text-xs-center">Sign up</h1>
                     <p class="text-xs-center">
-                        <a href="{% url 'signup' %}">Need an account?</a>
+                        <a href="{% url 'login' %}">Have an account?</a>
                     </p>
                     {{ form.non_field_errors }}
                     <form method="post">
@@ -14,23 +14,34 @@
                         <fieldset class="form-group">
                             <input
                                 class="form-control form-control-lg"
-                                type="email"
-                                placeholder="Email"
+                                type="text"
+                                placeholder="Your {{ form.username.name }}"
                                 name="{{ form.username.name }}"
+                                value="{{ form.username.value|default_if_none:'' }}"
                             >
-                            {{ form.username.errors }}
                         </fieldset>
+                        {{ form.username.errors }}
+                        <fieldset class="form-group">
+                            <input
+                                class="form-control form-control-lg"
+                                type="email"
+                                placeholder="Your {{ form.email.name }}"
+                                name="{{ form.email.name }}"
+                                value="{{ form.email.value|default_if_none:''  }}"
+                            >
+                        </fieldset>
+                        {{ form.email.errors }}
                         <fieldset class="form-group">
                             <input
                                 class="form-control form-control-lg"
                                 type="password"
-                                placeholder="Password"
+                                placeholder="Your {{ form.password.name }}"
                                 name="{{ form.password.name }}"
                             >
-                            {{ form.password.errors }}
                         </fieldset>
-                        <button class="btn btn-lg btn-primary pull-xs-right" type="submit">
-                            Sign in
+                        {{ form.password.errors }}
+                        <button class="btn btn-lg btn-primary pull-xs-right">
+                            Sign up
                         </button>
                     </form>
                 </div>

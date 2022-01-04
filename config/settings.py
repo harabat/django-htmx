@@ -27,6 +27,9 @@ SECRET_KEY = "django-insecure-(7dp=e66ob1s02qi@z8^#d*tose^c4hbrf1=p@i7k1im1gg)qk
 DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+INTERNAL_IPS = [  # debug
+    "127.0.0.1",  # debug
+]  # debug
 
 
 # Application definition
@@ -40,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "conduit.articles",
     "conduit.users",
+    "debug_toolbar",  # debug
 ]
 
 AUTH_USER_MODEL = "users.User"
@@ -47,6 +51,7 @@ AUTH_USER_MODEL = "users.User"
 LOGIN_URL = "login"
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",  # debug
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",

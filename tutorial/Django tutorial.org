@@ -804,23 +804,11 @@ Now, we can create the template =editor_create.html=:
         <div class="container page">
             <div class="row">
                 <div class="col-md-10 offset-md-1 col-xs-12">
-                    <form
-                        action="{% url 'editor_create' %}"
-                        method="post"
-                    >
+                    <form method="post">
                         {% csrf_token %}
+                        {{ form.non_field_errors }}
                         <fieldset>
-                            {% if form.errors %}
-                                <ul>
-                                    {% for key, value in form.errors.items %}
-                                        <li>
-                                            <strong>
-                                                {{ key }}: {{ value }}
-                                            </strong>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
+                            {% form.non_field_errors %}
                             <fieldset class="form-group">
                                 <input
                                     class="form-control form-control-lg"
@@ -829,6 +817,7 @@ Now, we can create the template =editor_create.html=:
                                     name='title'
                                 />
                             </fieldset>
+                            {{ form.title.errors }}
                             <fieldset class="form-group">
                                 <input
                                     class="form-control"
@@ -837,6 +826,7 @@ Now, we can create the template =editor_create.html=:
                                     name='description'
                                 />
                             </fieldset>
+                            {{ form.description.errors }}
                             <fieldset class="form-group">
                                 <textarea
                                     class="form-control"
@@ -845,6 +835,7 @@ Now, we can create the template =editor_create.html=:
                                     name='body'
                                 ></textarea>
                             </fieldset>
+                            {{ form.body.errors }}
                             <button class="btn btn-lg pull-xs-right btn-primary">
                                 Publish Article
                             </button>
@@ -1396,7 +1387,6 @@ The =email= field holds the email users will be logging in with. We specify this
 The =password= field is already provided by =AbstractUser=.
 =REQUIRED_FIELDS= is the list of field users will be prompted for at sign up: because the =USERNAME_FIELD= and the =password= are already required by Django, we only need to specify =username=.
 More information about the fields can be found in the docs for [[https://docs.djangoproject.com/en/4.0/ref/contrib/auth/][the default Django User model]].
-
 *** UserManager
 We also need a =UserManager=, [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#writing-a-manager-for-a-custom-user-model][as advised by the docs]]. In =models.py=, we add the following, BEFORE we define our =User= model:
 
@@ -1405,7 +1395,7 @@ We also need a =UserManager=, [[https://docs.djangoproject.com/en/4.0/topics/aut
 from django.contrib.auth.models import AbstractUser, UserManager
 
 # other models
-class UserManager(UserManager):
+class CustomUserManager(UserManager):
     """custom UserManager with unique identifier is email instead of username"""
 
     def create_user(self, username, email, password=None):
@@ -1420,6 +1410,7 @@ class UserManager(UserManager):
         user = self.model(username=username, email=email)
         user.set_password(password)
         user.save()
+
         return user
 
     def create_superuser(self, username, email, password=None):
@@ -1428,58 +1419,64 @@ class UserManager(UserManager):
         user.is_staff = True
         user.is_superuser = True
         user.is_active = True
-
-        user.save()
-
         user = self.create_user(username, email, password)
+        user.save()
 
         return user
 #+end_src
+
+=create_user= and =create_superuser= are self-explanatory.
 
 We now need to go back to the =User= model in =users/models.py= and indicate to Django that the =UserManager= defined above will manage objects of type =User=:
 
 #+begin_src python
 # other
 class User(AbstractUser):
-    """user model"""
+    """User model"""
 
-    username = models.charfield(max_length=255, unique=true)
-    email = models.emailfield(unique=true)
+    username = models.CharField(max_length=255, unique=True)
+    email = models.EmailField(unique=True)
 
-    username_field = "email"
-    required_fields = ["username"]
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
 
-    objects = UserManager()                 # new
+    objects = CustomUserManager()               # new
+
+    def __str__(self):
+        return self.email
 #+end_src
 
+Make sure to =makemigrations= and =migrate=, so that Django is aware of your new model.
 ** Profile model
 *** Profile
 We are following the instructions in the Django docs about [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model][extending a User model]]. We need to store some information about our users in the database, so we'll create a model that will link to the =User= through a =OneToOneField=.
 
 Our =Profile= needs the following fields:
 - image
+- bio
 - articles
 - comments
 
 We have already taken care of the two last fields in the =Article= and =Comment= models through the =related_name= args in the =author= fields.
 
-We will allow users to specify a URL to their avatar. This is optional, so we make sure to have =blank=True=. Let's add the following to the =Profile= model in =users/models.py=:
+We will allow users to specify a URL to their avatar and to write a short bio. This is optional, so we make sure to have =blank=True=. Let's add the following to the =Profile= model in =users/models.py=:
 
 #+begin_src python
 class Profile(models.Model):
     """Profile model"""
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.URLField(blank=True)                 # new
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    image = models.URLField(blank=True)
+    bio = models.TextField(max_length=1000, blank=True)
 #+end_src
 
 As always, whenever you change a model, you should =makemigrations= and =migrate=.
 *** signals.py
-Since we're defining the =Profile= outside of the =User= model, it won't be created automatically whenever a user signs up.
+Since we're defining the =Profile= outside of the =User= model, a profile won't be created automatically whenever a user signs up.
 
-Let's follow the docs and create a signal that creates a =Profile= at user sign-up.
+Let's follow the docs linked above and code up a signal that creates a =Profile= at user sign-up.
 
-Create a =signals.py= in the =users= folder and add the following:
+Create a =signals.py= file in the =users= folder and add the following:
 
 #+begin_src python
 from django.db.models.signals import post_save
@@ -1504,9 +1501,9 @@ from .models import Profile
 admin.site.register(Profile)
 #+end_src
 
-You'll notice that this code is much shorter than [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model][what the docs say]]: we're trying to keep it simple.
+You'll notice that this code is much shorter than [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model][what the docs say]]: we're trying to keep it simple, so we'll do without some of the quality of life improvements that a more intricate code would allow.
 ** Auth views
-In =users/views.py=, we take advantage of the generic =LoginView= and =LogoutView= to implement our authentication logic:
+In =users/views.py=, we take advantage of the generic =LoginView=, =LogoutView=, and =CreateView= to implement our authentication logic:
 
 #+begin_src python
 from django.shortcuts import render
@@ -1518,17 +1515,24 @@ from .models import User
 
 class Login(LoginView):
     template_name = "login.html"
+    next_page = reverse_lazy("home")
 
 
 class Logout(LogoutView):
-    template_name = "logout.html"
+    next_page = reverse_lazy("home")
 
 
 class SignUpView(CreateView):
+    model = User
+    fields = ["username", "email", "password"]
     template_name = "signup.html"
     success_url = reverse_lazy("home")
 #+end_src
+
+We don't have to specify much to the generic views, they're quite full-featured as is. What we did here is indicate where the templates live and where the views redirect to (the [[https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url][defaults]] are =accounts/profile= for =LoginView= and =None= for =LogoutView=).
+We didn't specify a template for =LogoutView= because it's not necessary.
 ** Auth urls
+Let's deal with the URL patterns now.
 Create =users/urls.py= and add the following:
 
 #+begin_src python
@@ -1543,7 +1547,7 @@ urlpatterns = [
 ]
 #+end_src
 
-In =config/urls.py=, let Django know that it should look at the patterns we specify in =users/urls.py=:
+For every app that we create, we need to tell =config/urls.py= to look at the patterns specified in the app's =urls.py= file:
 
 #+begin_src python
 urlpatterns = [
@@ -1552,18 +1556,174 @@ urlpatterns = [
     path("", include("conduit.users.urls")),        # new
 ]
 #+end_src
-
-We need to make our sign-in and sign-up templates.
-
-** Templates
-Let's create =registration.html= in the =templates= folder:
+** Auth templates
+*** login.html
+Let's create =login.html= in the =templates= folder:
 
 #+begin_src html
+{% extends 'base.html' %}
+{% block content %}
+    <div class="auth-page">
+        <div class="container page">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 col-xs-12">
+                    <h1 class="text-xs-center">Sign In</h1>
+                    <p class="text-xs-center">
+                        <a href="{% url 'signup' %}">Need an account?</a>
+                    </p>
+                    {{ form.non_field_errors }}
+                    <form method="post">
+                        {% csrf_token %}
+                        <fieldset class="form-group">
+                            <input
+                                class="form-control form-control-lg"
+                                type="email"
+                                placeholder="Email"
+                                name="{{ form.username.name }}"
+                            >
+                            {{ form.username.errors }}
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <input
+                                class="form-control form-control-lg"
+                                type="password"
+                                placeholder="Password"
+                                name="{{ form.password.name }}"
+                            >
+                            {{ form.password.errors }}
+                        </fieldset>
+                        <button class="btn btn-lg btn-primary pull-xs-right" type="submit">
+                            Sign in
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+#+end_src
 
+Notice that we are using =form.username= to authenticate. I initially was trying to work with =form.email=, because that was the field we chose to authenticate with, but it kept throwing errors: Django didn't see the field, didn't POST the value that I gave it, and asked for the username every time. It took me a while, but I realised that our username /is/ the email. =form.username= is effectively querying what the =USERNAME_FIELD= is. Not straightforward though.
+*** signup.html
+Create =signup.html=:
+
+#+begin_src html
+{% extends 'base.html' %}
+{% block content %}
+    <div class="auth-page">
+        <div class="container page">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 col-xs-12">
+                    <h1 class="text-xs-center">Sign up</h1>
+                    <p class="text-xs-center">
+                        <a href="{% url 'login' %}">Have an account?</a>
+                    </p>
+                    {{ form.non_field_errors }}
+                    <form method="post">
+                        {% csrf_token %}
+                        <fieldset class="form-group">
+                            <input
+                                class="form-control form-control-lg"
+                                type="text"
+                                placeholder="Your {{ form.username.name }}"
+                                name="{{ form.username.name }}"
+                                value="{{ form.username.value|default_if_none:'' }}"
+                            >
+                        </fieldset>
+                        {{ form.username.errors }}
+                        <fieldset class="form-group">
+                            <input
+                                class="form-control form-control-lg"
+                                type="email"
+                                placeholder="Your {{ form.email.name }}"
+                                name="{{ form.email.name }}"
+                                value="{{ form.email.value|default_if_none:''  }}"
+                            >
+                        </fieldset>
+                        {{ form.email.errors }}
+                        <fieldset class="form-group">
+                            <input
+                                class="form-control form-control-lg"
+                                type="password"
+                                placeholder="Your {{ form.password.name }}"
+                                name="{{ form.password.name }}"
+                            >
+                        </fieldset>
+                        {{ form.password.errors }}
+                        <button class="btn btn-lg btn-primary pull-xs-right">
+                            Sign up
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+#+end_src
+** Nav
+We don't want to expose the =New post= link to unauthenticated users.
+
+In =nav.html=:
+
+#+begin_src html
+<nav class="navbar navbar-light">
+    <div class="container">
+        <a rel="prefetch" class="navbar-brand" href="/">conduit</a>
+        <ul class="nav navbar-nav pull-xs-right">
+            <li class="nav-item">
+                <a rel="prefetch" class="nav-link" href="{% url 'home' %}">
+                    Home
+                </a>
+            </li>
+            {% if user.is_authenticated %}                          <!-- new from here -->
+                <li class="nav-item">
+                    <a rel="prefetch" href="{% url 'editor_create' %}" class="nav-link">
+                        <span class="ion-compose"> New Post </span>
+                    </a>
+                </li>
+                {% comment %}
+                    <li class="nav-item">
+                        <a
+                            rel="prefetch"
+                            href="{% url 'settings' username=user.username %}"
+                            class="nav-link">
+                            <i class="ion-gear-a" /> Settings
+                        </a>
+                    </li>
+                <li class="nav-item">
+                    <a
+                      rel="prefetch"
+                      href="{% url 'profile' username=user.username %}"
+                      class="nav-link"
+                    >
+                        <img src="{{ user.image }}" class="user-pic" alt="{{ user.username }}">
+                        {{ user.username }}
+                    </a>
+                </li>
+                {% endcomment %}
+            {% else %}
+                <li class="nav-item">
+                    <a rel="prefetch" href="{% url 'login' %}" class="nav-link">
+                        Sign in
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a
+                        rel="prefetch"
+                        href="{% url 'signup' %}"
+                        class="nav-link"
+                    >
+                        Sign up
+                    </a>
+                </li>
+            {% endif %}                                             <!-- to here -->
+        </ul>
+    </div>
+</nav>
 #+end_src
 ** LoginRequiredMixin
-Some pages should only be accessible to authenticated users, and Django provides an easy way of doing so through mixins.
-Mixins are components that provide common extra functionality. They can be added to class-based views on the fly.
+Some pages should only be accessible to authenticated users, and Django provides an easy way of doing so through mixins. Mixins are components that provide common extra functionality. They can be added to class-based views on the fly.
+
 In =articles/models.py=, add the following:
 
 #+begin_src python
@@ -1598,6 +1758,29 @@ By default, the login url in Django is =accounts/login/=: while we changed our u
 
 #+begin_src python
 LOGIN_URL = "login"
+#+end_src
+** Testing login and signup
+For now, we only have one user for our app: the =admin= superuser.
+
+Let's create a new user by clicking on =Sign up= in our navbar. Enter a username, an email (which doesn't have to be a real one as long as it's the right format), and a password. When you finalise this action by clicking the button =Sign up=, you'll notice that you're redirected to the homepage without being logged in. This is fine - you can sign in manually as the user you just created or you might want to implement an email verification before allowing sign ups - but, in our case, we might as well sign in the user automatically.
+
+In =users/views.py=, add the following to =SignUpView= (as explained in [[https://stackoverflow.com/questions/3222549/how-to-automatically-login-a-user-after-registration-in-django/28974691#28974691][this StackOverflow answer]]):
+
+#+begin_src python
+# other imports
+from django.contrib.auth import login               # new
+
+# other views
+class SignUpView(CreateView):
+    model = User
+    fields = ["username", "email", "password"]
+    template_name = "signup.html"
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):                     # new
+        valid = super().form_valid(form)            # new
+        login(self.request, self.object)            # new
+        return valid                                # new
 #+end_src
 * Follows, favorites, and tags
 * UI stuff
