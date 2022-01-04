@@ -6,18 +6,8 @@
                 <div class="col-md-10 offset-md-1 col-xs-12">
                     <form method="post">
                         {% csrf_token %}
+                        {{ form.non_field_errors }}
                         <fieldset>
-                            {% if form.errors %}
-                                <ul>
-                                    {% for key, value in form.errors.items %}
-                                        <li>
-                                            <strong>
-                                                {{ key }}: {{ value }}
-                                            </strong>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
                             <fieldset class="form-group">
                                 <input
                                     class="form-control form-control-lg"
@@ -27,6 +17,7 @@
                                     value="{{ form.title.value|default_if_none:'' }}"
                                 />
                             </fieldset>
+                            {{ form.title.errors }}
                             <fieldset class="form-group">
                                 <input
                                     class="form-control"
@@ -36,6 +27,7 @@
                                     value="{{ form.description.value|default_if_none:'' }}"
                                 />
                             </fieldset>
+                            {{ form.description.errors }}
                             <fieldset class="form-group">
                                 <textarea
                                     class="form-control"
@@ -44,6 +36,7 @@
                                     name="{{ form.body.name }}"
                                 >{{ form.body.value|default_if_none:'' }}</textarea>
                             </fieldset>
+                            {{ form.body.errors }}
                             <!-- <fieldset class="form-group">
                                  <input
                                  class="form-control"

@@ -20,4 +20,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("conduit.articles.urls")),
     path("", include("conduit.users.urls")),
+    path("__debug__/", include("debug_toolbar.urls")),  # debug
 ]
