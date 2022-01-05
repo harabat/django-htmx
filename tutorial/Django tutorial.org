@@ -1416,10 +1416,10 @@ class CustomUserManager(UserManager):
     def create_superuser(self, username, email, password=None):
         """Create and return a SuperUser with admin permissions."""
 
+        user = self.create_user(username, email, password)
         user.is_staff = True
         user.is_superuser = True
         user.is_active = True
-        user = self.create_user(username, email, password)
         user.save()
 
         return user
@@ -1447,6 +1447,17 @@ class User(AbstractUser):
 #+end_src
 
 Make sure to =makemigrations= and =migrate=, so that Django is aware of your new model.
+*** admin.py
+We need to register this new =User= model in =users/admins.py=, to have access to it in our admin app.
+
+#+begin_src python
+from django.contrib import admin
+from .models import User
+
+admin.site.register(User)
+#+end_src
+
+You'll notice that this code is much shorter than [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model][what the docs say]]: we're trying to keep it simple, so we'll do without some of the quality of life improvements that a more intricate code would allow.
 ** Profile model
 *** Profile
 We are following the instructions in the Django docs about [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model][extending a User model]]. We need to store some information about our users in the database, so we'll create a model that will link to the =User= through a =OneToOneField=.
@@ -1485,9 +1496,28 @@ from .models import User, Profile
 
 
 @receiver(post_save, sender=User)
-def create_profile_for_user(sender, instance, created, *args, **kwargs):
+def create_profile_for_user(sender, instance, created, **kwargs):
     if created:
-        instance.profile = Profile.objects.create(user=instance)
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_profile_for_user(sender, instance, **kwargs):
+    instance.profile.save()
+#+end_src
+
+In order to activate this signal, we will modify =users/apps.py=:
+
+#+begin_src python
+from django.apps import AppConfig
+
+
+class UsersConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "conduit.users"
+
+    def ready(self):                        # new
+        import conduit.users.signals        # new
 #+end_src
 
 This signal runs whenever a =User= is saved. By checking for =created=, we make sure to only initiate a =Profile= for the =User= instance if the User has just been created, instead of whenever the instance is updated.
@@ -1500,8 +1530,6 @@ from .models import Profile
 
 admin.site.register(Profile)
 #+end_src
-
-You'll notice that this code is much shorter than [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model][what the docs say]]: we're trying to keep it simple, so we'll do without some of the quality of life improvements that a more intricate code would allow.
 ** Auth views
 In =users/views.py=, we take advantage of the generic =LoginView=, =LogoutView=, and =CreateView= to implement our authentication logic:
 
@@ -1724,7 +1752,7 @@ In =nav.html=:
 ** LoginRequiredMixin
 Some pages should only be accessible to authenticated users, and Django provides an easy way of doing so through mixins. Mixins are components that provide common extra functionality. They can be added to class-based views on the fly.
 
-In =articles/models.py=, add the following:
+In =articles/views.py=, add the following:
 
 #+begin_src python
 # other imports
@@ -1759,10 +1787,12 @@ By default, the login url in Django is =accounts/login/=: while we changed our u
 #+begin_src python
 LOGIN_URL = "login"
 #+end_src
-** Testing login and signup
+** Testing signup and login
 For now, we only have one user for our app: the =admin= superuser.
 
-Let's create a new user by clicking on =Sign up= in our navbar. Enter a username, an email (which doesn't have to be a real one as long as it's the right format), and a password. When you finalise this action by clicking the button =Sign up=, you'll notice that you're redirected to the homepage without being logged in. This is fine - you can sign in manually as the user you just created or you might want to implement an email verification before allowing sign ups - but, in our case, we might as well sign in the user automatically.
+Let's create a new user by clicking on =Sign up= in our navbar. Enter a username, an email (which doesn't have to be a real one as long as it's the right format), and a password.
+
+When you finalise this action by clicking the button =Sign up=, you'll notice that you're redirected to the homepage without being logged in. This is fine - you can sign in manually as the user you just created or you might want to implement an email verification before allowing sign ups - but, in our case, we might as well sign in the user automatically.
 
 In =users/views.py=, add the following to =SignUpView= (as explained in [[https://stackoverflow.com/questions/3222549/how-to-automatically-login-a-user-after-registration-in-django/28974691#28974691][this StackOverflow answer]]):
 
@@ -1781,6 +1811,33 @@ class SignUpView(CreateView):
         valid = super().form_valid(form)            # new
         login(self.request, self.object)            # new
         return valid                                # new
+#+end_src
+
+Try creating a new user: this should have resolved the issue.
+*** TODO check why =authenticate= returs =None=
+#+begin_src python
+class SignUpView(CreateView):
+    model = User
+    fields = ["username", "email", "password"]
+    template_name = "signup.html"
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):
+        form.save()
+        email = form.cleaned_data.get("email")
+        password = form.cleaned_data.get("password")
+        user = authenticate(email=email, password=password)
+        login(self.request, user)
+        return redirect(self.success_url)
+#+end_src
+[[https://stackoverflow.com/questions/3222549/how-to-automatically-login-a-user-after-registration-in-django/70582911#70582911][How to automatically login a user after registration in django - Stack Overflow]]
+** Profile templates
+It's time to allow users to change their profiles.
+
+In =users/views.py=:
+
+#+begin_src python
+
 #+end_src
 * Follows, favorites, and tags
 * UI stuff
