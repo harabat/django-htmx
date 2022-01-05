@@ -24,10 +24,10 @@ class CustomUserManager(UserManager):
     def create_superuser(self, email, username, password=None):
         """Create and return a SuperUser with admin permissions."""
 
+        user = self.create_user(email, username, password)
         user.is_staff = True
         user.is_superuser = True
         user.is_active = True
-        user = self.create_user(email, username, password)
         user.save()
 
         return user

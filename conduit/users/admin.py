@@ -14,5 +14,5 @@ from .models import User, Profile
 
 
 # admin.site.register(User, UserAdmin)
-# admin.site.register(User)
+admin.site.register(User)
 admin.site.register(Profile)
