@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView
 from django.urls import reverse_lazy
 from django.contrib.auth import login
-from .models import User
+from .models import User, Profile
 
 
 class Login(LoginView):
@@ -25,3 +25,13 @@ class SignUpView(CreateView):
         valid = super().form_valid(form)
         login(self.request, self.object)
         return valid
+
+
+class ProfileDetailView(DetailView):
+    model = Profile
+    template_name = "profile_detail.html"
+
+    def get_object(self, queryset=None):
+        username = self.kwargs.get("username", None)
+        user = get_object_or_404(User, username=username)
+        return user.profile

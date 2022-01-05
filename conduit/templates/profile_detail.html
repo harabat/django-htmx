@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>{{ profile.user.username }} - Conduit: Django + HTMX</title>
+{% endblock %}
+{% block content %}
+    <div class="profile-page">
+        <div class="user-info">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-md-10 offset-md-1">
+                        <img src="{{ profile.image }}" class="user-img" alt="{{ profile.user.username }}" />
+                        <h4>{{ profile.user.username }}</h4>
+                        <p>{{ profile.bio|default:"This user doesn't have a bio for now" }}</p>
+                        {% comment "edit profiles" %}
+                            {#if is_user}
+                            <a href="/settings" class="btn btn-sm btn-outline-secondary action-btn">
+                                <i class="ion-gear-a" />
+                                Edit Profile Settings
+                            </a>
+                            {:else if $session.user}
+                            <button
+                                class="btn btn-sm action-btn {profile.following ? 'btn-secondary' : 'btn-outline-secondary'}"
+                                on:click={toggle_following}
+                            >
+                                <i class="ion-plus-round" />
+                                {profile.following ? 'Unfollow' : 'Follow'}
+                                {profile.username}
+                            </button>
+                            {:else}<a href="/login">Sign in to follow</a>{/if}
+                        {% endcomment %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% comment "articles" %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-md-10 offset-md-1">
+                        <div class="articles-toggle">
+                            <ul class="nav nav-pills outline-active">
+                                <li class="nav-item">
+                                    <a
+                                        href="{% url 'profile_detail' username=profile.user.username %}"
+                                        class="nav-link"
+                                        rel="prefetch"
+                                    >Articles</a>
+                                </li>
+                                {% comment "favourites" %}
+                                <li class="nav-item">
+                                    <a
+    href="/profile/@{profile.username}/favorites"
+    class="nav-link"
+    rel="prefetch"
+    class:active={is_favorites}
+                                    >Favorites</a>
+                                </li>
+                                {% endcomment "favourites" %}
+                            </ul>
+                        </div>
+                        <slot />
+                    </div>
+                </div>
+            </div>
+        {% endcomment %}
+    </div>
+{% endblock %}
