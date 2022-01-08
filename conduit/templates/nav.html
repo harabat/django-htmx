@@ -13,22 +13,22 @@
                         <span class="ion-compose"> New Post </span>
                     </a>
                 </li>
-                {% comment %}
-                    <li class="nav-item">
-                        <a
-                            rel="prefetch"
-                            href="{% url 'settings' username=user.username %}"
-                            class="nav-link">
-                            <i class="ion-gear-a" /> Settings
-                        </a>
-                    </li>
                 <li class="nav-item">
-                    <a rel="prefetch" href="{% url 'profile' username=user.username %}" class="nav-link">
-                        <img src="{{ user.image }}" class="user-pic" alt="{{ user.username }}">
+                    <a rel="prefetch" href="{% url 'settings' %}" class="nav-link">
+                        <span class="ion-gear-a"> Settings </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a rel="prefetch" href="{% url 'profile_detail' username=user.username %}" class="nav-link">
+                        <img src="{{ user.profile.image }}" class="user-pic" alt="{{ user.username }}">
                         {{ user.username }}
                     </a>
                 </li>
-                {% endcomment %}
+                <li class="nav-item">
+                    <a rel="prefetch" href="{% url 'logout' %}" class="nav-link">
+                        <span class="ion-log-out"> Log out </span>
+                    </a>
+                </li>
             {% else %}
                 <li class="nav-item">
                     <a rel="prefetch" href="{% url 'login' %}" class="nav-link">

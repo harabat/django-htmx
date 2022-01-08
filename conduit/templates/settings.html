@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>Settings - Conduit</title>
+{% endblock %}
+{% block content %}
+    <div class="settings-page">
+        <div class="container page">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 col-xs-12">
+                    <h1 class="text-xs-center">Your Settings</h1>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+                        {{ user_form.non_field_errors }}
+                        <fieldset>
+                            <fieldset class="form-group">
+                                <input
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="URL of profile picture"
+                                    name="{{ form.image.name }}"
+                                    value="{{ form.image.value|default_if_none:'' }}"
+                                />
+                            </fieldset>
+                            {{ form.image.errors }}
+                            <fieldset class="form-group">
+                                <input
+                                    class="form-control form-control-lg"
+                                    type="text"
+                                    placeholder="Username"
+                                    name="{{ user_form.username.name }}"
+                                    value="{{  user_form.username.value|default_if_none:'' }}"
+                                />
+                            </fieldset>
+                            {{ userform.username.errors }}
+                            <fieldset class="form-group">
+                                <textarea
+                                    class="form-control form-control-lg"
+                                    rows="8"
+                                    placeholder="Short bio about you"
+                                    name="{{ form.bio.name }}"
+                                >{{ form.bio.value|default_if_none:'' }}</textarea>
+                            </fieldset>
+                            {{ form.bio.errors }}
+                            <fieldset class="form-group">
+                                <input
+                                    class="form-control form-control-lg"
+                                    type="email"
+                                    placeholder="Email"
+                                    name="{{ user_form.email.name }}"
+                                    value="{{ user_form.email.value|default_if_none:'' }}"
+                                />
+                            </fieldset>
+                            {{ user_form.email.errors }}
+                            {% comment %}
+                                <fieldset class="form-group">
+                                    <input
+                                        class="form-control form-control-lg"
+                                        type="password"
+                                        placeholder="New Password"
+                                        name="{{ userform.password.name }}"
+                                        value="{{ userform.password.value|default_if_none:'' }}"
+                                    />
+                                </fieldset>
+                                {{ userform.password.errors }}
+                            {% endcomment %}
+                            <button
+                                class="btn btn-lg btn-primary pull-xs-right"
+                                type="submit"
+                            >
+                                Update Settings
+                            </button>
+                        </fieldset>
+                    </form>
+                    <hr />
+                    <a href="{% url 'logout' %}" class="btn btn-outline-danger">
+                        Or click here to logout.
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

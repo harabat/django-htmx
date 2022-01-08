@@ -1,22 +1,28 @@
 {% extends 'base.html' %}
+{% block title %}
+    <title>{{ article.title }} - Conduit: Django + HTMX</title>
+{% endblock %}
 {% block content %}
     <div class="article-page">
         <div class="banner">
             <div class="container">
                 <h1>{{ article.title }}</h1>
                 <div class="article-meta">
+                    <a href="{% url 'profile_detail' username=article.author.user.username %}">
+                        <img src="{{ article.author.image }}" alt="{{ article.author.user.username }}"/>
+                    </a>
                     <div class="info">
-                        <span class="author">
+                        <a href="{% url 'profile_detail' username=article.author.user.username %}" class="author">
                             {{ article.author.user.username }}
-                        </span>
+                        </a>
                         <span class="date">
-                            {{ article.created_at|date:"F d, Y" }}
+                            {{ article.created_at|date:"D M d Y" }}
                         </span>
                     </div>
                     <span>
                         <a
-    href="{% url 'editor_update' slug=article.slug %}"
-    class="btn btn-outline-secondary btn-sm"
+                            href="{% url 'editor_update' slug=article.slug %}"
+                            class="btn btn-outline-secondary btn-sm"
                         >
                             <span class="ion-edit">
                                 Edit Article
