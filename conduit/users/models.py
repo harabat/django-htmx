@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.conf import settings
+from django.urls import reverse
 from django.db import models
 
 
@@ -52,5 +53,13 @@ class Profile(models.Model):
     """Profile model"""
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    image = models.URLField(blank=True)
+    image = models.URLField(
+        default="https://static.productionready.io/images/smiley-cyrus.jpg"
+    )
     bio = models.TextField(max_length=1000, blank=True)
+
+    def __str__(self):
+        return self.user.username
+
+    def get_absolute_url(self):
+        return reverse("profile_detail", kwargs={"username": self.user.username})

@@ -421,7 +421,9 @@ This template will contain the following:
         <link href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
         <!-- fonts -->
         <link href="//fonts.googleapis.com/css?family=Titillium+Web:700|Source+Serif+Pro:400,700|Merriweather+Sans:400,700|Source+Sans+Pro:400,300,600,700,300italic,400italic,600italic,700italic&display=swap" rel="stylesheet" type="text/css">
-        <title>Conduit: Django + HTMX</title>
+        {% block title %}
+            <title>Conduit: Django + HTMX</title>
+        {% endblock %}
     </head>
     <body>
         <main>
@@ -478,14 +480,54 @@ Let's create the template  and add the following to it:
 {% endblock %}
 #+end_src
 
-The HTML is adapted from other realworld projects, especially the [[https://github.com/sveltejs/realworld/][SvelteKit implementation of the RealWorld app]], because it's unexpectedly close to Django's templating language.
+The HTML is adapted from other realworld projects (especially the [[https://github.com/sveltejs/realworld/][SvelteKit implementation of the RealWorld app]], because Svelte is unexpectedly close to Django's templating language).
 Because the HTML is little more than a copy-paste, we won't explain its structure and classes: suffice it to say that this is required to have something that looks like the actual Realworld app.
 
 #+ATTR_ORG: :width 400
-[[./Screenshots/1 - Home with global feed.png]]
-[[./Screenshots/1 - Home with global feed - realworld.png]]
+[[./Screenshots/home - global feed.png]]
+[[./Screenshots/home - global feed - realworld.png]]
 
-It's starting to look like something.
+It's starting to look like something, but we can improve the template a bit.
+
+We want to keep our templates as modular as possible, to simplify the structure of our project and make it easier to think about. In this case, we could move the =<div class="article-preview">= to a separate file. Let's move all the code in the ={% for article in articles %}= for loop into the file =article_preview.html= (which we need to create).
+
+In =templates/home.html=, we change the following lines:
+
+#+begin_src html
+<div class="container page">
+  <div class="row">
+    <div class="col-md-9">
+      {% for article in articles %}
+        {% include 'article_preview.html' %} <!-- from <div class="article-preview">...</div>-->
+      {% endfor %}
+    </div>
+  </div>
+</div>
+#+end_src
+
+Our =templates/article_preview.html= file should look like this:
+
+#+begin_src html
+{% block content %}
+  <div class="article-preview">
+    <div class="article-meta">
+      <div class="info">
+        <span class="author">
+          {{ article.author.user.username }}
+        </span>
+        <span class="date">
+          {{ article.created_at|date:"D M d Y" }}
+        </span>
+      </div>
+    </div>
+    <a href="{{ article.get_absolute_url }}" rel="prefetch" class="preview-link">
+      <h1>{{ article.title }}</h1>
+      <p>{{ article.description }}</p>
+      <span>Read more...</span>
+    </a>
+  </div>
+{% endblock %}
+#+end_src
 * Article views, templates, etc.
 ** Article view
 Next we'll implement the article view.
@@ -522,6 +564,9 @@ Now, we create the =article_detail.html= file in our =templates= folder and add 
 
 #+begin_src html
 {% extends 'base.html' %}
+{% block title %}
+    <title>{{ article.title }} - Conduit: Django + HTMX</title>
+{% endblock %}
 {% block content %}
     <div class="article-page">
         <div class="banner">
@@ -533,7 +578,7 @@ Now, we create the =article_detail.html= file in our =templates= folder and add 
                             {{ article.author.user.username }}
                         </span>
                         <span class="date">
-                            {{ article.created_at|date:"F d, Y" }}
+                            {{ article.created_at|date:"D M d Y" }}
                         </span>
                     </div>
                 </div>
@@ -567,8 +612,8 @@ Finally, we modify =home.html= so that article previews redirect to articles:
 Let's see what it looks like:
 
 #+ATTR_ORG: :width 400
-[[./Screenshots/2 - Article.png]]
-[[./Screenshots/2 - Article - realworld.png]]
+[[./Screenshots/article_detail.png]]
+[[./Screenshots/article_detail - realworld.png]]
 
 ** Slugs
 We want our article URLs to include slugs, which are easier to read than IDs.
@@ -709,7 +754,7 @@ Let's try creating an Article through the Django admin app.
 When going back to http://localhost:8000/ (where your app is running), you will see that your new article has a slug consisting of its slugified title and a UUID:
 
 #+ATTR_ORG: :width 400
-[[./Screenshots/3 - Article - slug.png]]
+[[./Screenshots/article_detail - slug.png]]
 *** TODO add =primary_key=True= to =uuid_field=, then add =query_pk_and_slug=True= in relevant views
 * Navbar
 Let's create a simple navigation bar. Because we have yet to implement authentication and profiles, the navbar will just contain a link to =Home=.
@@ -795,10 +840,13 @@ We add a =New article= button to the Nav bar in =nav.html=:
         </ul>
 #+end_src
 
-Now, we can create the template =editor_create.html=:
+Now, we can create the template =editor.html=:
 
 #+begin_src html
 {% extends 'base.html' %}
+{% block title %}
+    <title>Editor - Conduit: Django + HTMX</title>
+{% endblock %}
 {% block content %}
     <div class="editor-page">
         <div class="container page">
@@ -1477,8 +1525,13 @@ class Profile(models.Model):
     """Profile model"""
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    image = models.URLField(blank=True)
+    image = models.URLField(
+        default="https://static.productionready.io/images/smiley-cyrus.jpg"
+    )
     bio = models.TextField(max_length=1000, blank=True)
+
+    def __str__(self):
+        return self.user.username
 #+end_src
 
 As always, whenever you change a model, you should =makemigrations= and =migrate=.
@@ -1590,6 +1643,9 @@ Let's create =login.html= in the =templates= folder:
 
 #+begin_src html
 {% extends 'base.html' %}
+{% block title %}
+    <title>Sign in - Conduit: Django + HTMX</title>
+{% endblock %}
 {% block content %}
     <div class="auth-page">
         <div class="container page">
@@ -1637,6 +1693,9 @@ Create =signup.html=:
 
 #+begin_src html
 {% extends 'base.html' %}
+{% block title %}
+    <title>Sign up - Conduit: Django + HTMX</title>
+{% endblock %}
 {% block content %}
     <div class="auth-page">
         <div class="container page">
@@ -1709,26 +1768,11 @@ In =nav.html=:
                         <span class="ion-compose"> New Post </span>
                     </a>
                 </li>
-                {% comment %}
-                    <li class="nav-item">
-                        <a
-                            rel="prefetch"
-                            href="{% url 'settings' username=user.username %}"
-                            class="nav-link">
-                            <i class="ion-gear-a" /> Settings
-                        </a>
-                    </li>
                 <li class="nav-item">
-                    <a
-                      rel="prefetch"
-                      href="{% url 'profile' username=user.username %}"
-                      class="nav-link"
-                    >
-                        <img src="{{ user.image }}" class="user-pic" alt="{{ user.username }}">
-                        {{ user.username }}
+                    <a rel="prefetch" href="{% url 'logout' %}" class="nav-link">
+                        <span class="ion-log-out"> Log out </span>
                     </a>
                 </li>
-                {% endcomment %}
             {% else %}
                 <li class="nav-item">
                     <a rel="prefetch" href="{% url 'login' %}" class="nav-link">
@@ -1774,7 +1818,7 @@ Notice that the =LoginRequiredMixin= should be at the leftmost position in the i
 
 If you try creating a post from the app, you should get this error:
 
-[[./Screenshots/Users - login_url  error.png]]
+[[./Screenshots/login - error.png]]
 
 The cause of the problem is given in the line:
 
@@ -1794,11 +1838,12 @@ Let's create a new user by clicking on =Sign up= in our navbar. Enter a username
 
 When you finalise this action by clicking the button =Sign up=, you'll notice that you're redirected to the homepage without being logged in. This is fine - you can sign in manually as the user you just created or you might want to implement an email verification before allowing sign ups - but, in our case, we might as well sign in the user automatically.
 
-In =users/views.py=, add the following to =SignUpView= (as explained in [[https://stackoverflow.com/questions/3222549/how-to-automatically-login-a-user-after-registration-in-django/28974691#28974691][this StackOverflow answer]]):
+In =users/views.py=, add the following to =SignUpView= (as explained in [[https://stackoverflow.com/a/70582911][this StackOverflow answer]]):
 
 #+begin_src python
 # other imports
-from django.contrib.auth import login               # new
+from django.shortcuts import render, redirect  # new
+from django.contrib.auth import authenticate, login  # new
 
 # other views
 class SignUpView(CreateView):
@@ -1807,30 +1852,32 @@ class SignUpView(CreateView):
     template_name = "signup.html"
     success_url = reverse_lazy("home")
 
-    def form_valid(self, form):                     # new
-        valid = super().form_valid(form)            # new
-        login(self.request, self.object)            # new
-        return valid                                # new
+    def form_valid(self, form):  # new
+        # create the User object
+        user = form.save(commit=False)  # new
+        # set password manually
+        # as otherwise the User will be saved with unhashed password
+        password = form.cleaned_data.get("password")  # new
+        user.set_password(password)  # new
+        # save the User object to the database
+        user.save()  # new
+        # authenticate your user with unhashed password
+        # (`authenticate` expects unhashed passwords)
+        email = form.cleaned_data.get("email")  # new
+        authenticated_user = authenticate(email=email, password=password)  # new
+        # log in
+        login(self.request, authenticated_user)  # new
+        return redirect(self.success_url)  # new
 #+end_src
 
-Try creating a new user: this should have resolved the issue.
-*** TODO check why =authenticate= returs =None=
-#+begin_src python
-class SignUpView(CreateView):
-    model = User
-    fields = ["username", "email", "password"]
-    template_name = "signup.html"
-    success_url = reverse_lazy("home")
+To make sure you understand what we're doing here: Django hashes passwords when creating a new =User=, but we need to make it explicit that the =password= field is the password (through =user.set_password(password)=) and needs to be hashed, otherwise there will be errors whenever we try to authenticate:
+- Django will save the unhashed password to the database
+- during login, it will take the user-submitted plaintext password and hash it
+- check the hash of the user-submitted password against what it believes to be /the hash of the actual password/ in the database
+- see that the two passwords don't match (obviously)
+- refuse authentication.
 
-    def form_valid(self, form):
-        form.save()
-        email = form.cleaned_data.get("email")
-        password = form.cleaned_data.get("password")
-        user = authenticate(email=email, password=password)
-        login(self.request, user)
-        return redirect(self.success_url)
-#+end_src
-[[https://stackoverflow.com/questions/3222549/how-to-automatically-login-a-user-after-registration-in-django/70582911#70582911][How to automatically login a user after registration in django - Stack Overflow]]
+Now that we've resolved the issue, try creating a new user: everything should work.
 ** Viewing profiles
 It's time to allow users to view their profiles.
 
@@ -1886,7 +1933,7 @@ In the =templates= folder, create =profile_detail.html=:
 Everything should be working now, right? Let's check by going to =localhost:8000/profile/@admin=, for example.
 Welp, we're getting an error:
 #+ATTR_ORG: :width 600
-[[./Screenshots/Profile - ProfileDetailView error.png]]
+[[./Screenshots/profile_detail - error.png]]
 
 The error tells us that our =ProfileDetailView= wants to be called with an object primary key or a slug, while we're calling it with a =username=. The solution is simple: we just change how the view decides which objects to show.
 
@@ -1907,9 +1954,149 @@ class ProfileDetailView(DetailView):
         return user.profile
 #+end_src
 
-Let's try again: we should see an actual profile page (though there isn't much on it yet).
-** Editing profiles
+Let's try again: we should see an actual profile page (though there isn't much on it yet). Make sure to set a profile image for your =admin= user, as everyone else should have a default already set.
 
+#+ATTR_ORG: :width 600
+[[./Screenshots/profile_detail.png]]
+** Links to Profiles in templates
+We now need to link the profile page from all the places our users' usernames are exposed.
+
+In =templates/article_preview.html=, change the following lines:
+
+#+begin_src html
+<div class="article-meta">
+  <a href="{% url 'profile_detail' username=article.author.user.username %}">                    <!-- new -->
+    <img src="{{ article.author.image }}" alt="{{ article.author.user.username }}"/>           <!-- new -->
+  </a>                                                                                           <!-- new -->
+  <div class="info">
+    <a href="{% url 'profile_detail' username=article.author.user.username %}" class="author"> <!-- from <span class="author"> -->
+        {{ article.author.user.username }}
+    </a>                                                                                       <!-- from </span> -->
+    <span class="date">
+      {{ article.created_at|date:"D M d Y" }}
+    </span>
+  </div>
+</div>
+#+end_src
+
+In =templates/nav.html=:
+
+#+begin_src html
+{% if user.is_authenticated %}
+  <li class="nav-item">
+    <a rel="prefetch" href="{% url 'editor_create' %}" class="nav-link">
+      <span class="ion-compose"> New Post </span>
+    </a>
+  </li>
+  <li class="nav-item">                                                                          <!-- new -->
+    <a rel="prefetch" href="{% url 'profile_detail' username=user.username %}" class="nav-link"> <!-- new -->
+      <img src="{{ user.profile.image }}" class="user-pic" alt="{{ user.username }}">            <!-- new -->
+      {{ user.username }}                                                                        <!-- new -->
+    </a>                                                                                         <!-- new -->
+  </li>                                                                                          <!-- new -->
+  <li class="nav-item">
+    <a rel="prefetch" href="{% url 'logout' %}" class="nav-link">
+      <span class="ion-log-out"> Log out </span>
+    </a>
+  </li>
+{% else %}
+#+end_src
+
+In =templates/article_detail.html=:
+
+#+begin_src html
+<div class="article-meta">
+  <a href="{% url 'profile_detail' username=article.author.user.username %}">                  <!-- new -->
+    <img src="{{ article.author.image }}" alt="{{ article.author.user.username }}"/>           <!-- new -->
+  </a>                                                                                         <!-- new -->
+  <div class="info">
+    <a href="{% url 'profile_detail' username=article.author.user.username %}" class="author"> <!-- from <span class="author"> -->
+      {{ article.author.user.username }}
+    </a>                                                                                       <!-- from </span> -->
+    <span class="date">
+      {{ article.created_at|date:"D M d Y" }}
+    </span>
+  </div>
+#+end_src
+
+In =templates/comments.html=:
+
+#+begin_src html
+<div class="card-footer">
+  <a href="{% url 'profile_detail' username=comment.author.user.username %}" class="comment-author">            <!-- new -->
+    <img src="{{ comment.author.image }}" class="comment-author-img" alt="{{ comment.author.user.username }}"/> <!-- new -->
+  </a>                                                                                                          <!-- new -->
+  <a href="{% url 'profile_detail' username=comment.author.user.username %}" class="comment-author"> <!-- from <span class="comment-author"> -->
+      {{ comment.author.user.username }}
+  </a>                                                                                               <!-- from </span>-->
+  <span class="date-posted">
+    {{ comment.created_at|date:"D M d Y" }}
+  </span>
+  {% include 'comment_delete.html' %}
+</div>
+#+end_src
+*** TODO replace {% url 'profile_detail' username=... %} with {{ ...profile.get_absolute_url }}
+** Editing profiles
+We want to allow users to modify their profile information (username, email, password, image, bio). This is straightforward: we have done it a few times by now.
+
+In =users/views.py=:
+
+#+begin_src python
+# other imports
+from django.views.generic import CreateView, DetailView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+# other classes
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = Profile
+    fields = ["image", "user.username", "bio", "user.email", "user.password"]
+    template_name = "settings.html"
+
+    def get_object(self, queryset=None):
+        return self.request.user.profile
+        # return Profile.objects.get(user=self.request.user)
+#+end_src
+
+Our =ProfileUpdateView= only allows to update the =Profile= associated with the current =User=: users should only be able to edit their own profile.
+
+In =users/urls.py=:
+
+#+begin_src python
+# other imports
+from .views import Login, Logout, SignUpView, ProfileDetailView, ProfileUpdateView
+
+
+urlpatterns = [
+    # other paths
+    path("settings/", ProfileUpdateView.as_view(), name="settings"),
+]
+#+end_src
+
+In =templates/nav.html=:
+
+#+begin_src html
+<li class="nav-item">
+  <a rel="prefetch" href="{% url 'editor_create' %}" class="nav-link">
+    <span class="ion-compose"> New Post </span>
+  </a>
+</li>
+<li class="nav-item">                                              <!-- new -->
+  <a rel="prefetch" href="{% url 'settings' %}" class="nav-link">  <!-- new -->
+    <span class="ion-gear-a"> Settings </span>                     <!-- new -->
+  </a>                                                             <!-- new -->
+</li>                                                              <!-- new -->
+<li class="nav-item">
+  <a rel="prefetch" href="{% url 'profile_detail' username=user.username %}" class="nav-link">
+    <img src="{{ user.profile.image }}" class="user-pic" alt="{{ user.username }}">
+    {{ user.username }}
+  </a>
+</li>
+#+end_src
+
+In =templates/settings.html=:
+
+#+begin_src html
+#+end_src
 * Follows, favorites, and tags
 * UI stuff
 ** TODO class:active

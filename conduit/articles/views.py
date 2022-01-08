@@ -31,9 +31,6 @@ class ArticleListView(ListView):
     model = Article
     template_name = "home.html"
 
-    def get_queryset(self):
-        return super().get_queryset()
-
 
 class ArticleDetailView(DetailView):
     """detail view for individual articles"""
@@ -60,8 +57,8 @@ class EditorCreateView(LoginRequiredMixin, CreateView):
         self.object.save()
         return super().form_valid(form)
 
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
+    # def post(self, request, *args, **kwargs):
+    #     return super().post(request, *args, **kwargs)
 
 
 class EditorUpdateView(LoginRequiredMixin, UpdateView):

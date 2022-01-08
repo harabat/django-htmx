@@ -11,23 +11,7 @@
             <div class="row">
                 <div class="col-md-9">
                     {% for article in articles %}
-                        <div class="article-preview">
-                            <div class="article-meta">
-                                <div class="info">
-                                    <span class="author">
-                                        {{ article.author.user.username }}
-                                    </span>
-                                    <span class="date">
-                                        {{ article.created_at|date:"D M d Y" }}
-                                    </span>
-                                </div>
-                            </div>
-                            <a href="{{ article.get_absolute_url }}" rel="prefetch" class="preview-link">
-                                <h1>{{ article.title }}</h1>
-                                <p>{{ article.description }}</p>
-                                <span>Read more...</span>
-                            </a>
-                        </div>
+                        {% include 'article_preview.html' %}
                     {% endfor %}
                 </div>
             </div>
