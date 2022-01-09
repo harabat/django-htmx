@@ -10,8 +10,6 @@
                     <h1 class="text-xs-center">Your Settings</h1>
                     <form method="post">
                         {% csrf_token %}
-                        {{ form.non_field_errors }}
-                        {{ user_form.non_field_errors }}
                         <fieldset>
                             <fieldset class="form-group">
                                 <input
@@ -27,12 +25,13 @@
                                 <input
                                     class="form-control form-control-lg"
                                     type="text"
+                                    required
                                     placeholder="Username"
                                     name="{{ user_form.username.name }}"
                                     value="{{  user_form.username.value|default_if_none:'' }}"
                                 />
                             </fieldset>
-                            {{ userform.username.errors }}
+                            {{ user_form.username.errors }}
                             <fieldset class="form-group">
                                 <textarea
                                     class="form-control form-control-lg"
@@ -47,27 +46,22 @@
                                     class="form-control form-control-lg"
                                     type="email"
                                     placeholder="Email"
+                                    required
                                     name="{{ user_form.email.name }}"
                                     value="{{ user_form.email.value|default_if_none:'' }}"
                                 />
                             </fieldset>
                             {{ user_form.email.errors }}
-                            {% comment %}
-                                <fieldset class="form-group">
-                                    <input
-                                        class="form-control form-control-lg"
-                                        type="password"
-                                        placeholder="New Password"
-                                        name="{{ userform.password.name }}"
-                                        value="{{ userform.password.value|default_if_none:'' }}"
-                                    />
-                                </fieldset>
-                                {{ userform.password.errors }}
-                            {% endcomment %}
-                            <button
-                                class="btn btn-lg btn-primary pull-xs-right"
-                                type="submit"
-                            >
+                            <fieldset class="form-group">
+                                <input
+                                    class="form-control form-control-lg"
+                                    type="password"
+                                    placeholder="New Password"
+                                    name="{{ user_form.new_password.name }}"
+                                />
+                            </fieldset>
+                            {{ user_form.new_password.errors }}
+                            <button class="btn btn-lg btn-primary pull-xs-right" type="submit">
                                 Update Settings
                             </button>
                         </fieldset>
