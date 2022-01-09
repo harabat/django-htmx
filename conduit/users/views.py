@@ -61,26 +61,9 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         profile_form = self.form_class(request.POST, instance=request.user.profile)
         user_form = UserForm(request.POST, instance=request.user)
-        # import pudb
-
-        # pu.db
         if profile_form.is_valid() and user_form.is_valid():
             profile_form.save()
             user_form.save()
-            import pudb
-
-            pu.db
             messages.success(request, "Your profile has been updated!")
             return redirect(self.success_url)
         return super().post(request, *args, **kwargs)
-
-
-# class UserUpdateView(LoginRequiredMixin, UpdateView):
-#     model = User
-#     fields = ["username", "email", "password"]
-#     context_object_name = "user_form"
-#     template_name = "settings.html"
-#     success_url = reverse_lazy("settings")
-
-#     def get_object(self, queryset=None):
-#         return self.request.user
