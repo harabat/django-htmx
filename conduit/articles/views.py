@@ -1,17 +1,14 @@
-from django.shortcuts import render
 from django.views.generic import (
     TemplateView,
     DetailView,
     CreateView,
     UpdateView,
     DeleteView,
-    ListView,
     View,
 )
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Article, Comment
-import pudb
 
 
 class Home(TemplateView):
@@ -23,13 +20,6 @@ class Home(TemplateView):
         context = super().get_context_data(**kwargs)
         context["articles"] = Article.objects.order_by("-created_at")
         return context
-
-
-class ArticleListView(ListView):
-    """list articles"""
-
-    model = Article
-    template_name = "home.html"
 
 
 class ArticleDetailView(DetailView):

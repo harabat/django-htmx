@@ -1,0 +1,13 @@
+{% block content %}
+    {% if articles|length_is:'0' %}
+        <div class="article-preview">
+            No articles are here... yet.
+        </div>
+    {% else %}
+        <div>
+            {% for article in articles %}
+                {% include 'article_preview.html' %}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
