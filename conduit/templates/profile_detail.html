@@ -21,23 +21,7 @@
                                 </span>
                             </a>
                         {% else %}
-                            <form
-                                method="post"
-                                action="{% url 'profile_follow' username=profile.user.username %}"
-                            >
-                                {% csrf_token %}
-                                <button class="btn btn-sm action-btn
-                                               {% if is_following %}
-                                               btn-secondary
-                                               {% else %}
-                                               btn-outline-secondary
-                                               {% endif %}"
-                                >
-                                    <span class="ion-plus-round">
-                                        {% if is_following %}Unfollow{% else %}Follow{% endif %} {{ profile.user.username }}
-                                    </span>
-                                </button>
-                            </form>
+                            {% include 'profile_follow.html' %}
                         {% endif %}
                     </div>
                 </div>
@@ -64,7 +48,7 @@
                             {% endcomment %}
                         </ul>
                     </div>
-                    {% include 'profile_articles.html' with articles=my_articles %}
+                    {% include 'article_list.html' with articles=my_articles %}
                 </div>
             </div>
         </div>

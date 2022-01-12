@@ -1,0 +1,18 @@
+<form
+    method="post"
+    action="{% url 'article_favorite' slug=article.slug %}"
+    style="display:inline"
+>
+    {% csrf_token %}
+    <button class="btn btn-sm action-btn
+                   {% if has_favorited %}
+                   btn-primary
+                   {% else %}
+                   btn-outline-primary
+                   {% endif %}"
+    >
+        <span class="ion-plus-round">
+            {% if has_favorited %}Unfavorite{% else %}Favorite{% endif %} Article ({{ article.favorited_by.count }})
+        </span>
+    </button>
+</form>

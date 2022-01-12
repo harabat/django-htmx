@@ -19,7 +19,9 @@
                 <span class="date-posted">
                     {{ comment.created_at|date:"D M d Y" }}
                 </span>
-                {% include 'comment_delete.html' %}
+                {% if user == comment.author.user %}
+                    {% include 'comment_delete.html' %}
+                {% endif %}
             </div>
         </div>
     {% endfor %}

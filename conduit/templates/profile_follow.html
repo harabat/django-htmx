@@ -1,0 +1,18 @@
+<form
+    method="post"
+    action="{% url 'profile_follow' username=profile.user.username %}"
+    style="display:inline"
+>
+    {% csrf_token %}
+    <button class="btn btn-sm action-btn
+                   {% if is_following %}
+                   btn-secondary
+                   {% else %}
+                   btn-outline-secondary
+                   {% endif %}"
+    >
+        <span class="ion-plus-round">
+            {% if is_following %}Unfollow{% else %}Follow{% endif %} {{ profile.user.username }}
+        </span>
+    </button>
+</form>

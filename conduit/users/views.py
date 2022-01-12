@@ -12,6 +12,11 @@ class Login(LoginView):
     template_name = "login.html"
     next_page = reverse_lazy("home")
 
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect(self.next_page)
+        return super().get(request, *args, **kwargs)
+
 
 class Logout(LogoutView):
     next_page = reverse_lazy("home")
@@ -22,6 +27,11 @@ class SignUpView(CreateView):
     fields = ["username", "email", "password"]
     template_name = "signup.html"
     success_url = reverse_lazy("home")
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect(self.success_url)
+        return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
         user = form.save(commit=False)
