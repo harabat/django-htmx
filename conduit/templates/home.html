@@ -10,16 +10,44 @@
         <div class="container page">
             <div class="row">
                 <div class="col-md-9">
-                    {% if articles|length_is:'0' %}
-                        <div class="article-preview">
-                            No articles are here... yet.
-                        </div>
-                    {% else %}
-                        <div>
-                            {% for article in articles %}
-                                {% include 'article_preview.html' %}
-                            {% endfor %}
-                        </div>
+                    <div class="feed-toggle">
+                        <ul class="nav nav-pills outline-active">
+                            <li class="nav-item">
+                                {% url 'home' as home %}
+                                <a
+                                    href="{{ home }}"
+                                    rel="prefetch"
+                                    class="nav-link
+                                          {% if request.path == home %}active{% endif %}"
+                                >
+                                    Global Feed
+                                </a>
+                            </li>
+                            {% if user.is_authenticated %}
+                                <li class="nav-item">
+                                    {% url 'home_feed' as home_feed %}
+                                    <a
+                                        href="{{ home_feed }}"
+                                        rel="prefetch"
+                                        class="nav-link
+                                              {% if request.path == home_feed %}active{% endif %}"
+                                    >
+                                        Your Feed
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a href="{% url 'login' %}" rel="prefetch" class="nav-link">
+                                        Sign in to see your Feed
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    {% if request.path == home %}
+                        {% include 'article_list.html' with articles=global_feed %}
+                    {% elif request.path == home_feed %}
+                        {% include 'article_list.html' with articles=your_articles %}
                     {% endif %}
                 </div>
             </div>

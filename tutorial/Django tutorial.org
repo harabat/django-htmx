@@ -503,23 +503,31 @@ In =templates/home.html=, we change the following lines:
 <div class="container page">
   <div class="row">
     <div class="col-md-9">
-      {% if articles|length_is:"0" %}
-        <div class="article-preview">
-          No articles are here... yet.
-        </div>
-      {% else %}
-        <div>
-          {% for article in articles %}
-            {% include 'article_preview.html' %} <!-- from <div class="article-preview">...</div>-->
-          {% endfor %}
-        </div>
-      {% endif %}
+      {% include 'article_list.html' %}  <!-- from {% if articles|length%}...{% end%} -->
     </div>
   </div>
 </div>
 #+end_src
 
-Our =templates/article_preview.html= file should look like this:
+Our =templates/article_list.html= file should look like this:
+
+#+begin_src html
+{% block content %}
+  {% if articles|length_is:"0" %}
+    <div class="article-preview">
+      No articles are here... yet.
+    </div>
+  {% else %}
+    <div>
+      {% for article in articles %}
+        {% include 'article_preview.html' %} <!-- from <div class="article-preview">...</div>-->
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}
+#+end_src
+
+The =templates/article_preview.html= file should look like this:
 
 #+begin_src html
 {% block content %}
@@ -542,6 +550,8 @@ Our =templates/article_preview.html= file should look like this:
   </div>
 {% endblock %}
 #+end_src
+
+You might wonder why we're adopting this template structure: it actually comes from the Svelte implementation of the RealWorld app, and, since it makes a lot of sense and avoids us having to reinvent the wheel, we are taking advantage of it.
 * Article views, templates, etc.
 ** Article view
 Next we'll implement the article view.
@@ -571,8 +581,6 @@ urlpatterns = [
     path("article/<int:pk>", ArticleDetailView.as_view(), name="article_detail"),
 ]
 #+end_src
-
-*** TODO create "article_list.html", {% include 'article_list.html' with tab=tab %}
 ** Article template
 Now, we create the =article_detail.html= file in our =templates= folder and add the following to it:
 
@@ -789,16 +797,20 @@ Let's create =nav.html= in out =templates= folder and add the following to it:
 
 #+begin_src html
 <nav class="navbar navbar-light">
-    <div class="container">
-        <a rel="prefetch" class="navbar-brand" href="/">conduit</a>
-        <ul class="nav navbar-nav pull-xs-right">
-            <li class="nav-item">
-                <a rel="prefetch" class="nav-link" href="{% url 'home' %}">
-                    Home
-                </a>
-            </li>
-        </ul>
-    </div>
+  <div class="container">
+    <a rel="prefetch" class="navbar-brand" href="/">conduit</a>
+    <ul class="nav navbar-nav pull-xs-right">
+      <li class="nav-item">
+        <a
+          href="{% url 'home' %}"
+          rel="prefetch"
+          class="nav-link"
+        >
+          Home
+        </a>
+      </li>
+    </ul>
+  </div>
 </nav>
 #+end_src
 * Creating, editing, and deleting Articles
@@ -840,19 +852,33 @@ urlpatterns = [
 We add a =New article= button to the Nav bar in =nav.html=:
 
 #+begin_src html
-        <ul class="nav navbar-nav pull-xs-right">
-            <li class="nav-item">
-                <a rel="prefetch" class="nav-link" href="{% url 'home' %}">
-                    Home
-                </a>
-            </li>
-            <li class="nav-item">                                                       <!-- new -->
-                <a rel="prefetch" href="{% url 'editor_create' %}" class="nav-link">    <!-- new -->
-                    <span class="ion-compose"> New Post </span>                            <!-- new -->
-                </a>                                                                    <!-- new -->
-            </li>                                                                       <!-- new -->
-        </ul>
+<ul class="nav navbar-nav pull-xs-right">
+  <li class="nav-item">
+    {% url 'home' as home %}                                    <!-- new -->
+    <a
+      href="{{ home }}"                                         <!-- new -->
+      rel="prefetch"
+      class="nav-link
+             {% if request.path == home %}active{% endif %}"    <!-- new -->
+    >
+      Home
+    </a>
+  </li>
+  <li class="nav-item">                                         <!-- new from here -->
+    {% url 'editor_create' as editor_create %}
+    <a
+      href="{{ editor_create }}"
+      rel="prefetch"
+      class="nav-link
+             {% if request.path == editor_create %}active{% endif %}"
+    >
+      <span class="ion-compose"> New Post </span>
+    </a>
+  </li>                                                         <!-- new to here -->
+</ul>
 #+end_src
+
+We added ={% url 'home' as home %}= and =class "nav-link {% if request.path == home %}active{% endif %}"= to better style active links.
 
 Now, we can create the template =editor.html=:
 
@@ -1518,8 +1544,6 @@ from .models import User
 
 admin.site.register(User)
 #+end_src
-
-You'll notice that this code is much shorter than [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model][what the docs say]]: we're trying to keep it simple, so we'll do without some of the quality of life improvements that a more intricate code would allow.
 ** Profile model
 *** Profile
 We are following the instructions in the Django docs about [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model][extending a User model]]. We need to store some information about our users in the database. Each =User= object should be related to a single =Profile=, and vice-versa: we'll use a [[https://docs.djangoproject.com/en/4.0/ref/models/fields/#onetoonefield][=OneToOneField=]] relationship.
@@ -1589,14 +1613,27 @@ class UsersConfig(AppConfig):
 
 This signal runs whenever a =User= is saved. By checking for =created=, we make sure to only initiate a =Profile= for the =User= instance if the User has just been created, instead of whenever the instance is updated.
 *** admin.py
-We need to register this new =Profile= model in =users/admins.py=, to have access to it in our admin app.
+We need to register this new =Profile= model in =users/admins.py=, to have access to it in our admin app, but we want to be able to view =User= and =Profile= information for a given user in the same place.
 
 #+begin_src python
 from django.contrib import admin
-from .models import Profile
+from .models import User, Profile
 
-admin.site.register(Profile)
+
+class ProfileInline(admin.StackedInline):
+    model = Profile
+    can_delete = False
+
+
+class UserAdmin(admin.ModelAdmin):
+    model = User
+    inlines = [ProfileInline]
+
+
+admin.site.register(User, UserAdmin)
 #+end_src
+
+You'll notice that this code is much shorter than [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model][what the docs say]]: we're trying to keep it simple, so we'll do without some of the quality of life improvements that a more intricate code would allow.
 ** Auth views
 In =users/views.py=, we take advantage of the generic =LoginView=, =LogoutView=, and =CreateView= to implement our authentication logic:
 
@@ -1611,6 +1648,11 @@ class Login(LoginView):
     template_name = "login.html"
     next_page = reverse_lazy("home")
 
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect(self.next_page)
+        return super().get(request, *args, **kwargs)
+
 
 class Logout(LogoutView):
     next_page = reverse_lazy("home")
@@ -1621,9 +1663,15 @@ class SignUpView(CreateView):
     fields = ["username", "email", "password"]
     template_name = "signup.html"
     success_url = reverse_lazy("home")
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect(self.success_url)
+        return super().get(request, *args, **kwargs)
 #+end_src
 
 We don't have to specify much to the generic views, they're quite full-featured as is. What we did here is indicate where the templates live and where the views redirect to (the [[https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url][defaults]] are =accounts/profile= for =LoginView= and =None= for =LogoutView=).
+We also overrode the =get= method in =LoginView= and =SignUpView=, so that already authenticated users who for some reason visit the login page are automatically redirected to the =home= URL.
 We didn't specify a template for =LogoutView= because it's not necessary.
 ** Auth urls
 Let's deal with the URL patterns now.
@@ -1767,43 +1815,63 @@ In =nav.html=:
 
 #+begin_src html
 <nav class="navbar navbar-light">
-    <div class="container">
-        <a rel="prefetch" class="navbar-brand" href="/">conduit</a>
-        <ul class="nav navbar-nav pull-xs-right">
-            <li class="nav-item">
-                <a rel="prefetch" class="nav-link" href="{% url 'home' %}">
-                    Home
-                </a>
-            </li>
-            {% if user.is_authenticated %}                          <!-- new from here -->
-                <li class="nav-item">
-                    <a rel="prefetch" href="{% url 'editor_create' %}" class="nav-link">
-                        <span class="ion-compose"> New Post </span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a rel="prefetch" href="{% url 'logout' %}" class="nav-link">
-                        <span class="ion-log-out"> Log out </span>
-                    </a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a rel="prefetch" href="{% url 'login' %}" class="nav-link">
-                        Sign in
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a
-                        rel="prefetch"
-                        href="{% url 'signup' %}"
-                        class="nav-link"
-                    >
-                        Sign up
-                    </a>
-                </li>
-            {% endif %}                                             <!-- to here -->
-        </ul>
-    </div>
+  <div class="container">
+    <a rel="prefetch" class="navbar-brand" href="/">conduit</a>
+    <ul class="nav navbar-nav pull-xs-right">
+      <li class="nav-item">
+        {% url 'home' as home %}
+        <a
+          href="{{ home }}"
+          rel="prefetch"
+          class="nav-link
+                 {% if request.path == home %}active{% endif %}"
+        >
+          Home
+        </a>
+      </li>
+      {% if user.is_authenticated %}                          <!-- new from here -->
+        <li class="nav-item">
+          {% url 'editor_create' as editor_create %}
+          <a
+            href="{{ editor_create }}"
+            rel="prefetch"
+            class="nav-link
+                   {% if request.path == editor_create %}active{% endif %}"
+          >
+            <span class="ion-compose"> New Post </span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'logout' %}" rel="prefetch" class="nav-link">
+            <span class="ion-log-out"> Log out </span>
+          </a>
+        </li>
+      {% else %}
+        <li class="nav-item">
+          {% url 'login' as login %}
+          <a
+            href="{{ login }}"
+            rel="prefetch"
+            class="nav-link
+                   {% if request.path == login %}active{% endif %}"
+          >
+            Sign in
+          </a>
+        </li>
+        <li class="nav-item">
+          {% url 'signup' as signup %}
+          <a
+            href="{{ signup }}"
+            rel="prefetch"
+            class="nav-link
+                   {% if request.path == signup %}active{% endif %}"
+          >
+            Sign up
+          </a>
+        </li>
+      {% endif %}                                             <!-- to here -->
+    </ul>
+  </div>
 </nav>
 #+end_src
 ** LoginRequiredMixin
@@ -1843,6 +1911,65 @@ By default, the login url in Django is =accounts/login/=: while we changed our u
 
 #+begin_src python
 LOGIN_URL = "login"
+#+end_src
+** Only allow authors to edit or delete their articles and comments
+While we're at it, let's also make sure that articles and comments can only be edited and deleted by their authors.
+
+In =templates/article_detail.html=, we hide the button for editing and deleting articles from any user who is not the article's author:
+
+#+begin_src html
+{% if user == article.author.user %}                        <!-- new -->
+  <span>
+    <a
+      href="{% url 'editor_update' slug=article.slug %}"
+      class="btn btn-outline-secondary btn-sm"
+    >
+      <span class="ion-edit">
+        Edit Article
+      </span>
+    </a>
+    {% include 'article_delete.html' %}
+  </span>
+{% endif %}                                                 <!-- new -->
+#+end_src
+
+In =templates/comment_comments.html=:
+
+#+begin_src html
+{% if user == comment.author.user %}
+  {% include 'comment_delete.html' %}
+{% endif %}
+#+end_src
+
+In =users/views.py=, we make sure that editing or deleting actions are only taken into account if the user is the author of the article or comment:
+
+#+begin_src python
+# other imports
+from django.shortcuts import redirect
+
+# ...
+class EditorUpdateView(LoginRequiredMixin, UpdateView):
+    # ...
+    def post(self, request, *args, **kwargs):
+        if request.user == self.get_object().author.user:
+            return super().post(request, *args, **kwargs)
+        return redirect(self.get_object().get_absolute_url())
+
+
+class EditorDeleteView(LoginRequiredMixin, DeleteView):
+    # ...
+    def post(self, request, *args, **kwargs):
+        if request.user == self.get_object().author.user:
+            return super().post(request, *args, **kwargs)
+        return redirect(self.get_object().get_absolute_url())
+
+
+class CommentDeleteView(LoginRequiredMixin, DeleteView):
+    # ...
+    def post(self, request, *args, **kwargs):
+        if request.user == self.get_object().author.user:
+            return super().post(request, *args, **kwargs)
+        return redirect(self.get_object().get_absolute_url())
 #+end_src
 ** Testing signup and login
 For now, we only have one user for our app: the =admin= superuser.
@@ -1991,25 +2118,7 @@ class ProfileDetailView(DetailView):
 
 This will return all the articles written by the user whose username is specified in the URL: for example, =/profile/@admin= will return all the articles written by =admin=.
 
-Create =templates/profile_articles.html=:
-
-#+begin_src html
-{% block content %}
-    {% if articles|length_is:'0' %}
-        <div class="article-preview">
-            No articles are here... yet.
-        </div>
-    {% else %}
-        <div>
-            {% for article in articles %}
-                {% include 'article_preview.html' %}
-            {% endfor %}
-        </div>
-    {% endif %}
-{% endblock %}
-#+end_src
-
-Expose the =profile_articles.html= template in =templates/profile_detail.html=:
+Expose the =article_list.html= template in =templates/profile_detail.html=:
 
 #+begin_src html
 {% extends 'base.html' %}
@@ -2041,7 +2150,7 @@ Expose the =profile_articles.html= template in =templates/profile_detail.html=:
                             </li>
                         </ul>
                     </div>
-                    {% include 'profile_articles.html' with articles=my_articles %}
+                    {% include 'article_list.html' with articles=my_articles %}
                 </div>
             </div>
         </div>                                  <!-- new to here -->
@@ -2074,16 +2183,28 @@ In =templates/nav.html=:
 #+begin_src html
 {% if user.is_authenticated %}
   <li class="nav-item">
-    <a rel="prefetch" href="{% url 'editor_create' %}" class="nav-link">
+    {% url 'editor_create' as editor_create %}
+    <a
+      href="{{ editor_create }}"
+      rel="prefetch"
+      class="nav-link
+             {% if request.path == editor_create %}active{% endif %}"
+    >
       <span class="ion-compose"> New Post </span>
     </a>
   </li>
-  <li class="nav-item">                                                                          <!-- new -->
-    <a rel="prefetch" href="{% url 'profile_detail' username=user.username %}" class="nav-link"> <!-- new -->
-      <img src="{{ user.profile.image }}" class="user-pic" alt="{{ user.username }}">            <!-- new -->
-      {{ user.username }}                                                                        <!-- new -->
-    </a>                                                                                         <!-- new -->
-  </li>                                                                                          <!-- new -->
+  <li class="nav-item">                             <!-- new from here -->
+    {% url 'profile_detail' username=user.username as profile %}
+    <a
+      href="{{ profile }}"
+      rel="prefetch"
+      class="nav-link
+             {% if request.path == profile %}active{% endif %}"
+    >
+      <img src="{{ user.profile.image }}" class="user-pic" alt="{{ user.username }}">
+      {{ user.username }}
+    </a>
+  </li>                                             <!-- new to here -->
   <li class="nav-item">
     <a rel="prefetch" href="{% url 'logout' %}" class="nav-link">
       <span class="ion-log-out"> Log out </span>
@@ -2323,11 +2444,17 @@ In =templates/nav.html=:
     <span class="ion-compose"> New Post </span>
   </a>
 </li>
-<li class="nav-item">                                              <!-- new -->
-  <a rel="prefetch" href="{% url 'settings' %}" class="nav-link">  <!-- new -->
-    <span class="ion-gear-a"> Settings </span>                     <!-- new -->
-  </a>                                                             <!-- new -->
-</li>                                                              <!-- new -->
+<li class="nav-item">
+  {% url 'settings' as settings %}
+  <a
+    href="{{ settings }}"
+    rel="prefetch"
+    class="nav-link
+           {% if request.path == settings %}active{% endif %}"
+  >
+    <span class="ion-gear-a"> Settings </span>
+  </a>
+</li>
 <li class="nav-item">
   <a rel="prefetch" href="{% url 'profile_detail' username=user.username %}" class="nav-link">
     <img src="{{ user.profile.image }}" class="user-pic" alt="{{ user.username }}">
@@ -2387,6 +2514,7 @@ In [7]: User.objects.get(username='admin').profile.follow(Profile.objects.last()
 
 This will create 2 users with full profiles and a couple articles each.
 ** Follows
+*** Model
 We'll now let our users follow other users, ie subscribe to other users' articles. This should be a relationship between =Profile= objects, where one =Profile= object can follow, and be followed by, many other =Profile= objects: we'll use a [[https://docs.djangoproject.com/en/4.0/ref/models/fields/#django.db.models.ManyToManyField][=ManyToManyField=]] relationship.
 
 We need a new field in our =Profile= model in =users/models.py=:
@@ -2396,7 +2524,7 @@ We need a new field in our =Profile= model in =users/models.py=:
 class Profile(models.Model):
     # ...
     follows = models.ManyToManyField(
-        "self", related_name="followed_by", symmetrical=False
+        "self", related_name="followed_by", symmetrical=False, blank=True
     )
     # ...
 #+end_src
@@ -2419,10 +2547,6 @@ class Profile(models.Model):
     def is_following(self, profile):
         """Return True if `profile` is in self.follows, False otherwise"""
         return self.follows.filter(pk=profile.pk).exists()
-
-    def is_followed_by(self, profile):
-        """Return True if `profile` is following self, False otherwise"""
-        return self.followed_by.filter(pk=profile.pk).exists()
 #+end_src
 
 Let's =makemigrations= and =migrate=, since we have modified the model.
@@ -2433,7 +2557,7 @@ Let's =makemigrations= and =migrate=, since we have modified the model.
 (django) django_tutorial$ python manage.py migrate
 # ...
 #+end_src
-
+*** ProfileDetailView
 We need to let users to follow or unfollow other users in our templates. This involves some work around checking whether the user is already in our =follows= or not.
 Because the Django Template Language (intentionally) makes it difficult to write non-trivial queries within templates, we'll have to do some groundwork in our views, with the help of the model methods we just created.
 
@@ -2491,43 +2615,305 @@ Let's implement the follow functionality in =templates/profile_detail.html= now:
         Edit Profile Settings
       </span>
     </a>
-  {% else %}                                    <!-- new from here -->
-    <form
-      method="post"
-      action="{% url 'profile_follow' username=profile.user.username %}"
-    >
-      {% csrf_token %}
-      <button class="btn btn-sm action-btn
-                     {% if is_following %}
-                     btn-secondary
-                     {% else %}
-                     btn-outline-secondary
-                     {% endif %}"
-      >
-        <span class="ion-plus-round">
-          {% if is_following %}Unfollow{% else %}Follow{% endif %} {{ profile.user.username }}
-        </span>
-      </button>
-    </form>                                     <!-- new to here -->
+  {% else %}                                <!-- new -->
+    {% include 'profile_follow.html' %}     <!-- new -->
   {% endif %}
 </div>
+#+end_src
+
+In =templates/profile_follow.html=:
+
+#+begin_src html
+<form
+  method="post"
+  action="{% url 'profile_follow' username=profile.user.username %}"
+>
+  {% csrf_token %}
+  <button class="btn btn-sm action-btn
+                 {% if is_following %}
+                 btn-secondary
+                 {% else %}
+                 btn-outline-secondary
+                 {% endif %}"
+  >
+    <span class="ion-plus-round">
+      {% if is_following %}Unfollow{% else %}Follow{% endif %} {{ profile.user.username }}
+    </span>
+  </button>
+</form>
 #+end_src
 
 What we're doing in this template is the following:
 - if the user's viewing their own profile, show a link to the =settings= URL.
 - if the user's viewing another profile (or is not logged in), redirect them to the =profile_follow= URL, which toggles a =Profile= object's =follow= and =unfollow= methods
 - adapt the text and UI based on whether the user's following the viewed profile via a bunch of ={% if ...%}= template tags.
-
-An interesting aside: for the longest time, I tried to follow or unfollow a profile based on whether the template form had =method="post"= or =method="delete"= (because =RedirectView= has both =post= and =delete= methods), only to discover that [[https://stackoverflow.com/questions/165779/are-the-put-delete-head-etc-methods-available-in-most-web-browsers][HTML forms only support =GET= and =POST=]] and that [[https://stackoverflow.com/questions/27203547/django-csrf-token-invalid-after-modifying-request][workarounds are not very pretty]]. Live and learn.
-** Feeds
-We need to go back all the way to the beginning for this one.
+*** ArticleDetailView
+We also expose the follow/unfollow feature on article pages.
 
 In =articles/views.py=:
 
 #+begin_src python
+class ArticleDetailView(DetailView):
+    # ...
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = CommentCreateView().get_form_class()
+        if self.request.user.is_authenticated:
+            context["is_following"] =   self.request.user.profile.is_following(
+                self.object.author
+            )
+        return context
+#+end_src
 
+In =templates/article_detail.html=:
+
+#+begin_src html
+{% if user == article.author.user %}
+  <span>
+    <a
+      href="{% url 'editor_update' slug=article.slug %}"
+      class="btn btn-outline-secondary btn-sm"
+    >
+      <span class="ion-edit">
+        Edit Article
+      </span>
+    </a>
+    {% include 'article_delete.html' %}
+  </span>
+{% else %}
+  <span>
+    {% include 'profile_follow.html' with profile=article.author %}
+  </span>
+{% endif %}
+#+end_src
+
+In =templates/profile_follow.html=, we add =style="display:inline"=:
+
+#+begin_src html
+<form
+    method="post"
+    action="{% url 'profile_follow' username=profile.user.username %}"
+    style="display:inline"
+>
+<!-- ... -->
+#+end_src
+
+An interesting aside: for the longest time, I tried to follow or unfollow a profile based on whether the template form had =method="post"= or =method="delete"= (because =RedirectView= has both =post= and =delete= methods), only to discover that [[https://stackoverflow.com/questions/165779/are-the-put-delete-head-etc-methods-available-in-most-web-browsers][HTML forms only support =GET= and =POST=]] and that [[https://stackoverflow.com/questions/27203547/django-csrf-token-invalid-after-modifying-request][workarounds are not very pretty]]. Live and learn.
+**** TODO ProfileFollowView success_url
+*** Feeds
+We need to go back all the way to the beginning for this one.
+
+In =articles/views.py=, we need to modify our very first view, =Home=, so that it can give us a feed of articles written by users we follow:
+
+#+begin_src python
+class Home(TemplateView):
+    # ...
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["global_feed"] = Article.objects.order_by("-created_at")
+        if self.request.user.is_authenticated:
+            context["your_articles"] = Article.objects.filter(
+                author__in=self.request.user.profile.follows.all()
+            ).order_by("-created_at")
+        else:
+            context["your_articles"] = None
+        return context
+#+end_src
+
+In =templates/home.html=:
+
+#+begin_src html
+<div class="container page">
+  <div class="row">
+    <div class="col-md-9">
+      <div class="feed-toggle">
+        <ul class="nav nav-pills outline-active">
+          <li class="nav-item">
+            {% url 'home' as home %}
+            <a
+              href="{{ home }}"
+              rel="prefetch"
+              class="nav-link
+                     {% if request.path == home %}active{% endif %}"
+            >
+              Global Feed
+            </a>
+          </li>
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              {% url 'home_feed' as home_feed %}
+              <a
+                href="{{ home_feed }}"
+                rel="prefetch"
+                class="nav-link
+                       {% if request.path == home_feed %}active{% endif %}"
+              >
+                Your Feed
+              </a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a href="{% url 'login' %}" rel="prefetch" class="nav-link">
+                Sign in to see your Feed
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+      {% if request.path == home %}
+        {% include 'article_list.html' with articles=your_articles %}
+      {% elif request.path == home_feed %}
+        {% include 'article_list.html' with articles=global_feed %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+#+end_src
+
+In =articles/urls.py=:
+
+#+begin_src python
+urlpatterns = [
+    # ...
+    path("feed", Home.as_view(), name="home_feed"),
+]
 #+end_src
 ** Favourites
+*** Model
+The second to last feature we need is allowing users to favourite some articles, so that they are added to the user's profile for everyone to see.
+
+In =users/models.py=:
+
+#+begin_src python
+class Profile(models.Model):
+    # ...
+    favorites = models.ManyToManyField(
+        "articles.Article", related_name="favorited", blank=True
+    )
+    # ...
+    def favorite(self, article):
+        """Add article to Favorites"""
+        self.favorites.add(article)
+
+    def unfavorite(self, article):
+        """Remove article from Favorites"""
+        self.favorites.remove(article)
+
+    def has_favorited(self, article):
+        """Return True if article is in Favorites, False otherwise"""
+        return self.favorites.filter(pk=article.pk).exists()
+#+end_src
+*** ArticleFavoriteView
+In =articles/views.py=:
+
+#+begin_src python
+from django.views.generic import (
+    # ...
+    RedirectView
+)
+
+# ...
+class ArticleFavoriteView(RedirectView):
+    pattern_name = "article_detail"
+
+    def post(self, request, *args, **kwargs):
+        slug = self.kwargs.get("slug", None)
+        article = get_object_or_404(Article, slug=slug)
+        if request.user.profile.has_favorited(article):
+            request.user.profile.unfavorite(article)
+        else:
+            request.user.profile.favorite(article)
+        return super().post(request, *args, **kwargs)
+#+end_src
+
+In =articles/urls.py=:
+
+#+begin_src python
+# ...
+from django.shortcuts import redirect, get_object_or_404
+from .views import (
+    # ...
+    ArticleFavoriteView
+)
+
+urlpatterns = [
+    # ...
+    path(
+        "article/<slug:slug>/favorite",
+        ArticleFavoriteView.as_view(),
+        name="article_favorite",
+    ),
+]
+#+end_src
+*** ArticleDetailView
+In =articles/views.py=:
+
+#+begin_src python
+class ArticleDetailView(DetailView):
+    # ...
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = CommentCreateView().get_form_class()
+        if self.request.user.is_authenticated:
+            context["is_following"] = self.request.user.profile.is_following(
+                self.object.author
+            )
+            context["has_favorited"] = self.request.user.profile.has_favorited(   # new
+                self.object                                                     # new
+            )                                                                   # new
+        return context
+#+end_src
+
+In =templates/article_detail.html=:
+
+#+begin_src html
+{% if user == article.author.user %}
+  <span>
+    <a
+      href="{% url 'editor_update' slug=article.slug %}"
+      class="btn btn-outline-secondary btn-sm"
+    >
+      <span class="ion-edit">
+        Edit Article
+      </span>
+    </a>
+    {% include 'article_delete.html' %}
+  </span>
+{% else %}
+  <span>
+    {% include 'profile_follow.html' with profile=article.author %}
+    {% include 'article_favorite.html' %}           <!-- new -->
+  </span>
+{% endif %}
+#+end_src
+
+In =templates/article_favorite.html=:
+
+#+begin_src html
+<form
+    method="post"
+    action="{% url 'article_favorite' slug=article.slug %}"
+    style="display:inline"
+>
+    {% csrf_token %}
+    <button class="btn btn-sm action-btn
+                   {% if has_favorited %}
+                   btn-primary
+                   {% else %}
+                   btn-outline-primary
+                   {% endif %}"
+    >
+        <span class="ion-heart">
+            {% if has_favorited %}Unfavorite{% else %}Favorite{% endif %} Article ({{ article.favorited_by.count }})
+        </span>
+    </button>
+</form>
+#+end_src
+*** TODO ArticlePreviewView
+In =articles/article_preview.html=:
+
+#+begin_src html
+#+end_src
 ** Tags
 * UI stuff
 ** TODO class:active
