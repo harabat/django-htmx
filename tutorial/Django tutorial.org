@@ -2110,13 +2110,12 @@ class ProfileDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        username = self.kwargs.get("username", None)
-        profile = get_object_or_404(User, username=username).profile
-        context["my_articles"] = profile.articles.all()
+        if self.request.user.is_authenticated:
+            context["my_articles"] = self.object.articles.order_by('-created_at')
         return context
 #+end_src
 
-This will return all the articles written by the user whose username is specified in the URL: for example, =/profile/@admin= will return all the articles written by =admin=.
+This will return all the articles written by the user whose username is specified in the URL: for example, =/profile/@admin= will return all the articles written by =admin=. Technically, we could have obtained this queryset directly in the template with something like ={{ profile.articles.order_by|dictsortreversed:"created_at" }}=, but dealing with logic in views makes for clearer code and easier debugging.
 
 Expose the =article_list.html= template in =templates/profile_detail.html=:
 
@@ -2145,7 +2144,7 @@ Expose the =article_list.html= template in =templates/profile_detail.html=:
                         <ul class="nav nav-pills outline-active">
                             <li class="nav-item">
                                 <span class="nav-link">
-                                  Articles
+                                  My Articles
                                 </span>
                             </li>
                         </ul>
@@ -2557,7 +2556,7 @@ Let's =makemigrations= and =migrate=, since we have modified the model.
 (django) django_tutorial$ python manage.py migrate
 # ...
 #+end_src
-*** ProfileDetailView
+****** ProfileDetailView
 We need to let users to follow or unfollow other users in our templates. This involves some work around checking whether the user is already in our =follows= or not.
 Because the Django Template Language (intentionally) makes it difficult to write non-trivial queries within templates, we'll have to do some groundwork in our views, with the help of the model methods we just created.
 
@@ -2568,11 +2567,9 @@ class ProfileDetailView(DetailView):
     # ...
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["my_articles"] = self.object.articles.all()
-        if self.request.user.is_authenticated:                                  # new
-            context["is_following"] = self.request.user.profile.is_following(   # new
-                self.object                                                     # new
-            )                                                                   # new
+        if self.request.user.is_authenticated:
+            context["my_articles"] = self.object.articles.order_by('-created_at')
+            context["is_following"] = self.object.is_following(self.object)     # new
         return context
 #+end_src
 
@@ -2846,23 +2843,7 @@ urlpatterns = [
 ]
 #+end_src
 *** ArticleDetailView
-In =articles/views.py=:
-
-#+begin_src python
-class ArticleDetailView(DetailView):
-    # ...
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["form"] = CommentCreateView().get_form_class()
-        if self.request.user.is_authenticated:
-            context["is_following"] = self.request.user.profile.is_following(
-                self.object.author
-            )
-            context["has_favorited"] = self.request.user.profile.has_favorited(   # new
-                self.object                                                     # new
-            )                                                                   # new
-        return context
-#+end_src
+We don't need to modify the views for this: the logic can happen in the templates.
 
 In =templates/article_detail.html=:
 
@@ -2897,22 +2878,149 @@ In =templates/article_favorite.html=:
 >
     {% csrf_token %}
     <button class="btn btn-sm action-btn
-                   {% if has_favorited %}
+                   {% if article in user.profile.favorites.all %}
                    btn-primary
                    {% else %}
                    btn-outline-primary
                    {% endif %}"
     >
         <span class="ion-heart">
-            {% if has_favorited %}Unfavorite{% else %}Favorite{% endif %} Article ({{ article.favorited_by.count }})
+            {% if article in user.profile.favorites.all %}
+                Unfavorite
+            {% else %}
+                Favorite
+            {% endif %} Article ({{ article.favorited_by.count }})
         </span>
     </button>
 </form>
 #+end_src
-*** TODO ArticlePreviewView
-In =articles/article_preview.html=:
+
+Checking if an article is in a user's =favorites= should be done in the view (or, even better, the model) instead of the template, but we would have to change our templates' structure and write new views if we wanted to include a =Favorite= button in the =article_preview.html= template.
+*** ArticlePreviewView
+In =templates/article_preview.html=:
 
 #+begin_src html
+            <div class="info">
+                <a href="{% url 'profile_detail' username=article.author.user.username %}" class="author">
+                    {{ article.author.user.username }}
+                </a>
+                <span class="date">
+                    {{ article.created_at|date:"D M d Y" }}
+                </span>
+            </div>
+            <div class="pull-xs-right">                 <!-- new -->
+                {% include 'article_favorite.html' %}   <!-- new -->
+            </div>                                      <!-- new -->
+#+end_src
+
+In =templates/article_preview.html=
+
+#+begin_src html
+<form
+    method="post"
+    action="{% url 'article_favorite' slug=article.slug %}"
+    style="display:inline"
+>
+    {% csrf_token %}
+    <button class="btn btn-sm action-btn
+                   {% if article in user.profile.favorites.all %}
+                   btn-primary
+                   {% else %}
+                   btn-outline-primary
+                   {% endif %}"
+    >
+        <span class="ion-heart">
+            {% if request.path|truncatechars:7 == 'article' %}  <!-- new -->
+                {% if article in user.profile.favorites.all %}
+                    Unfavorite
+                {% else %}
+                    Favorite
+                {% endif %} Article ({{ article.favorited_by.count }})
+            {% else  %}                                         <!-- new -->
+                {{ article.favorited_by.count }}                <!-- new -->
+            {% endif %}                                         <!-- new -->
+        </span>
+    </button>
+</form>
+#+end_src
+
+#+ATTR_ORG: :width 200
+[[./Screenshots/home - favorite - before.png]]
+[[./Screenshots/home - favorite.png]]
+**** TODO ArticleFavoriteView success_url
+*** Feeds
+Now, we need to do something with this =Favorite= feature: we'll display a user's favorited articles on their profile.
+
+In =users/views.py=:
+
+#+begin_src python
+class ProfileDetailView(DetailView):
+    # ...
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context["my_articles"] = self.object.articles.order_by("-created_at")
+            context["is_following"] = self.object.is_following(self.object)
+            context["favorited_articles"] = self.object.favorites.order_by(         # new
+                "-created_at"                       # new
+            )                                       # new
+        return context
+#+end_src
+
+In =users/urls.py=:
+
+#+begin_src python
+urlpatterns = [
+    # ...
+    path(
+        "profile/@<str:username>/favorites",
+        ProfileDetailView.as_view(),
+        name="profile_favorites",
+    ),
+]
+#+end_src
+
+In =templates/profile_detail.html=:
+
+#+begin_src html
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-md-10 offset-md-1">
+      <div class="articles-toggle">
+        <ul class="nav nav-pills outline-active">
+          <li class="nav-item">
+            {% url 'profile_detail' username=profile.user.username as profile_detail %}
+            <a
+              href="{{ profile_detail }}"
+              rel="prefetch"
+              class="nav-link
+                     {% if request.path == profile_detail %}active{% endif %}"
+            >
+              My Articles
+            </a>
+          </li>
+          <li class="nav-item">
+            {% url 'profile_favorites' username=profile.user.username as profile_favorites %}
+            <a
+              href="{{ profile_favorites }}"
+              rel="prefetch"
+              class="nav-link
+                     {% if request.path == profile_favorites %}active{% endif %}"
+            >
+              Favorited Articles
+            </a>
+          </li>
+        </ul>
+      </div>
+      {% if request.path == profile_detail %}
+        {% include 'article_list.html' with articles=my_articles %}
+      {% elif request.path == profile_favorites %}
+        {% include 'article_list.html' with articles=favorited_articles %}
+      {% endif %}
+    </div>
+  </div>
+</div>
 #+end_src
 ** Tags
 * UI stuff

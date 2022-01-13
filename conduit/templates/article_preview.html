@@ -12,6 +12,9 @@
                     {{ article.created_at|date:"D M d Y" }}
                 </span>
             </div>
+            <div class="pull-xs-right">
+                {% include 'article_favorite.html' %}
+            </div>
         </div>
         <a href="{{ article.get_absolute_url }}" rel="prefetch" class="preview-link">
             <h1>{{ article.title }}</h1>

@@ -55,10 +55,11 @@ class ProfileDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["my_articles"] = self.object.articles.all()
         if self.request.user.is_authenticated:
-            context["is_following"] = self.request.user.profile.is_following(
-                self.object
+            context["my_articles"] = self.object.articles.order_by("-created_at")
+            context["is_following"] = self.object.is_following(self.object)
+            context["favorited_articles"] = self.object.favorites.order_by(
+                "-created_at"
             )
         return context
 

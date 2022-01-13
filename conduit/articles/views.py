@@ -43,9 +43,6 @@ class ArticleDetailView(DetailView):
             context["is_following"] = self.request.user.profile.is_following(
                 self.object.author
             )
-            context["has_favorited"] = self.request.user.profile.has_favorited(
-                self.object
-            )
         return context
 
 
@@ -135,7 +132,10 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
 
 
 class ArticleFavoriteView(RedirectView):
-    pattern_name = "article_detail"
+    pattern_name = "home"
+
+    def get_redirect_url(self, *args, **kwargs):
+        return super().get_redirect_url(*args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         slug = self.kwargs.get("slug", None)

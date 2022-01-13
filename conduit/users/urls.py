@@ -20,4 +20,9 @@ urlpatterns = [
         ProfileFollowView.as_view(),
         name="profile_follow",
     ),
+    path(
+        "profile/@<str:username>/favorites",
+        ProfileDetailView.as_view(),
+        name="profile_favorites",
+    ),
 ]
