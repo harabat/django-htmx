@@ -3,6 +3,7 @@
     action="{% url 'article_favorite' slug=article.slug %}"
     style="display:inline"
 >
+    <input type="hidden" name="next" value="{{ request.path }}">
     {% csrf_token %}
     <button class="btn btn-sm action-btn
                    {% if article in user.profile.favorites.all %}
