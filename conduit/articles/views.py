@@ -132,10 +132,14 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
 
 
 class ArticleFavoriteView(RedirectView):
-    pattern_name = "home"
+    pattern_name = "article_detail"
 
     def get_redirect_url(self, *args, **kwargs):
-        return super().get_redirect_url(*args, **kwargs)
+        url = self.request.POST.get("next", None)
+        if url:
+            return url
+        else:
+            return super().get_redirect_url(*args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         slug = self.kwargs.get("slug", None)

@@ -3,6 +3,7 @@
     action="{% url 'profile_follow' username=profile.user.username %}"
     style="display:inline"
 >
+    <input type="hidden" name="next" value="{{ request.path }}">
     {% csrf_token %}
     <button class="btn btn-sm action-btn
                    {% if is_following %}

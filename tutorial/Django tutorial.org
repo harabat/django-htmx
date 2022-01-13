@@ -2696,7 +2696,52 @@ In =templates/profile_follow.html=, we add =style="display:inline"=:
 #+end_src
 
 An interesting aside: for the longest time, I tried to follow or unfollow a profile based on whether the template form had =method="post"= or =method="delete"= (because =RedirectView= has both =post= and =delete= methods), only to discover that [[https://stackoverflow.com/questions/165779/are-the-put-delete-head-etc-methods-available-in-most-web-browsers][HTML forms only support =GET= and =POST=]] and that [[https://stackoverflow.com/questions/27203547/django-csrf-token-invalid-after-modifying-request][workarounds are not very pretty]]. Live and learn.
-**** TODO ProfileFollowView success_url
+*** Redirect URL
+If you play around with the =Follow= feature, you will notice that it redirects us to the profile page of the user we want to (un)follow. This is due to the fact that the =Follow= button is exposed both in =profile_detail.html= and in =home.html= (through =article_preview.html=), so for the sake of simplicity we chose a single redirect URL in our =ProfileFollowView=.
+
+However, it would be better if we could stay on whatever page we are when we follow a user. This involves implementing the =next= kwarg.
+
+In =profile_follow.html=:
+
+#+begin_src html
+<form
+    method="post"
+    action="{% url 'profile_follow' username=profile.user.username %}"
+    style="display:inline"
+>
+    <input type="hidden" name="next" value="{{ request.path }}">    <!-- new -->
+    {% csrf_token %}
+    <button class="btn btn-sm action-btn
+                   {% if is_following %}
+                   btn-secondary
+                   {% else %}
+                   btn-outline-secondary
+                   {% endif %}"
+    >
+        <span class="ion-plus-round">
+            {% if is_following %}Unfollow{% else %}Follow{% endif %} {{ profile.user.username }}
+        </span>
+    </button>
+</form>
+#+end_src
+
+The =next= parameter above just holds the URL that the =profile_follow= URL pattern was called from.
+
+In =ProfileFollowView=:
+
+#+begin_src python
+class ProfileFollowView(LoginRequiredMixin, RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        url = self.request.POST.get("next", None)
+        if url:
+            return url
+        else:
+            return super().get_redirect_url(*args, **kwargs)
+
+    # ...
+#+end_src
+
+We override the =get_redirect_url= method of =RedirectView= so that we go to the URL specified by =next=, or fall back to =profile_detail= if for some reason the =next= parameter is missing (for example, if the user visits =profile_follow= directly by typing =.../profile/@<username>/follow= in their browser's URL bar).
 *** Feeds
 We need to go back all the way to the beginning for this one.
 
@@ -2813,6 +2858,13 @@ from django.views.generic import (
 class ArticleFavoriteView(RedirectView):
     pattern_name = "article_detail"
 
+    def get_redirect_url(self, *args, **kwargs):
+        url = self.request.POST.get("next", None)
+        if url:
+            return url
+        else:
+            return super().get_redirect_url(*args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         slug = self.kwargs.get("slug", None)
         article = get_object_or_404(Article, slug=slug)
@@ -2876,22 +2928,23 @@ In =templates/article_favorite.html=:
     action="{% url 'article_favorite' slug=article.slug %}"
     style="display:inline"
 >
-    {% csrf_token %}
-    <button class="btn btn-sm action-btn
-                   {% if article in user.profile.favorites.all %}
-                   btn-primary
-                   {% else %}
-                   btn-outline-primary
-                   {% endif %}"
-    >
-        <span class="ion-heart">
-            {% if article in user.profile.favorites.all %}
-                Unfavorite
-            {% else %}
-                Favorite
-            {% endif %} Article ({{ article.favorited_by.count }})
-        </span>
-    </button>
+  <input type="hidden" name="next" value="{{ request.path }}">
+  {% csrf_token %}
+  <button class="btn btn-sm action-btn
+                 {% if article in user.profile.favorites.all %}
+                 btn-primary
+                 {% else %}
+                 btn-outline-primary
+                 {% endif %}"
+  >
+    <span class="ion-heart">
+      {% if article in user.profile.favorites.all %}
+        Unfavorite
+      {% else %}
+        Favorite
+      {% endif %} Article ({{ article.favorited_by.count }})
+    </span>
+  </button>
 </form>
 #+end_src
 
@@ -2913,7 +2966,7 @@ In =templates/article_preview.html=:
             </div>                                      <!-- new -->
 #+end_src
 
-In =templates/article_preview.html=
+In =templates/article_favorite.html=
 
 #+begin_src html
 <form
@@ -2921,26 +2974,27 @@ In =templates/article_preview.html=
     action="{% url 'article_favorite' slug=article.slug %}"
     style="display:inline"
 >
-    {% csrf_token %}
-    <button class="btn btn-sm action-btn
-                   {% if article in user.profile.favorites.all %}
-                   btn-primary
-                   {% else %}
-                   btn-outline-primary
-                   {% endif %}"
-    >
-        <span class="ion-heart">
-            {% if request.path|truncatechars:7 == 'article' %}  <!-- new -->
-                {% if article in user.profile.favorites.all %}
-                    Unfavorite
-                {% else %}
-                    Favorite
-                {% endif %} Article ({{ article.favorited_by.count }})
-            {% else  %}                                         <!-- new -->
-                {{ article.favorited_by.count }}                <!-- new -->
-            {% endif %}                                         <!-- new -->
-        </span>
-    </button>
+  <input type="hidden" name="next" value="{{ request.path }}">
+  {% csrf_token %}
+  <button class="btn btn-sm action-btn
+                 {% if article in user.profile.favorites.all %}
+                 btn-primary
+                 {% else %}
+                 btn-outline-primary
+                 {% endif %}"
+  >
+    <span class="ion-heart">
+      {% if request.path|truncatechars:7 == 'article' %}  <!-- new -->
+        {% if article in user.profile.favorites.all %}
+          Unfavorite
+        {% else %}
+          Favorite
+        {% endif %} Article ({{ article.favorited_by.count }})
+      {% else  %}                                         <!-- new -->
+        {{ article.favorited_by.count }}                  <!-- new -->
+      {% endif %}                                         <!-- new -->
+    </span>
+  </button>
 </form>
 #+end_src
 
@@ -3023,6 +3077,7 @@ In =templates/profile_detail.html=:
 </div>
 #+end_src
 ** Tags
+The very last feature that we need to implement
 * UI stuff
 ** TODO class:active
 *** [[https://stackoverflow.com/questions/340888/navigation-in-django/341748#341748][Navigation in django - Stack Overflow]]

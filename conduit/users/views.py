@@ -67,6 +67,13 @@ class ProfileDetailView(DetailView):
 class ProfileFollowView(LoginRequiredMixin, RedirectView):
     pattern_name = "profile_detail"
 
+    def get_redirect_url(self, *args, **kwargs):
+        url = self.request.POST.get("next", None)
+        if url:
+            return url
+        else:
+            return super().get_redirect_url(*args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         username = self.kwargs.get("username", None)
         profile = get_object_or_404(User, username=username).profile
