@@ -5,14 +5,22 @@
 >
     {% csrf_token %}
     <button class="btn btn-sm action-btn
-                   {% if has_favorited %}
+                   {% if article in user.profile.favorites.all %}
                    btn-primary
                    {% else %}
                    btn-outline-primary
                    {% endif %}"
     >
-        <span class="ion-plus-round">
-            {% if has_favorited %}Unfavorite{% else %}Favorite{% endif %} Article ({{ article.favorited_by.count }})
+        <span class="ion-heart">
+            {% if request.path|truncatechars:7 == 'article' %}
+                {% if article in user.profile.favorites.all %}
+                    Unfavorite
+                {% else %}
+                    Favorite
+                {% endif %} Article ({{ article.favorited_by.count }})
+            {% else  %}
+                {{ article.favorited_by.count }}
+            {% endif %}
         </span>
     </button>
 </form>

@@ -33,22 +33,34 @@
                     <div class="articles-toggle">
                         <ul class="nav nav-pills outline-active">
                             <li class="nav-item">
-                                <span class="nav-link">
-                                    Articles
-                                </span>
+                                {% url 'profile_detail' username=profile.user.username as profile_detail %}
+                                <a
+                                    href="{{ profile_detail }}"
+                                    rel="prefetch"
+                                    class="nav-link
+                                          {% if request.path == profile_detail %}active{% endif %}"
+                                >
+                                    My Articles
+                                </a>
                             </li>
-                            {% comment "favourites" %}
-                                <li class="nav-item">
-                                    <a
-                                        href="/profile/@{profile.username}/favorites"
-                                        class="nav-link"
-                                        rel="prefetch"
-                                    >Favorites</a>
-                                </li>
-                            {% endcomment %}
+                            <li class="nav-item">
+                                {% url 'profile_favorites' username=profile.user.username as profile_favorites %}
+                                <a
+                                    href="{{ profile_favorites }}"
+                                    rel="prefetch"
+                                    class="nav-link
+                                          {% if request.path == profile_favorites %}active{% endif %}"
+                                >
+                                    Favorited Articles
+                                </a>
+                            </li>
                         </ul>
                     </div>
-                    {% include 'article_list.html' with articles=my_articles %}
+                    {% if request.path == profile_detail %}
+                        {% include 'article_list.html' with articles=my_articles %}
+                    {% elif request.path == profile_favorites %}
+                        {% include 'article_list.html' with articles=favorited_articles %}
+                    {% endif %}
                 </div>
             </div>
         </div>
