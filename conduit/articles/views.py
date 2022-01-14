@@ -10,7 +10,7 @@ from django.views.generic import (
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, get_object_or_404
-from .models import Article, Comment
+from .models import Article, Comment, Tag
 
 
 class Home(TemplateView):
@@ -50,7 +50,7 @@ class EditorCreateView(LoginRequiredMixin, CreateView):
     """create article"""
 
     model = Article
-    fields = ["title", "description", "body"]
+    fields = ["title", "description", "body", "tags"]
     template_name = "editor.html"
 
     def form_valid(self, form):
@@ -64,7 +64,7 @@ class EditorUpdateView(LoginRequiredMixin, UpdateView):
     """edit article"""
 
     model = Article
-    fields = ["title", "description", "body"]
+    fields = ["title", "description", "body", "tags"]
     template_name = "editor.html"
 
     def post(self, request, *args, **kwargs):
@@ -149,3 +149,21 @@ class ArticleFavoriteView(RedirectView):
         else:
             request.user.profile.favorite(article)
         return super().post(request, *args, **kwargs)
+
+
+class TagAddView(UpdateView):
+    pattern_name = "editor_update"
+
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
+
+class TagDeleteView(DeleteView):
+    model = Tag
+    template_name = "article_tag.html"
+
+    def get_success_url(self):
+        return reverse(
+            "article_detail", kwargs={"slug": self.kwargs.get("article_slug")}
+        )
+        return super().get_success_url()
