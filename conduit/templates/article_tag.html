@@ -1,0 +1,27 @@
+<form
+    method="post"
+    action="{% url 'article_tag' article_slug=article_slug %}"
+>
+    <input type="hidden" name="next" value="{% url 'editor_update' slug=article_slug %}">
+    {% csrf_token %}
+    <fieldset class="form-group">
+        <input
+            class="form-control"
+            type="text"
+            placeholder="Enter tags"
+            name="tag"
+        />
+        {% comment %}
+        <div class="tag-list">
+            {% for tag in form.tags %}
+                <a
+                    href="{% url 'article_tag' article_slug=slug tag_slug=tag.slug %}"
+                    class="tag-default tag-pill"
+                >
+                    <span class="ion-close-round"> {{ tag }} </span>
+                </a>
+            {% endfor %}
+        </div>
+        {% endcomment %}
+    </fieldset>
+</form>

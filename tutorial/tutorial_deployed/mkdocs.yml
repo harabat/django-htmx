@@ -1,0 +1,52 @@
+site_name: Django + HTMX tutorial
+site_url:
+site_description:
+
+theme:
+  name: material
+  logo: assets/django-logo.png
+  favicon: assets/django-logo.png
+  language: en
+  # include_homepage_in_sidebar: true
+  # sticky_navigation: true
+  # collapse_navigation: true
+  features:
+    - navigation.instant
+    # - navigation.tabs
+    - navigation.expand
+    # - toc.integrate
+    - navigation.top
+    - search.suggest
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: cyan
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: red
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+plugins:
+  - search
+markdown_extensions:
+  # https://facelessuser.github.io/pymdown-extensions/extensions/
+  # - attr_list  # for images
+  # - md_in_html  # for images
+  # - abbr  # information on hover
+  # - admonitions  # callouts
+  # - tables
+  # - pymdownx.details  # information in dropdown
+  - pymdownx.highlight:
+      auto_title: true
+      linenums: true
+      use_pygments: true
+  - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+  - pymdownx.inlinehilite  # inline code blocks
+  # - pymdownx.tabbed  # for tabs
+  # - pymdownx.tasklist  # for lists with checkboxes
