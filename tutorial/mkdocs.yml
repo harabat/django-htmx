@@ -1,7 +1,6 @@
 site_name: Django + HTMX tutorial
 site_url:
 site_description:
-
 theme:
   name: material
   logo: assets/django-logo.png
@@ -12,8 +11,8 @@ theme:
   # collapse_navigation: true
   features:
     - navigation.instant
-    # - navigation.tabs
-    - navigation.expand
+    - navigation.tabs
+    # - navigation.expand
     # - toc.integrate
     - navigation.top
     - search.suggest
