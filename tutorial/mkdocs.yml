@@ -11,7 +11,7 @@ theme:
   # collapse_navigation: true
   features:
     - navigation.instant
-    - navigation.tabs
+    # - navigation.tabs
     # - navigation.expand
     # - toc.integrate
     - navigation.top
@@ -49,3 +49,19 @@ markdown_extensions:
   - pymdownx.inlinehilite  # inline code blocks
   # - pymdownx.tabbed  # for tabs
   # - pymdownx.tasklist  # for lists with checkboxes
+nav:
+  - Django tutorial Readme: index.md
+  - Creating a project: 01_creating_a_project.md
+  - First views and templates: 02_first_views_and_templates.md
+  - Articles: 03_articles.md
+  - Creating, editing, and deleting Articles: 04_creating_editing_and_deleting_articles.md
+  - Comments: 05_comments.md
+  - Users and Profiles: 06_users_and_profiles.md
+  - Authentication: 07_authentication.md
+  - Securing the app: 08_securing_the_app.md
+  - Profile features: 09_profile_features.md
+  - Editing profiles: 10_editing_profiles.md
+  - Follows: 11_follows.md
+  - Favourites: 12_favourites.md
+  - Tags: 13_tags.md
+  - HTMX: 14_HTMX.md
