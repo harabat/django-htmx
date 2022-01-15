@@ -1,18 +1,21 @@
 :PROPERTIES:
-:ID:       a35b9773-9529-41fd-bbc3-3c2b071047e4
-#+OPTIONS:  author:nil
-#+OPTIONS:  ':nil
+:ID:        a35b9773-9529-41fd-bbc3-3c2b071047e4
 #+PROPERTY: header-args :eval never
 :END:
+#+OPTIONS:  ':t *:t -:t \n:nil ^:nil
+#+OPTIONS:  author:nil brokenlinks:mark d:nil prop:nil toc:2
+#+EXPORT_FILE_NAME: index.md
 #+title: Django tutorial
 
-* Introduction
+* Django tutorial
+** Introduction
 We'll build the [[https://github.com/gothinkster/django-realworld-example-app.git][Thinkster's Django RealWorld Example App]] from the ground up. The app is called Conduit and is a Medium clone.
 
 Instead of only building the backend in Django, we'll do both frontend and backend, to show that SSR is still going strong.
 
 We'll be following a simplified version of the [[https://github.com/cookiecutter/cookiecutter-django/][cookiecutter/cookiecutter-django]] architecture (made famous by the excellent book [[https://www.feldroy.com/books/two-scoops-of-django-3-x][Two Scoops of Django 3.x]]), but you don't need to have read it to follow.
-* Pre-requisites
+-----
+** Pre-requisites
 - [[https://github.com/DjangoGirls/tutorial][DjangoGirls tutorial]]
 
   You should have followed the [[https://github.com/DjangoGirls/tutorial][DjangoGirls tutorial]] before starting this one: it is excellent for getting you up to speed, and covers most of the introductory material you'll need, like HTML, CSS, and, of course, Django. We'll assume you have completed that tutorial and won't go into the specifics of anything that has already been covered there.
@@ -25,7 +28,8 @@ We'll be following a simplified version of the [[https://github.com/cookiecutter
     We assume that you know the basics of git. You should ~git commit~ at the end of every chapter.
 
   + [[https://github.com/joke2k/faker][faker]], to avoid creating fake users, articles, etc. manually
-* Virtual environment
+-----
+** Virtual environment
 Let's start this tutorial in earnest.
 
 Before doing anything else, we need to create our virtual environment.
@@ -39,8 +43,9 @@ conda install django
 #+end_src
 
 Now, you have a virtual environment with ~django~ installed.
-* Creating a project
-** Project layout
+-----
+** Creating a project
+*** Project layout
 We'll be following the folder structure presented as best practice in [[https://www.feldroy.com/books/two-scoops-of-django-3-x][Two Scoops of Django]] by Daniel and Audrey Feldroy, which will yield something like the following:
 
 #+begin_src
@@ -121,10 +126,10 @@ ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
 # from WSGI_APPLICATION = "conduit.wsgi.application"
 #+end_src
-** Database
-*** TODO PostgreSQL
+*** Database
+**** TODO PostgreSQL
 Following the arguments of [[https://htmx-django.com/blog/a-minimalistic-modern-django-boilerplate#docker][A Minimalistic Modern Django Boilerplate]]
-** App folder structure
+*** App folder structure
 Our app will have a lot of moving parts (articles, profiles, tags, etc.). To keep the structure of our app clear, we'll host the logic for each of these parts in separate folders.
 
 We'll build Conduit step by step.
@@ -185,8 +190,8 @@ INSTALLED_APPS = [
     'conduit.articles', # add this line
 ]
 #+end_src
-** User model
-[[https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#substituting-a-custom-user-model][The Django docs warn you]]: "/If you’re starting a new project, it’s highly recommended to set up a custom user model, even if the default User model is sufficient for you. [...] Changing AUTH_USER_MODEL after you’ve created database tables is significantly more difficult [...]. This change can’t be done automatically and requires manually fixing your schema, moving your data from the old user table, and possibly manually reapplying some migrations./". Scary stuff. Let's just follow the advice.
+*** User model
+[[https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#substituting-a-custom-user-model][The Django docs warn you]]: "/If you're starting a new project, it's highly recommended to set up a custom user model, even if the default User model is sufficient for you. [...] Changing AUTH_USER_MODEL after you've created database tables is significantly more difficult [...]. This change can't be done automatically and requires manually fixing your schema, moving your data from the old user table, and possibly manually reapplying some migrations./". Scary stuff. Let's just follow the advice.
 
 First, we need to create the app where we'll do everything that has to do with users.
 
@@ -269,7 +274,7 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'users.User'    # new
 #+end_src
-** Create a database
+*** Create a database
 Make the migrations and start the server:
 
 #+begin_src shell
@@ -279,8 +284,9 @@ Make the migrations and start the server:
 #+end_src
 
 Our app, Conduit, is online!
-* Article model
-** Model
+-----
+** Articles
+*** Model
 We'll start by making a model for our articles.
 The articles need a title, a body (the text), a description, an author, and a creation date.
 
@@ -316,7 +322,7 @@ Let's sync the database again:
 (django) django_tutorial$ python manage.py makemigrations
 (django) django_tutorial$ python manage.py migrate
 #+end_src
-** Django admin
+*** Django admin
 In order to have something to work with for the rest of the tutorial, we need to create some posts. Because we can't yet do it through Conduit, we will do so through Django admin.
 
 First, register the ~Article~ model in ~articles/admin.py~ by adding the following line:
@@ -329,8 +335,8 @@ admin.site.register(Article)            # new
 #+end_src
 
 The server should still be running (otherwise restart it). Log in as the superuser you just created and create 3 articles.
-* Lists of Articles
-** Home view
+-----
+*** Home view
 The default view that the unauthenticated user has is the global feed, or the list of all articles.
 
 We add the following line in ~django_tutorial/conduit/urls.py~, so that the project-level ~urls.py~ is aware of the urls defined in ~articles/urls.py~:
@@ -370,7 +376,7 @@ class Home(TemplateView):
         context["articles"] = Article.objects.order_by("-created_at")
         return context
 #+end_src
-** Templates folder
+*** Templates folder
 We need a template now, but before this we need to create a folder for templates and for static files (icons, CSS, etc.).
 
 It's easier to have all templates in one place, instead of in each separate app, and the same is true for static files. Let's create the ~templates~ and ~static~ folders:
@@ -401,7 +407,7 @@ STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [APPS_DIR / "static"]
 #+end_src
-** Base template
+*** Base template
 Let's create the base template now.
 
 #+begin_src shell
@@ -440,7 +446,7 @@ This template will contain the following:
 
 We'll also download the favicon referenced in our template: download the file located at the URL below to ~conduit/articles/static/icons/favicon.ico~:
 https://github.com/gothinkster/react-redux-realworld-example-app/blob/master/public/favicon.ico
-** Home template
+*** Home template
 Now we'll make the ~home.html~ template, which for now only needs to display our "global feed".
 # Because we know that there will be a lot stuff contained in view later ("Your feed", tag feed, "Popular tags"), we might as well take that into account and make our templates as modular as possible.
 Let's create the template  and add the following to it:
@@ -495,9 +501,13 @@ Let's create the template  and add the following to it:
 The HTML is adapted from other realworld projects (especially the [[https://github.com/sveltejs/realworld/][SvelteKit implementation of the RealWorld app]], because Svelte is unexpectedly close to Django's templating language).
 Because the HTML is little more than a copy-paste, we won't explain its structure and classes: suffice it to say that this is required to have something that looks like the actual Realworld app.
 
-#+ATTR_ORG: :width 400
-[[./Screenshots/home - global feed.png]]
-[[./Screenshots/home - global feed - realworld.png]]
+#+CAPTION: home - global feed in our app
+#+ATTR_HTML: :width 600
+[[./assets/home - global feed.png]]
+
+#+CAPTION: home - global feed in the canonical RealWorld app
+#+ATTR_HTML: :width 600
+[[./assets/home - global feed - realworld.png]]
 
 It's starting to look like something, but we can improve the template a bit.
 
@@ -558,8 +568,9 @@ The ~templates/article_preview.html~ file should look like this:
 #+end_src
 
 You might wonder why we're adopting this template structure: it actually comes from the Svelte implementation of the RealWorld app, and, since it makes a lot of sense and avoids us having to reinvent the wheel, we are taking advantage of it.
-* Article views, templates, etc.
-** Article view
+-----
+** Article views, templates, etc.
+*** Article view
 Next we'll implement the article view.
 
 We'll be working with Class-Based Views: the /Django Girls/ tutorial only presents Function-Based Views, which are arguably a more intuitive option, but CBVs are considered to be best practice, at least according to /Two Scoops of Django/, and simplify a lot of work.
@@ -587,7 +598,7 @@ urlpatterns = [
     path("article/<int:pk>", ArticleDetailView.as_view(), name="article_detail"),
 ]
 #+end_src
-** Article template
+*** Article template
 Now, we create the ~article_detail.html~ file in our ~templates~ folder and add the following to it:
 
 #+begin_src html
@@ -639,16 +650,19 @@ Finally, we modify ~home.html~ so that article previews redirect to articles:
 
 Let's see what it looks like:
 
-#+ATTR_ORG: :width 400
-[[./Screenshots/article_detail.png]]
-[[./Screenshots/article_detail - realworld.png]]
+#+CAPTION: article_detail
+#+ATTR_HTML: :width 600
+[[./assets/article_detail.png]]
+#+CAPTION: article_detail - canonical RealWorld app
+#+ATTR_HTML: :width 600
+[[./assets/article_detail - realworld.png]]
 
-** Slugs
+*** Slugs
 We want our article URLs to include slugs, which are easier to read than IDs.
 
 We want the slugs to be unique, but some articles might have the same titles, which would generate the same slugs. One solution to this problem is to combine slugs with UUIDs.
 
-*** Defining a slug and a UUID in the model
+**** Defining a slug and a UUID in the model
 First, we need to modify our ~Article~ model to include a slug, and to update the ~get_absolute_url~ method:
 
 #+begin_src python
@@ -705,7 +719,7 @@ Select an option:
 #+end_src
 
 You can safely select ~2~, as we already have taken care of the slug fields through the Django admin app.
-*** Generate unique slug automatically
+**** Generate unique slug automatically
 We want to avoid manually entering the slugs for every article: the generation of a unique slug should be triggered automatically every time an Article is saved.
 
 Let's create a ~utils.py~ file in the ~conduit~ folder and add the following methods to it:
@@ -734,7 +748,7 @@ def unique_slug_generator(instance):
 
     return slug
 #+end_src
-*** Signals
+**** Signals
 We will now use a signal, a Django utility that allows linking events with actions, to call our ~unique_slug_generator~ every time an Article is created. We could override the ~Article~ model's ~save~ method instead: this is a common method, but not [[https://teddit.ggc-project.de/r/django/comments/p3pgr/overriding_save_vs_presave_signals_which_is/][best practice]].
 
 We create a ~signals.py~ file in the ~articles~ folder and add the following method to it:
@@ -781,10 +795,12 @@ Let's try creating an Article through the Django admin app.
 
 When going back to http://localhost:8000/ (where your app is running), you will see that your new article has a slug consisting of its slugified title and a UUID:
 
-#+ATTR_ORG: :width 400
-[[./Screenshots/article_detail - slug.png]]
-*** TODO add ~primary_key=True~ to ~uuid_field~, then add ~query_pk_and_slug=True~ in relevant views
-* Navbar
+#+CAPTION: article_detail - slug
+#+ATTR_HTML: :width 600
+[[./assets/article_detail - slug.png]]
+**** TODO add ~primary_key=True~ to ~uuid_field~, then add ~query_pk_and_slug=True~ in relevant views
+-----
+** Navbar
 Let's create a simple navigation bar. Because we have yet to implement authentication and profiles, the navbar will just contain a link to ~Home~.
 
 Let's add the following lines to ~base.html~:
@@ -819,9 +835,10 @@ Let's create ~nav.html~ in our ~templates~ folder and add the following to it:
   </div>
 </nav>
 #+end_src
-* Creating, editing, and deleting Articles
+-----
+** Creating, editing, and deleting Articles
 We have implemented the features that allow to view articles, but we need to allow users to create, edit, and delete them as well. We'll first implement this functionality, and modify it later to take into account user authentication.
-** Creating Articles
+*** Creating Articles
 Let's allow users to create articles.
 
 We define the ~EditorCreateView~ view in ~views.py~:
@@ -968,7 +985,7 @@ class EditorCreateView(CreateView):
 #+end_src
 
 Once this is done, try creating another article: it should work.
-** Editing Articles
+*** Editing Articles
 We will now implement the editing feature.
 
 In ~views.py~, add the following:
@@ -1068,7 +1085,7 @@ In the ~editor.html~ template, we want to have the form fields prepopulated with
 #+end_src
 
 Try editing an article: all the values should be prepopulated.
-** Deleting Articles
+*** Deleting Articles
 In ~views.py~, we create a ~ArticleDeleteView~:
 
 #+begin_src python
@@ -1143,9 +1160,10 @@ Now, we want to load this template in ~article_detail.html~ directly, which we a
 #+end_src
 
 Try deleting an article: you should get a nice confirmation message while still on the ~article_detail.html~ template, before the article is deleted.
-* Comments
+-----
+** Comments
 Now that we have articles, we need comments.
-** Model
+*** Model
 A comment needs a related article, an author, a body, and a date.
 Let's create a ~Comment~ model in ~models.py~:
 
@@ -1197,7 +1215,7 @@ admin.site.register(Comment)                # new
 #+end_src
 
 When this is done, go to your admin app and create a few comments for a couple articles.
-** Viewing comments
+*** Viewing comments
 We want to be able to view the comments in our ~article_detail.html~ template.
 
 In ~article_detail.html~:
@@ -1241,7 +1259,7 @@ Now create ~comments.html~ in the ~templates~ folder and add the following:
     {% endfor %}
 </div>
 #+end_src
-** Creating comments
+*** Creating comments
 We will now start allowing our users to leave comments on the website. We could do this like in the Django Girls tutorial: the ~ArticleDetailView~ would include a button that would direct to ~CommentCreateView~ on a separate page, and saving the comment would bring the user back to the ~ArticleDetailView~. However, the ~RealWorldApp~ allows users to create and save their comments directly below the article, on the same page, so that's what we're going to try.
 
 Surprisingly, this is not straightforward to implement in Django, because it implies mixing ~DetailView~ and ~CreateView~ functionalities in a single page, which is made difficult by the fact that the ~DetailView~ doesn't have a POST method, while the ~CreateView~ requires it. Fortunately, our use case is covered in the Django documentation: https://docs.djangoproject.com/en/4.0/topics/class-based-views/mixins/#an-alternative-better-solution.
@@ -1374,7 +1392,7 @@ In ~comments.html~, we include the ~comment_create.html~ template:
 #+end_src
 
 Everything should be working now. Try to create some comments on an article.
-** Deleting comments
+*** Deleting comments
 We now want to be able to delete comments.
 
 In ~articles/views.py~, add the ~CommentDeleteView~:
@@ -1445,15 +1463,16 @@ Create ~comment_delete.html~:
     </form>
 {% endblock %}
 #+end_src
-* Users and Profiles
-** Introduction
+-----
+** Users and Profiles
+*** Introduction
 Time to work on our users and profiles.
 
 [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#specifying-a-custom-user-model][The Django docs say]] "/it may be more suitable to store app-specific user information in a model that has a relation with your custom user model. That allows each app to specify its own user data requirements without potentially conflicting or breaking assumptions by other apps. It also means that you would keep your user model as simple as possible, focused on authentication, and following the minimum requirements Django expects custom user models to meet./".
 
 This is why we'll have the authentication logic in a ~User~ model and the profile logic in a ~Profile~ model.
-** User model
-*** User
+*** User model
+**** User
 The ~User~ model will contain everything related to authentication.
 
 We need an email, a username, and a password. Let's add the following to the ~User~ model in ~users/models.py~:
@@ -1481,7 +1500,7 @@ The ~email~ field holds the email users will be logging in with. We specify this
 The ~password~ field is already provided by ~AbstractUser~.
 ~REQUIRED_FIELDS~ is the list of field users will be prompted for at sign up: because the ~USERNAME_FIELD~ and the ~password~ are already required by Django, we only need to specify ~username~.
 More information about the fields can be found in the docs for [[https://docs.djangoproject.com/en/4.0/ref/contrib/auth/][the default Django User model]].
-*** UserManager
+**** UserManager
 We also need a ~UserManager~, [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#writing-a-manager-for-a-custom-user-model][as advised by the docs]]. In ~models.py~, we add the following, BEFORE we define our ~User~ model:
 
 #+begin_src python
@@ -1541,7 +1560,7 @@ class User(AbstractUser):
 #+end_src
 
 Make sure to ~makemigrations~ and ~migrate~, so that Django is aware of your new model.
-*** admin.py
+**** admin.py
 We need to register this new ~User~ model in ~users/admins.py~, to have access to it in our admin app.
 
 #+begin_src python
@@ -1550,8 +1569,8 @@ from .models import User
 
 admin.site.register(User)
 #+end_src
-** Profile model
-*** Profile
+*** Profile model
+**** Profile
 We are following the instructions in the Django docs about [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model][extending a User model]]. We need to store some information about our users in the database. Each ~User~ object should be related to a single ~Profile~, and vice-versa: we'll use a [[https://docs.djangoproject.com/en/4.0/ref/models/fields/#onetoonefield][~OneToOneField~]] relationship.
 
 Our ~Profile~ needs the following fields:
@@ -1579,7 +1598,7 @@ class Profile(models.Model):
 #+end_src
 
 As always, whenever you change a model, you should ~makemigrations~ and ~migrate~.
-*** signals.py
+**** signals.py
 Since we're defining the ~Profile~ outside of the ~User~ model, a profile won't be created automatically whenever a user signs up.
 
 Let's follow the docs linked above and code up a signal that creates a ~Profile~ at user sign-up.
@@ -1618,7 +1637,7 @@ class UsersConfig(AppConfig):
 #+end_src
 
 This signal runs whenever a ~User~ is saved. By checking for ~created~, we make sure to only initiate a ~Profile~ for the ~User~ instance if the User has just been created, instead of whenever the instance is updated.
-*** admin.py
+**** admin.py
 We need to register this new ~Profile~ model in ~users/admins.py~, to have access to it in our admin app, but we want to be able to view ~User~ and ~Profile~ information for a given user in the same place.
 
 #+begin_src python
@@ -1640,7 +1659,7 @@ admin.site.register(User, UserAdmin)
 #+end_src
 
 You'll notice that this code is much shorter than [[https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model][what the docs say]]: we're trying to keep it simple, so we'll do without some of the quality of life improvements that a more intricate code would allow.
-** Auth views
+*** Auth views
 In ~users/views.py~, we take advantage of the generic ~LoginView~, ~LogoutView~, and ~CreateView~ to implement our authentication logic:
 
 #+begin_src python
@@ -1679,7 +1698,7 @@ class SignUpView(CreateView):
 We don't have to specify much to the generic views, they're quite full-featured as is. What we did here is indicate where the templates live and where the views redirect to (the [[https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url][defaults]] are ~accounts/profile~ for ~LoginView~ and ~None~ for ~LogoutView~).
 We also overrode the ~get~ method in ~LoginView~ and ~SignUpView~, so that already authenticated users who for some reason visit the login page are automatically redirected to the ~home~ URL.
 We didn't specify a template for ~LogoutView~ because it's not necessary.
-** Auth urls
+*** Auth urls
 Let's deal with the URL patterns now.
 Create ~users/urls.py~ and add the following:
 
@@ -1704,8 +1723,8 @@ urlpatterns = [
     path("", include("conduit.users.urls")),        # new
 ]
 #+end_src
-** Auth templates
-*** login.html
+*** Auth templates
+**** login.html
 Let's create ~login.html~ in the ~templates~ folder:
 
 #+begin_src html
@@ -1755,7 +1774,7 @@ Let's create ~login.html~ in the ~templates~ folder:
 #+end_src
 
 Notice that we are using ~form.username~ to authenticate. I initially was trying to work with ~form.email~, because that was the field we chose to authenticate with, but it kept throwing errors: Django didn't see the field, didn't POST the value that I gave it, and asked for the username every time. It took me a while, but I realised that our username /is/ the email. ~form.username~ is effectively querying what the ~USERNAME_FIELD~ is. Not straightforward though.
-*** signup.html
+**** signup.html
 Create ~signup.html~:
 
 #+begin_src html
@@ -1814,7 +1833,7 @@ Create ~signup.html~:
     </div>
 {% endblock %}
 #+end_src
-** Nav
+*** Nav
 We don't want to expose the ~New post~ link to unauthenticated users.
 
 In ~nav.html~:
@@ -1880,7 +1899,7 @@ In ~nav.html~:
   </div>
 </nav>
 #+end_src
-** LoginRequiredMixin
+*** LoginRequiredMixin
 Some pages should only be accessible to authenticated users, and Django provides an easy way of doing so through mixins. Mixins are components that provide common extra functionality. They can be added to class-based views on the fly.
 
 In ~articles/views.py~, add the following:
@@ -1905,12 +1924,12 @@ Notice that the ~LoginRequiredMixin~ should be at the leftmost position in the i
 
 If you try creating a post from the app, you should get this error:
 
-[[./Screenshots/login - error.png]]
+[[./assets/login - error.png]]
 
 The cause of the problem is given in the line:
 
 #+begin_quote
-The current path, accounts/login/, didn’t match any of these.
+The current path, accounts/login/, didn't match any of these.
 #+end_quote
 
 By default, the login url in Django is ~accounts/login~: while we changed our urls everywhere, the ~LoginRequiredMixin~ does not know that. To fix this, we need to add this line in ~config/settings.py~:
@@ -1918,7 +1937,7 @@ By default, the login url in Django is ~accounts/login~: while we changed our ur
 #+begin_src python
 LOGIN_URL = "login"
 #+end_src
-** Only allow authors to edit or delete their articles and comments
+*** Only allow authors to edit or delete their articles and comments
 While we're at it, let's also make sure that articles and comments can only be edited and deleted by their authors.
 
 In ~templates/article_detail.html~, we hide the button for editing and deleting articles from any user who is not the article's author:
@@ -1977,7 +1996,7 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
             return super().post(request, *args, **kwargs)
         return redirect(self.get_object().get_absolute_url())
 #+end_src
-** Testing signup and login
+*** Testing signup and login
 For now, we only have one user for our app: the ~admin~ superuser.
 
 Let's create a new user by clicking on ~Sign up~ in our navbar. Enter a username, an email (which doesn't have to be a real one as long as it's the right format), and a password.
@@ -2024,7 +2043,7 @@ To make sure you understand what we're doing here: Django hashes passwords when 
 - refuse authentication.
 
 Now that we've resolved the issue, try creating a new user: everything should work.
-** Viewing Profiles
+*** Viewing Profiles
 It's time to allow users to view their own and other users' profiles.
 
 In ~users/views.py~:
@@ -2078,8 +2097,10 @@ In the ~templates~ folder, create ~profile_detail.html~:
 
 Everything should be working now, right? Let's check by going to ~localhost:8000/profile/@admin~, for example.
 Welp, we're getting an error:
-#+ATTR_ORG: :width 600
-[[./Screenshots/profile_detail - error.png]]
+
+#+CAPTION: profile_detail - error
+#+ATTR_HTML: :width 600
+[[./assets/profile_detail - error.png]]
 
 The error tells us that our ~ProfileDetailView~ wants to be called with an object primary key or a slug, while we're calling it with a ~username~. The solution is simple: we just change how the view decides which objects to show.
 
@@ -2102,9 +2123,10 @@ class ProfileDetailView(DetailView):
 
 Let's try again: we should see an actual profile page (though there isn't much on it yet). Make sure to set a profile image for your ~admin~ user, as everyone else should have a default already set.
 
-#+ATTR_ORG: :width 600
-[[./Screenshots/profile_detail.png]]
-** Viewing Articles written by each User
+#+CAPTION: profile_detail
+#+ATTR_HTML: :width 600
+[[./assets/profile_detail.png]]
+*** Viewing Articles written by each User
 Whenever we visit a user's profile, we want to see all the articles written by that specific user. We could make a ~ListView~, but passing the list to our ~DetailView~'s context is simpler.
 
 In ~users/views.py~, override the ~get_context_data~ method of ~ProfileDetailView~:
@@ -2162,7 +2184,7 @@ Expose the ~article_list.html~ template in ~templates/profile_detail.html~:
     </div>
 {% endblock %}
 #+end_src
-** Links to Profiles in templates
+*** Links to Profiles in templates
 We now need to link the profile page from all the places our users' usernames are exposed.
 
 In ~templates/article_preview.html~, change the following lines:
@@ -2251,8 +2273,8 @@ In ~templates/comments.html~:
   {% include 'comment_delete.html' %}
 </div>
 #+end_src
-*** TODO replace {% url 'profile_detail' username=... %} with {{ ...profile.get_absolute_url }}
-** Editing profiles
+**** TODO replace ~{% url 'profile_detail' username=... %}~ with ~{{ ...profile.get_absolute_url }}~
+*** Editing profiles
 We want to allow users to modify their profile information (image, bio) and user information (username, email, password) at the same place. That is, we want to allow users to update 2 models at the same URL. Surprisingly, this common use case is not straightforward to implement with Django, especially if we're trying to follow good practice and use class-based views. Take a break before continuing, as we're going to go into the weeds here.
 
 Cool, let's recap what we're doing.
@@ -2295,8 +2317,13 @@ The ~ProfileForm~ is self-explanatory.
 The ~UserForm~ is a bit more complicated. Let's go through it in detail.
 We want to our user to be able to update three types of information: the username, the email, and the password. We also want to expose the current username and email values in the template, but we don't want to expose any information about the password. The screenshot below clarifies what we mean here: the screenshot on the right could leak information about the number of characters in our user's password, even though the characters themselves are masked, while the screenshot on the right exposes no information about the password.
 
-#+ATTR_ORG: :width 200
-[[./Screenshots/settings - password field.png]] [[./Screenshots/settings.png]]
+#+CAPTION: settings - password field with masked characters
+#+ATTR_HTML: :width 200
+[[./assets/settings - password field.png]]
+
+#+CAPTION: settings - empty password field
+#+ATTR_HTML: :width 200
+[[./assets/settings.png]]
 
 We want the password field in our future template to be empty, and we don't want to force the user to type it out every time they want to modify some other information. In other words, we want the password field to be optional, ie ~required=False~.
 Furthermore, since this password field doesn't need any information about the current password, we can just create a dummy ~new_password~ field, instead of linking our form to the ~User~ model's actual ~password~ attribute.
@@ -2490,8 +2517,9 @@ In ~templates/profile_detail.html~:
 
 We should add that all of this would have been much easier if we had a single model dealing with ~User~ and ~Profile~ information, instead of separating the two (as we could have kept a generic ~UpdateView~), but that would have gone against best practice.
 Similarly, our task would have been simplified if ~User~ and ~Profile~ were related through a ~ForeignKey~ (as we could have used [[https://docs.djangoproject.com/en/4.0/topics/forms/modelforms/#inline-formsets][inline formsets]]), but that would have gone against common patterns in Django.
-* Follows, favorites, and tags
-** Creating a few new users and articles
+-----
+** Follows, favorites, and tags
+*** Creating a few new users and articles
 To make the following sections more interesting, let's create a new users and posts. Run Django shell with src_shell{(django) django_tutorial$ python manage.py shell} and then paste the following into your shell (no need to clean it):
 
 #+begin_src python
@@ -2518,8 +2546,8 @@ In [7]: User.objects.get(username='admin').profile.follow(Profile.objects.last()
 #+end_src
 
 This will create 2 users with full profiles and a couple articles each.
-** Follows
-*** Model
+*** Follows
+**** Model
 We'll now let our users follow other users, ie subscribe to other users' articles. This should be a relationship between ~Profile~ objects, where one ~Profile~ object can follow, and be followed by, many other ~Profile~ objects: we'll use a [[https://docs.djangoproject.com/en/4.0/ref/models/fields/#django.db.models.ManyToManyField][~ManyToManyField~]] relationship.
 
 We need a new field in our ~Profile~ model in ~users/models.py~:
@@ -2562,7 +2590,7 @@ Let's ~makemigrations~ and ~migrate~, since we have modified the model.
 (django) django_tutorial$ python manage.py migrate
 # ...
 #+end_src
-****** ProfileDetailView
+**** ProfileDetailView
 We need to let users to follow or unfollow other users in our templates. This involves some work around checking whether the user is already in our ~follows~ or not.
 Because the Django Template Language (intentionally) makes it difficult to write non-trivial queries within templates, we'll have to do some groundwork in our views, with the help of the model methods we just created.
 
@@ -2650,7 +2678,7 @@ What we're doing in this template is the following:
 - if the user's viewing their own profile, show a link to the ~settings~ URL.
 - if the user's viewing another profile (or is not logged in), redirect them to the ~profile_follow~ URL, which toggles a ~Profile~ object's ~follow~ and ~unfollow~ methods
 - adapt the text and UI based on whether the user's following the viewed profile via a bunch of ~{% if ...%}~ template tags.
-*** ArticleDetailView
+**** ArticleDetailView
 We also expose the follow/unfollow feature on article pages.
 
 In ~articles/views.py~:
@@ -2702,7 +2730,7 @@ In ~templates/profile_follow.html~, we add ~style="display:inline"~:
 #+end_src
 
 An interesting aside: for the longest time, I tried to follow or unfollow a profile based on whether the template form had ~method="post"~ or ~method="delete"~ (because ~RedirectView~ has both ~post~ and ~delete~ methods), only to discover that [[https://stackoverflow.com/questions/165779/are-the-put-delete-head-etc-methods-available-in-most-web-browsers][HTML forms only support ~GET~ and ~POST~]] and that [[https://stackoverflow.com/questions/27203547/django-csrf-token-invalid-after-modifying-request][workarounds are not very pretty]]. Live and learn.
-*** Redirect URL
+**** Redirect URL
 If you play around with the ~Follow~ feature, you will notice that it redirects us to the profile page of the user we want to (un)follow. This is due to the fact that the ~Follow~ button is exposed both in ~profile_detail.html~ and in ~home.html~ (through ~article_preview.html~), so for the sake of simplicity we chose a single redirect URL in our ~ProfileFollowView~.
 
 However, it would be better if we could stay on whatever page we are when we follow a user. This involves implementing the ~next~ kwarg.
@@ -2748,7 +2776,7 @@ class ProfileFollowView(LoginRequiredMixin, RedirectView):
 #+end_src
 
 We override the ~get_redirect_url~ method of ~RedirectView~ so that we go to the URL specified by ~next~, or fall back to ~profile_detail~ if for some reason the ~next~ parameter is missing (for example, if the user visits ~profile_follow~ directly by typing ~.../profile/@<username>/follow~ in their browser's URL bar).
-*** Feeds
+**** Feeds
 We need to go back all the way to the beginning for this one.
 
 In ~articles/views.py~, we need to modify our very first view, ~home~, so that it can give us a feed of articles written by users we follow:
@@ -2826,8 +2854,8 @@ urlpatterns = [
     path("feed", Home.as_view(), name="home_feed"),
 ]
 #+end_src
-** Favourites
-*** Model
+*** Favourites
+**** Model
 The second to last feature we need is allowing users to favourite some articles, so that they are added to the user's profile for everyone to see.
 
 In ~users/models.py~:
@@ -2851,7 +2879,7 @@ class Profile(models.Model):
         """Return True if article is in Favorites, False otherwise"""
         return self.favorites.filter(pk=article.pk).exists()
 #+end_src
-*** ArticleFavoriteView
+**** ArticleFavoriteView
 In ~articles/views.py~:
 
 #+begin_src python
@@ -2900,7 +2928,7 @@ urlpatterns = [
     ),
 ]
 #+end_src
-*** ArticleDetailView
+**** ArticleDetailView
 We don't need to modify the views for this: the logic can happen in the templates.
 
 In ~templates/article_detail.html~:
@@ -2955,7 +2983,7 @@ In ~templates/article_favorite.html~:
 #+end_src
 
 Checking if an article is in a user's ~favorites~ should be done in the view (or, even better, the model) instead of the template, but we would have to change our templates' structure and write new views if we wanted to include a ~Favorite~ button in the ~article_preview.html~ template.
-*** ArticlePreviewView
+**** ArticlePreviewView
 In ~templates/article_preview.html~:
 
 #+begin_src html
@@ -3004,11 +3032,14 @@ In ~templates/article_favorite.html~
 </form>
 #+end_src
 
-#+ATTR_ORG: :width 200
-[[./Screenshots/home - favorite - before.png]]
-[[./Screenshots/home - favorite.png]]
-**** TODO ArticleFavoriteView success_url
-*** Feeds
+#+CAPTION: favorite - before
+#+ATTR_HTML: :width 600
+[[./assets/home - favorite - before.png]]
+#+CAPTION: favorite - after
+#+ATTR_HTML: :width 600
+[[./assets/home - favorite.png]]
+***** TODO ArticleFavoriteView success_url
+**** Feeds
 Now, we need to do something with this ~Favorite~ feature: we'll display a user's favorited articles on their profile.
 
 In ~users/views.py~:
@@ -3082,8 +3113,8 @@ In ~templates/profile_detail.html~:
   </div>
 </div>
 #+end_src
-** Tags
-*** Model
+*** Tags
+**** Model
 The very last feature that we need to implement is tags.
 
 First, we create the ~Tag~ object itself.
@@ -3125,7 +3156,7 @@ class Article(models.Model):
 #+end_src
 
 We have modified the models: we need to ~makemigrations~ and ~migrate~.
-*** Views
+**** Views
 We will now enable users to specify the tags for their article in the editor.
 
 In ~articles/views.py~:
@@ -3143,8 +3174,9 @@ class EditorUpdateView(LoginRequiredMixin, UpdateView):
 
 Now, we want to be able to add and remove tags straight in the editor, like in the following video:
 
-#+ATTR_ORG: :width 400
-[[./Screenshots/editor - tags.mp4]]
+#+CAPTION: editor - tags
+#+ATTR_HTML: :width 600
+[[./assets/editor - tags.mp4]]
 
 We'll have to do a bit of a hack here, to achieve this kind of functionality: we'll include a separate form for tags into the editor form, and this form will update the page whenever a tag is added or removed.
 
@@ -3208,15 +3240,15 @@ urlpatterns = [
 ]
 #+end_src
 
-* Observations                          :noexport:
-** TODO class:active
-*** [[https://stackoverflow.com/questions/340888/navigation-in-django/341748#341748][Navigation in django - Stack Overflow]]
-*** [[https://stackoverflow.com/questions/340888/navigation-in-django/477719#477719][Navigation in django - Stack Overflow]]
-** Changes compared to django-realworld-example-app
+** Observations                                                               :noexport:
+*** TODO class:active
+**** [[https://stackoverflow.com/questions/340888/navigation-in-django/341748#341748][Navigation in django - Stack Overflow]]
+**** [[https://stackoverflow.com/questions/340888/navigation-in-django/477719#477719][Navigation in django - Stack Overflow]]
+*** Changes compared to django-realworld-example-app
 - The =core.TimestampedModel= mostly exists to allow default ordering, which is [[https://docs.djangoproject.com/en/3.2/ref/models/options/#ordering][not recommended]], so we'll do without.
 - We can implement the whole app without building a REST API, so we won't.
 - Because we don't use REST API, we don't need to implement JWT authentication.
-** Site structure
+*** Site structure
 - =Nav=
 - home.html
   + =banner= if user is not authenticated
