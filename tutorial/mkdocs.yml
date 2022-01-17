@@ -1,19 +1,18 @@
 site_name: Django + HTMX tutorial
 site_url:
-site_description:
+site_description: A tutorial for building the RealWorld app in Django and HTMX
+docs_dir: 'docs'
 theme:
   name: material
   logo: assets/django-logo.png
   favicon: assets/django-logo.png
   language: en
-  # include_homepage_in_sidebar: true
-  # sticky_navigation: true
-  # collapse_navigation: true
+  # include_homepage_in_sidebar: true  # no effect
+  # sticky_navigation: true  # no effect
+  # collapse_navigation: true  # no effect
   features:
     - navigation.instant
-    # - navigation.tabs
     # - navigation.expand
-    # - toc.integrate
     - navigation.top
     - search.suggest
   palette:
@@ -33,29 +32,29 @@ plugins:
   - search
 markdown_extensions:
   # https://facelessuser.github.io/pymdown-extensions/extensions/
-  # - attr_list  # for images
-  # - md_in_html  # for images
-  # - abbr  # information on hover
+  # - attr_list  # for align
+  # - md_in_html  # better done by pandoc
   # - admonitions  # callouts
+  # - footnotes
   # - tables
   # - pymdownx.details  # information in dropdown
   - toc:
       permalink: "#"
   - pymdownx.highlight:
-      auto_title: true
       linenums: true
       use_pygments: true
   - pymdownx.superfences
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.inlinehilite  # inline code blocks
   # - pymdownx.tabbed  # for tabs
   # - pymdownx.tasklist  # for lists with checkboxes
 nav:
-  - Django tutorial Readme: index.md
-  - Creating a project: 01_creating_a_project.md
+  - Readme: index.md
+  - Starting the project: 01_starting_the_project.md
   - First views and templates: 02_first_views_and_templates.md
-  - Articles: 03_articles.md
+  - Viewing Articles: 03_viewing_articles.md
   - Creating, editing, and deleting Articles: 04_creating_editing_and_deleting_articles.md
   - Comments: 05_comments.md
   - Users and Profiles: 06_users_and_profiles.md
@@ -65,5 +64,5 @@ nav:
   - Editing profiles: 10_editing_profiles.md
   - Follows: 11_follows.md
   - Favourites: 12_favourites.md
-  - Tags: 13_tags.md
-  - HTMX: 14_HTMX.md
+  - Tags: 13_tags_coming_soon.md
+  - HTMX: 14_htmx_coming_soon.md

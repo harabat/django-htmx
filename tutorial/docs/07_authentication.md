@@ -5,7 +5,7 @@
 In `users/views.py`, we take advantage of the generic `LoginView`,
 `LogoutView`, and `CreateView` to implement our authentication logic:
 
-``` python
+``` { .python }
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
@@ -53,7 +53,7 @@ for `LogoutView` because it's not necessary.
 Let's deal with the URL patterns now. Create `users/urls.py` and add the
 following:
 
-``` python
+``` { .python }
 from django.urls import path
 from .views import Login, Logout, SignUp
 
@@ -68,7 +68,7 @@ urlpatterns = [
 For every app that we create, we need to tell `config/urls.py` to look
 at the patterns specified in the app's `urls.py` file:
 
-``` python
+``` { .python hl_lines="4" }
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("conduit.articles.urls")),
@@ -82,7 +82,7 @@ urlpatterns = [
 
 Let's create `login.html` in the `templates` folder:
 
-``` html
+``` { .html }
 {% extends 'base.html' %}
 {% block title %}
     <title>Sign in - Conduit: Django + HTMX</title>
@@ -140,7 +140,7 @@ the `USERNAME_FIELD` is. Not straightforward though.
 
 Create `signup.html`:
 
-``` html
+``` { .html }
 {% extends 'base.html' %}
 {% block title %}
     <title>Sign up - Conduit: Django + HTMX</title>

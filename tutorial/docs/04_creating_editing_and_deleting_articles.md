@@ -11,7 +11,7 @@ Let's allow users to create articles.
 
 We define the `EditorCreateView` view in `views.py`:
 
-``` python
+``` { .python }
 # other imports
 from django.views.generic import (
      # other views
@@ -30,7 +30,7 @@ class EditorCreateView(CreateView):
 
 We add the following to `urls.py`:
 
-``` python
+``` { .python }
 # other imports
 from .views import Home, ArticleDetailView, EditorCreateView
 
@@ -42,7 +42,7 @@ urlpatterns = [
 
 We add a `New article` button to the Nav bar in `nav.html`:
 
-``` html
+``` { .html hl_lines="3, 6, 8, 13-23" }
 <ul class="nav navbar-nav pull-xs-right">
   <li class="nav-item">
     {% url 'home' as home %}                                    <!-- new -->
@@ -75,7 +75,7 @@ better style active links.
 
 Now, we can create the template `editor.html`:
 
-``` html
+``` { .html }
 {% extends 'base.html' %}
 {% block title %}
     <title>Editor - Conduit: Django + HTMX</title>
@@ -132,15 +132,17 @@ Now, we can create the template `editor.html`:
 Try to create an article in your app. When you hit “Publish”, you'll get
 an error:
 
-    IntegrityError at /editor
-    NOT NULL constraint failed: articles_article.author_id
+```
+IntegrityError at /editor
+NOT NULL constraint failed: articles_article.author_id
+```
 
 That's because the form doesn't know who the author is, and author is a
 required field in our model. Let's override the `EditorCreateView`
 view's `form_valid` method in our `views.py` file: before we save the
 form, we'll set the logged in user (`admin`, for now) as the `author`:
 
-``` python
+``` { .python hl_lines="8-12" }
 class EditorCreateView(CreateView):
     """create article"""
 
@@ -163,7 +165,7 @@ We will now implement the editing feature.
 
 In `views.py`, add the following:
 
-``` python
+``` { .python }
 # other imports
 from django.views.generic import (
     # other views
@@ -183,7 +185,7 @@ class EditorUpdateView(UpdateView):
 We're using the same template for creating and editing articles. In
 `urls.py`, add:
 
-``` python
+``` { .python }
 # other imports
 from .views import (
     # other views
@@ -203,7 +205,7 @@ tag](https://docs.djangoproject.com/en/3.2/ref/templates/builtins/#url)),
 given that our URL expects a slug (`editor/<slug:slug>`). The
 documentation for ):
 
-``` python
+``` { .html hl_lines="10-19" }
 <div class="article-meta">
     <div class="info">
         <span class="author">
@@ -213,16 +215,16 @@ documentation for ):
             {{ article.created_at|date:"F d, Y" }}
         </span>
     </div>
-    <span>                                                              <!-- new -->
-        <a                                                              <!-- new -->
-            href="{% url 'editor_update' slug=article.slug %}"          <!-- new -->
-            class="btn btn-outline-secondary btn-sm"                    <!-- new -->
-        >                                                               <!-- new -->
-            <span class="ion-edit">                                    <!-- new -->
-                Edit Article                                            <!-- new -->
-            </span>                                                    <!-- new -->
-        </a>                                                            <!-- new -->
-    </span>                                                             <!-- new -->
+    <span>                                                              <!-- new from here -->
+        <a
+            href="{% url 'editor_update' slug=article.slug %}"
+            class="btn btn-outline-secondary btn-sm"
+        >
+            <span class="ion-edit">
+                Edit Article
+            </span>
+        </a>
+    </span>                                                             <!-- new to here -->
 </div>
 ```
 
@@ -231,7 +233,7 @@ prepopulated with the relevant values. When using `UpdateView`, we have
 access to the object being updated. Let's add the following to the
 `editor.html` template:
 
-``` html
+``` { .html hl_lines="8, 17, 26" }
 <fieldset>
     <fieldset class="form-group">
         <input
@@ -271,7 +273,7 @@ Try editing an article: all the values should be prepopulated.
 
 In `views.py`, we create a `ArticleDeleteView`:
 
-``` python
+``` { .python }
 # other imports
 from django.views.generic import (
     # other views
@@ -294,7 +296,7 @@ unnecessary: we'll in a second how we're making this work.
 
 In `urls.py`:
 
-``` python
+``` { .python }
 # other imports
 from .views import (
     # other views
@@ -310,29 +312,29 @@ urlpatterns = [
 Now, create an `article_delete.html` file: this will hold the form for
 deleteing the article.
 
-``` html
-<form                                                                                       <!-- new  -->
-    method="POST"                                                                           <!-- new  -->
-    action="{% url 'editor_delete' slug=article.slug %}"                                    <!-- new  -->
-    style="display:inline"                                                                  <!-- new  -->
->                                                                                           <!-- new  -->
-    {% csrf_token %}                                                                        <!-- new  -->
-    <button                                                                                 <!-- new  -->
-        class="btn btn-outline-danger btn-sm"                                               <!-- new  -->
-        value="DELETE"                                                                      <!-- new  -->
-        onclick="return confirm('Are you sure you want to delete {{ article.title }}?')"    <!-- new  -->
-    >                                                                                       <!-- new  -->
-        <span class="ion-trash-a">                                                         <!-- new  -->
-            Delete Article                                                                  <!-- new  -->
-        </span>                                                                                <!-- new  -->
-    </button>                                                                               <!-- new  -->
-</form>                                                                                     <!-- new  -->
+``` { .html }
+<form
+    method="POST"
+    action="{% url 'editor_delete' slug=article.slug %}"
+    style="display:inline"
+>
+    {% csrf_token %}
+    <button
+        class="btn btn-outline-danger btn-sm"
+        value="DELETE"
+        onclick="return confirm('Are you sure you want to delete {{ article.title }}?')"
+    >
+        <span class="ion-trash-a">
+            Delete Article
+        </span>
+    </button>
+</form>
 ```
 
 Now, we want to load this template in `article_detail.html` directly,
 which we achieve with an `include` tag:
 
-``` html
+``` { .html hl_lines="10" }
 <span>
     <a
         href="{% url 'editor_update' slug=article.slug %}"

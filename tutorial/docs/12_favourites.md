@@ -8,7 +8,7 @@ see.
 
 In `users/models.py`:
 
-``` python
+``` { .python }
 class Profile(models.Model):
     # ...
     favorites = models.ManyToManyField(
@@ -32,7 +32,7 @@ class Profile(models.Model):
 
 In `articles/views.py`:
 
-``` python
+``` { .python }
 from django.views.generic import (
     # ...
     RedirectView
@@ -61,7 +61,7 @@ class ArticleFavoriteView(RedirectView):
 
 In `articles/urls.py`:
 
-``` python
+``` { .python }
 # ...
 from django.shortcuts import redirect, get_object_or_404
 from .views import (
@@ -86,7 +86,7 @@ templates.
 
 In `templates/article_detail.html`:
 
-``` html
+``` { .html hl_lines="16" }
 {% if user == article.author.user %}
   <span>
     <a
@@ -107,9 +107,9 @@ In `templates/article_detail.html`:
 {% endif %}
 ```
 
-In `templates/article_favorite.html`:
+Create `templates/article_favorite.html`:
 
-``` html
+``` { .html }
 <form
     method="post"
     action="{% url 'article_favorite' slug=article.slug %}"
@@ -144,7 +144,7 @@ to include a `Favorite` button in the `article_preview.html` template.
 
 In `templates/article_preview.html`:
 
-``` html
+``` { .html hl_lines="9-11" }
 <div class="info">
     <a href="{% url 'profile_detail' username=article.author.user.username %}" class="author">
         {{ article.author.user.username }}
@@ -160,7 +160,7 @@ In `templates/article_preview.html`:
 
 In `templates/article_favorite.html`
 
-``` html
+``` { .html hl_lines="16, 22-24" }
 <form
     method="post"
     action="{% url 'article_favorite' slug=article.slug %}"
@@ -191,18 +191,12 @@ In `templates/article_favorite.html`
 ```
 
 <figure>
-<img src="./assets/home - favorite - before.png" width="600"
-alt="Figure 11: favorite - before" />
-<figcaption aria-hidden="true">Figure 11: favorite - before</figcaption>
+<img src="./assets/home - favorite - before.png" width="600" alt="Favorite button before" /><figcaption aria-hidden="true">Favorite button before</figcaption>
 </figure>
 
 <figure>
-<img src="./assets/home - favorite.png" width="600"
-alt="Figure 12: favorite - after" />
-<figcaption aria-hidden="true">Figure 12: favorite - after</figcaption>
+<img src="./assets/home - favorite.png" width="600" alt="Favorite button after" /><figcaption aria-hidden="true">Favorite button after</figcaption>
 </figure>
-
-### <span class="todo TODO">TODO</span> ArticleFavoriteView success_url
 
 ## Feeds
 
@@ -211,7 +205,7 @@ a user's favorited articles on their profile.
 
 In `users/views.py`:
 
-``` python
+``` { .python }
 class ProfileDetailView(DetailView):
     # ...
 
@@ -220,15 +214,13 @@ class ProfileDetailView(DetailView):
         if self.request.user.is_authenticated:
             context["my_articles"] = self.object.articles.order_by("-created_at")
             context["is_following"] = self.object.is_following(self.object)
-            context["favorited_articles"] = self.object.favorites.order_by(         # new
-                "-created_at"                       # new
-            )                                       # new
+            context["favorited_articles"] = self.object.favorites.order_by("-created_at")  # new
         return context
 ```
 
 In `users/urls.py`:
 
-``` python
+``` { .python }
 urlpatterns = [
     # ...
     path(
@@ -241,14 +233,14 @@ urlpatterns = [
 
 In `templates/profile_detail.html`:
 
-``` html
+``` { .html hl_lines="7-15, 17-27, 30, 32-34" }
 <div class="container">
   <div class="row">
     <div class="col-xs-12 col-md-10 offset-md-1">
       <div class="articles-toggle">
         <ul class="nav nav-pills outline-active">
           <li class="nav-item">
-            {% url 'profile_detail' username=profile.user.username as profile_detail %}
+            {% url 'profile_detail' username=profile.user.username as profile_detail %}         <!-- new from here -->
             <a
               href="{{ profile_detail }}"
               rel="prefetch"
@@ -256,9 +248,9 @@ In `templates/profile_detail.html`:
                      {% if request.path == profile_detail %}active{% endif %}"
             >
               My Articles
-            </a>
+            </a>                                                                                <!-- new to here -->
           </li>
-          <li class="nav-item">
+          <li class="nav-item">                                                                 <!-- new from here -->
             {% url 'profile_favorites' username=profile.user.username as profile_favorites %}
             <a
               href="{{ profile_favorites }}"
@@ -268,14 +260,14 @@ In `templates/profile_detail.html`:
             >
               Favorited Articles
             </a>
-          </li>
+          </li>                                                                                 <!-- new to here -->
         </ul>
       </div>
-      {% if request.path == profile_detail %}
+      {% if request.path == profile_detail %}                                                   <!-- new -->
         {% include 'article_list.html' with articles=my_articles %}
-      {% elif request.path == profile_favorites %}
-        {% include 'article_list.html' with articles=favorited_articles %}
-      {% endif %}
+      {% elif request.path == profile_favorites %}                                              <!-- new -->
+        {% include 'article_list.html' with articles=favorited_articles %}                      <!-- new -->
+      {% endif %}                                                                               <!-- new -->
     </div>
   </div>
 </div>

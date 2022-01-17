@@ -7,7 +7,7 @@ Now that we have articles, we need comments.
 A comment needs a related article, an author, a body, and a date. Let's
 create a `Comment` model in `models.py`:
 
-``` python
+``` { .python }
 # other models
 
 class Comment(models.Model):
@@ -35,11 +35,13 @@ class Comment(models.Model):
 Let's `makemigrations` and `migrate`. You should get the following
 error:
 
-    SystemCheckError: System check identified some issues:
+```
+SystemCheckError: System check identified some issues:
 
-    ERRORS:
-    articles.Comment.article: (fields.E311) 'Article.slug' must be unique because it is referenced by a foreign key.
-            HINT: Add unique=True to this field or add a UniqueConstraint (without condition) in the model Meta.constraints.
+ERRORS:
+articles.Comment.article: (fields.E311) 'Article.slug' must be unique because it is referenced by a foreign key.
+        HINT: Add unique=True to this field or add a UniqueConstraint (without condition) in the model Meta.constraints.
+```
 
 That's because we're using articles' slugs as ForeignKeys for the
 comments (so that we can filter our comments by the attached articles'
@@ -50,7 +52,7 @@ after that.
 
 Now, we need to register our model in `admin.py`:
 
-``` python
+``` { .python hl_lines="2, 5" }
 from django.contrib import admin
 from .models import Article, Comment        # new
 
@@ -68,7 +70,7 @@ template.
 
 In `article_detail.html`:
 
-``` html
+``` { .html hl_lines="9-12" }
 <div class="container page">
     <div class="row article-content">
         <div class="col-xs-12">
@@ -87,7 +89,7 @@ In `article_detail.html`:
 Now create `comments.html` in the `templates` folder and add the
 following:
 
-``` html
+``` { .html }
 <div class="col-xs-12 col-md-8 offset-md-2">
     {% for comment in article.comments.all|dictsortreversed:'created_at' %}
         <div class="card">
@@ -132,7 +134,7 @@ and `article` fields required by the `Comment` model. We also override
 the `get_success_url` because we want the user to be redirected to the
 `ArticleDetailView` upon saving the comment.
 
-``` python
+``` { .python }
 # other imports
 from .models import Article, Comment
 
@@ -159,7 +161,7 @@ Now, we need to modify the `ArticleDetailView` to make the
 `CommentCreateView`'s form available to `templates/article_detail.html`
 through the `get_context_data` method:
 
-``` python
+``` { .python hl_lines="7-10" }
 class ArticleDetailView(DetailView):
     """detail view for individual articles"""
 
@@ -175,7 +177,7 @@ class ArticleDetailView(DetailView):
 Finally, we create a view that combines `ArticleDetailView` and
 `CommentCreateView`:
 
-``` python
+``` { .python }
 # other imports
 from django.views.generic import (
     # other views
@@ -203,7 +205,7 @@ We want this new hybrid view to be the one returned by the
 
 In `urls.py`, we replace the `article_detail` path by the following:
 
-``` python
+``` { .python }
 # other imports
 from .views import (
     # other views
@@ -227,7 +229,7 @@ templates.
 Create `comment_create.html`, which corresponds to the
 `CommentCreateView`'s form:
 
-``` html
+``` { .html }
 {% block content %}
     <form
         class="card comment-form"
@@ -254,7 +256,7 @@ Create `comment_create.html`, which corresponds to the
 
 In `comments.html`, we include the `comment_create.html` template:
 
-``` html
+``` { .html hl_lines="2-4" }
 <div class="col-xs-12 col-md-8 offset-md-2">
     <div>                                           <!-- new -->
         {% include 'comment_create.html' %}         <!-- new -->
@@ -272,21 +274,20 @@ We now want to be able to delete comments.
 
 In `articles/views.py`, add the `CommentDeleteView`:
 
-``` python
+``` { .python }
 class CommentDeleteView(DeleteView):
     """delete comment"""
 
     model = Comment
     template_name = "article_detail.html"
 
-    # redirect to attached article's detail page upon success
     def get_success_url(self):
         return reverse("article_detail", kwargs={"slug": self.object.article.slug})
 ```
 
 In `urls.py`:
 
-``` python
+``` { .python }
 urlpatterns = [
     # ...
     path(
@@ -304,7 +305,7 @@ find.
 
 In `comments.html`:
 
-``` html
+``` { .html hl_lines="8" }
 <div class="card-footer">
     <span class="comment-author">
         {{ comment.author }}
@@ -318,7 +319,7 @@ In `comments.html`:
 
 Create `comment_delete.html`:
 
-``` html
+``` { .html }
 {% block content %}
     <form
         method="post"

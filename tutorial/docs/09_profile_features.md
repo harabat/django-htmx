@@ -6,7 +6,7 @@ It's time to allow users to view their own and other users' profiles.
 
 In `users/views.py`:
 
-``` python
+``` { .python }
 # other imports
 from django.views.generic import CreateView, DetailView
 
@@ -18,7 +18,7 @@ class ProfileDetailView(DetailView):
 
 In `users/urls.py`:
 
-``` python
+``` { .python }
 # other imports
 from .views import Login, Logout, SignUpView, ProfileDetailView
 
@@ -31,7 +31,7 @@ urlpatterns = [
 
 In the `templates` folder, create `profile_detail.html`:
 
-``` html
+``` { .html }
 {% extends 'base.html' %}
 {% block title %}
     <title>{{ profile.user.username }} - Conduit: Django + HTMX</title>
@@ -58,10 +58,7 @@ Everything should be working now, right? Let's check by going to
 error:
 
 <figure>
-<img src="./assets/profile_detail - error.png" width="600"
-alt="Figure 7: profile_detail - error" />
-<figcaption aria-hidden="true">Figure 7: profile_detail -
-error</figcaption>
+<img src="./assets/profile_detail - error.png" width="600" alt="profile_detail error" /><figcaption aria-hidden="true">profile_detail error</figcaption>
 </figure>
 
 The error tells us that our `ProfileDetailView` wants to be called with
@@ -72,7 +69,7 @@ which objects to show.
 We override the view's `get_object` method by adding the following to
 `users/views.py`:
 
-``` python
+``` { .python hl_lines="9-12" }
 # other imports
 from django.shortcuts import redirect, get_object_or_404
 
@@ -81,10 +78,10 @@ class ProfileDetailView(DetailView):
     model = Profile
     template_name = "profile_detail.html"
 
-    def get_object(self, queryset=None):
-        username = self.kwargs.get("username", None)
-        profile = get_object_or_404(User, username=username).profile
-        return profile
+    def get_object(self, queryset=None):                                  # new
+        username = self.kwargs.get("username", None)                    # new
+        profile = get_object_or_404(User, username=username).profile    # new
+        return profile                                                  # new
 ```
 
 Let's try again: we should see an actual profile page (though there
@@ -92,9 +89,7 @@ isn't much on it yet). Make sure to set a profile image for your `admin`
 user, as everyone else should have a default already set.
 
 <figure>
-<img src="./assets/profile_detail.png" width="600"
-alt="Figure 8: profile_detail" />
-<figcaption aria-hidden="true">Figure 8: profile_detail</figcaption>
+<img src="./assets/profile_detail.png" width="600" alt="A view of a profile, sans errors" /><figcaption aria-hidden="true">A view of a profile, sans errors</figcaption>
 </figure>
 
 ## Viewing Articles written by each User
@@ -106,7 +101,7 @@ the list to our `DetailView`'s context is simpler.
 In `users/views.py`, override the `get_context_data` method of
 `ProfileDetailView`:
 
-``` python
+``` { .python }
 # other views
 class ProfileDetailView(DetailView):
     # ...
@@ -128,7 +123,7 @@ dealing with logic in views makes for clearer code and easier debugging.
 Expose the `article_list.html` template in
 `templates/profile_detail.html`:
 
-``` html
+``` { .html hl_lines="18-33" }
 {% extends 'base.html' %}
 {% block title %}
     <title>{{ profile.user.username }} - Conduit: Django + HTMX</title>
@@ -173,15 +168,15 @@ usernames are exposed.
 
 In `templates/article_preview.html`, change the following lines:
 
-``` html
+``` { .html hl_lines="2-4, 6, 8" }
 <div class="article-meta">
-  <a href="{% url 'profile_detail' username=article.author.user.username %}">                    <!-- new -->
-    <img src="{{ article.author.image }}" alt="{{ article.author.user.username }}"/>           <!-- new -->
-  </a>                                                                                           <!-- new -->
+  <a href="{% url 'profile_detail' username=article.author.user.username %}">                   <!-- new -->
+    <img src="{{ article.author.image }}" alt="{{ article.author.user.username }}"/>            <!-- new -->
+  </a>                                                                                          <!-- new -->
   <div class="info">
-    <a href="{% url 'profile_detail' username=article.author.user.username %}" class="author"> <!-- from <span class="author"> -->
+    <a href="{% url 'profile_detail' username=article.author.user.username %}" class="author">  <!-- from <span class="author"> -->
         {{ article.author.user.username }}
-    </a>                                                                                       <!-- from </span> -->
+    </a>                                                                                        <!-- from </span> -->
     <span class="date">
       {{ article.created_at|date:"D M d Y" }}
     </span>
@@ -191,7 +186,7 @@ In `templates/article_preview.html`, change the following lines:
 
 In `templates/nav.html`:
 
-``` html
+``` { .html hl_lines="13-24" }
 {% if user.is_authenticated %}
   <li class="nav-item">
     {% url 'editor_create' as editor_create %}
@@ -226,7 +221,7 @@ In `templates/nav.html`:
 
 In `templates/article_detail.html`:
 
-``` html
+``` { .html hl_lines="2-4, 6, 8" }
 <div class="article-meta">
   <a href="{% url 'profile_detail' username=article.author.user.username %}">                  <!-- new -->
     <img src="{{ article.author.image }}" alt="{{ article.author.user.username }}"/>           <!-- new -->
@@ -243,20 +238,18 @@ In `templates/article_detail.html`:
 
 In `templates/comments.html`:
 
-``` html
+``` { .html hl_lines="2-5, 7" }
 <div class="card-footer">
   <a href="{% url 'profile_detail' username=comment.author.user.username %}" class="comment-author">            <!-- new -->
     <img src="{{ comment.author.image }}" class="comment-author-img" alt="{{ comment.author.user.username }}"/> <!-- new -->
   </a>                                                                                                          <!-- new -->
-  <a href="{% url 'profile_detail' username=comment.author.user.username %}" class="comment-author"> <!-- from <span class="comment-author"> -->
+  <a href="{% url 'profile_detail' username=comment.author.user.username %}" class="comment-author">            <!-- from <span class="comment-author"> -->
       {{ comment.author.user.username }}
-  </a>                                                                                               <!-- from </span>-->
+  </a>                                                                                                          <!-- from </span>-->
   <span class="date-posted">
     {{ comment.created_at|date:"D M d Y" }}
   </span>
   {% include 'comment_delete.html' %}
 </div>
 ```
-
-### <span class="todo TODO">TODO</span> replace `{% url 'profile_detail' username=... %}` with `{{ ...profile.get_absolute_url }}`
 

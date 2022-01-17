@@ -1,11 +1,12 @@
 # First views and templates
 
-## Model
+## Article model
 
-We'll start by making a model for our articles. The articles need a
-title, a body (the text), a description, an author, and a creation date.
+We'll start by making a model for our articles in `articles/models.py`.
+The articles need a title, a body (the text), a description, an author,
+and a creation date.
 
-``` python
+``` { .python }
 from django.db import models
 
 
@@ -34,7 +35,7 @@ articles through an `articles` attribute.
 
 Let's sync the database again:
 
-``` shell
+``` { .shell }
 (django) django_tutorial$ python manage.py makemigrations
 (django) django_tutorial$ python manage.py migrate
 ```
@@ -48,7 +49,7 @@ we will do so through Django admin.
 First, register the `Article` model in `articles/admin.py` by adding the
 following line:
 
-``` python
+``` { .python hl_lines="4" }
 from django.contrib import admin
 from .models import Article
 
@@ -67,7 +68,7 @@ We add the following line in `django_tutorial/conduit/urls.py`, so that
 the project-level `urls.py` is aware of the urls defined in
 `articles/urls.py`:
 
-``` python
+``` { .python hl_lines="6" }
 from django.contrib import admin
 from django.urls import path, include
 
@@ -80,7 +81,7 @@ urlpatterns = [
 Let's create a `urls.py` file in the `articles` folder, and add the
 following:
 
-``` python
+``` { .python }
 from django.urls import path
 from . import views
 
@@ -89,7 +90,7 @@ urlpatterns = [path("", Home.as_view(), name="home")]
 
 In `views.py`, we add the following:
 
-``` python
+``` { .python }
 from .models import Article
 
 
@@ -113,7 +114,7 @@ It's easier to have all templates in one place, instead of in each
 separate app, and the same is true for static files. Let's create the
 `templates` and `static` folders:
 
-``` shell
+``` { .shell }
 (django) conduit$ mkdir templates
 (django) conduit$ mkdir static
 ```
@@ -121,7 +122,8 @@ separate app, and the same is true for static files. Let's create the
 We need to modify `settings.py` so Django is aware of our project's
 architecture. Let's define the APPS_DIR below BASE_DIR first:
 
-``` python
+``` { .python }
+# ...
 BASE_DIR = Path(__file__).resolve().parent.parent
 APPS_DIR = BASE_DIR / "conduit"
 ```
@@ -129,14 +131,16 @@ APPS_DIR = BASE_DIR / "conduit"
 Let's change the `DIRS` line in the `TEMPLATES` section in `settings.py`
 like this:
 
-``` python
+``` { .python }
+# ...
 "DIRS": [APPS_DIR / "templates"], # changed from "DIRS": []
 ```
 
 Similarly, let's define the `STATIC_ROOT` directory below the `STATIC`
 line like this:
 
-``` python
+``` { .python }
+# ...
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [APPS_DIR / "static"]
@@ -146,13 +150,13 @@ STATICFILES_DIRS = [APPS_DIR / "static"]
 
 Let's create the base template now.
 
-``` shell
+``` { .shell }
 (django) conduit$ touch templates/base.html
 ```
 
 This template will contain the following:
 
-``` html
+``` { .html }
 <!doctype html>
 {% load static %}
 <html lang="en">
@@ -192,7 +196,7 @@ display our “global feed”.
 
 Let's create the template and add the following to it:
 
-``` html
+``` { .html }
 {% extends 'base.html' %}
 {% block content %}
   <div class="home-page">
@@ -248,17 +252,11 @@ classes: suffice it to say that this is required to have something that
 looks like the actual Realworld app.
 
 <figure>
-<img src="./assets/home - global feed.png" width="600"
-alt="Figure 1: home - global feed in our app" />
-<figcaption aria-hidden="true">Figure 1: home - global feed in our
-app</figcaption>
+<img src="./assets/home - global feed.png" width="600" alt="Global feed in our app" /><figcaption aria-hidden="true">Global feed in our app</figcaption>
 </figure>
 
 <figure>
-<img src="./assets/home - global feed - realworld.png" width="600"
-alt="Figure 2: home - global feed in the canonical RealWorld app" />
-<figcaption aria-hidden="true">Figure 2: home - global feed in the
-canonical RealWorld app</figcaption>
+<img src="./assets/home - global feed - realworld.png" width="600" alt="Global feed in the RealWorld app" /><figcaption aria-hidden="true">Global feed in the RealWorld app</figcaption>
 </figure>
 
 It's starting to look like something, but we can improve the template a
@@ -272,7 +270,7 @@ loop into the file `article_preview.html` (which we need to create).
 
 In `templates/home.html`, we change the following lines:
 
-``` html
+``` { .html hl_lines="4" }
 <div class="container page">
   <div class="row">
     <div class="col-md-9">
@@ -284,7 +282,7 @@ In `templates/home.html`, we change the following lines:
 
 Our `templates/article_list.html` file should look like this:
 
-``` html
+``` { .html hl_lines="9" }
 {% block content %}
   {% if articles|length_is:"0" %}
     <div class="article-preview">
@@ -302,7 +300,7 @@ Our `templates/article_list.html` file should look like this:
 
 The `templates/article_preview.html` file should look like this:
 
-``` html
+``` { .html }
 {% block content %}
   <div class="article-preview">
     <div class="article-meta">
@@ -337,9 +335,8 @@ authentication and profiles, the navbar will just contain a link to
 
 Let's add the following lines to `base.html`:
 
-``` html
+``` { .html hl_lines="2" }
 <body>
-    <!-- navbar -->                     <!-- new -->
     {% include 'nav.html' %}            <!-- new -->
     <main>
         {% block content %}
@@ -350,7 +347,7 @@ Let's add the following lines to `base.html`:
 Let's create `nav.html` in our `templates` folder and add the following
 to it:
 
-``` html
+``` { .html }
 <nav class="navbar navbar-light">
   <div class="container">
     <a rel="prefetch" class="navbar-brand" href="/">conduit</a>

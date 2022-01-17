@@ -6,7 +6,7 @@ We don't want to expose the `New post` link to unauthenticated users.
 
 In `nav.html`:
 
-``` html
+``` { .html hl_lines="16-56" }
 <nav class="navbar navbar-light">
   <div class="container">
     <a rel="prefetch" class="navbar-brand" href="/">conduit</a>
@@ -77,7 +77,7 @@ class-based views on the fly.
 
 In `articles/views.py`, add the following:
 
-``` python
+``` { .python }
 # other imports
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -100,7 +100,9 @@ avoid errors.
 
 If you try creating a post from the app, you should get this error:
 
-![](./assets/login - error.png)
+<figure>
+<img src="./assets/login - error.png" width="600" alt="Login error" /><figcaption aria-hidden="true">Login error</figcaption>
+</figure>
 
 The cause of the problem is given in the line:
 
@@ -110,7 +112,7 @@ By default, the login url in Django is `accounts/login`: while we
 changed our urls everywhere, the `LoginRequiredMixin` does not know
 that. To fix this, we need to add this line in `config/settings.py`:
 
-``` python
+``` { .python }
 LOGIN_URL = "login"
 ```
 
@@ -122,7 +124,8 @@ only be edited and deleted by their authors.
 In `templates/article_detail.html`, we hide the button for editing and
 deleting articles from any user who is not the article's author:
 
-``` html
+``` { .html hl_lines="2, 14" }
+<!-- ... -->
 {% if user == article.author.user %}                        <!-- new -->
   <span>
     <a
@@ -136,21 +139,24 @@ deleting articles from any user who is not the article's author:
     {% include 'article_delete.html' %}
   </span>
 {% endif %}                                                 <!-- new -->
+<!-- ... -->
 ```
 
-In `templates/comment_comments.html`:
+In `templates/comments.html`:
 
-``` html
-{% if user == comment.author.user %}
+``` { .html hl_lines="2, 4" }
+<!-- ... -->
+{% if user == comment.author.user %}    <!-- new -->
   {% include 'comment_delete.html' %}
-{% endif %}
+{% endif %}                             <!-- new -->
+<!-- ... -->
 ```
 
 In `users/views.py`, we make sure that editing or deleting actions are
 only taken into account if the user is the author of the article or
 comment:
 
-``` python
+``` { .python }
 # other imports
 from django.shortcuts import redirect
 
@@ -196,7 +202,7 @@ ups - but, in our case, we might as well sign in the user automatically.
 In `users/views.py`, add the following to `SignUpView` (as explained in
 [this StackOverflow answer](https://stackoverflow.com/a/70582911)):
 
-``` python
+``` { .python hl_lines="2-3, 12-27" }
 # other imports
 from django.shortcuts import redirect  # new
 from django.contrib.auth import authenticate, login  # new
