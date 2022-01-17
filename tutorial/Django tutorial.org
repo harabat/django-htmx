@@ -9,7 +9,7 @@
 
 * Django tutorial Readme
 ** Introduction
-We'll build the [[https://github.com/gothinkster/django-realworld-example-app.git][Thinkster's Django RealWorld Example App]] from the ground up. The app is called Conduit and is a Medium clone.
+We'll build the [[https://github.com/gothinkster/django-realworld-example-app.git][Thinkster's Django RealWorld Example App]] from the ground up, which you can see running at https://demo.realworld.io. The app is called Conduit and is a Medium clone.
 
 Instead of only building the backend in Django, we'll do both frontend and backend, to show that SSR is still going strong.
 
@@ -42,6 +42,9 @@ conda install django
 
 Now, you have a virtual environment with ~django~ installed.
 ** What we'll be doing
+First, we'll decide on a project and folder structure, to keep the project's complexity in check. We will then do the groundwork required by Django before we can get our app running online.
+
+We'll then dive into the tutorial proper: we'll  make models,
 * Creating a project
 ** Project layout
 We'll be following the folder structure presented as best practice in [[https://www.feldroy.com/books/two-scoops-of-django-3-x][Two Scoops of Django]] by Daniel and Audrey Feldroy, which will yield something like the following:
@@ -124,9 +127,6 @@ ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
 # from WSGI_APPLICATION = "conduit.wsgi.application"
 #+end_src
-** Database
-*** TODO PostgreSQL
-Following the arguments of [[https://htmx-django.com/blog/a-minimalistic-modern-django-boilerplate#docker][A Minimalistic Modern Django Boilerplate]]
 ** App folder structure
 Our app will have a lot of moving parts (articles, profiles, tags, etc.). To keep the structure of our app clear, we'll host the logic for each of these parts in separate folders.
 
@@ -283,7 +283,7 @@ Make the migrations and start the server:
 
 Our app, Conduit, is online!
 * First views and templates
-** Model
+** Article model
 We'll start by making a model for our articles.
 The articles need a title, a body (the text), a description, an author, and a creation date.
 
@@ -571,7 +571,6 @@ Let's add the following lines to ~base.html~:
 
 #+begin_src html
     <body>
-        <!-- navbar -->                     <!-- new -->
         {% include 'nav.html' %}            <!-- new -->
         <main>
             {% block content %}
@@ -599,7 +598,7 @@ Let's create ~nav.html~ in our ~templates~ folder and add the following to it:
   </div>
 </nav>
 #+end_src
-* Articles
+* Viewing articles
 ** Article view
 Next we'll implement the article view.
 
@@ -704,7 +703,6 @@ class Article(models.Model):
     # ...
     def get_absolute_url(self):
         return reverse("article_detail", kwargs={"slug": self.slug})    # new
-
 #+end_src
 
 After modifying the model, we need to sync the database, but this will return a warning.
@@ -828,8 +826,7 @@ When going back to http://localhost:8000/ (where your app is running), you will 
 #+CAPTION: article_detail - slug
 #+ATTR_HTML: :width 600
 [[./assets/article_detail - slug.png]]
-*** TODO add ~primary_key=True~ to ~uuid_field~, then add ~query_pk_and_slug=True~ in relevant views
-* Creating, editing, and deleting Articles
+* Creating, editing, and deleting articles
 We have implemented the features that allow to view articles, but we need to allow users to create, edit, and delete them as well. We'll first implement this functionality, and modify it later to take into account user authentication.
 ** Creating Articles
 Let's allow users to create articles.
@@ -2267,7 +2264,6 @@ In ~templates/comments.html~:
   {% include 'comment_delete.html' %}
 </div>
 #+end_src
-*** TODO replace ~{% url 'profile_detail' username=... %}~ with ~{{ ...profile.get_absolute_url }}~
 * Editing profiles
 ** Introduction
 We want to allow users to modify their profile information (image, bio) and user information (username, email, password) at the same place. That is, we want to allow users to update 2 models at the same URL. Surprisingly, this common use case is not straightforward to implement with Django, especially if we're trying to follow good practice and use class-based views. Take a break before continuing, as we're going to go into the weeds here.
@@ -2514,7 +2510,7 @@ We should add that all of this would have been much easier if we had a single mo
 Similarly, our task would have been simplified if ~User~ and ~Profile~ were related through a ~ForeignKey~ (as we could have used [[https://docs.djangoproject.com/en/4.0/topics/forms/modelforms/#inline-formsets][inline formsets]]), but that would have gone against common patterns in Django.
 * Follows
 ** Creating a few new users and articles
-To make the following sections more interesting, let's create a new users and posts. Run Django shell with src_shell{(django) django_tutorial$ python manage.py shell} and then paste the following into your shell (no need to clean it):
+To make the following sections more interesting, let's create a new users and posts. Run Django shell with ~(django) django_tutorial$ python manage.py shell~ and then paste the following into your shell (no need to clean it):
 
 #+begin_src python
 In [1]: from conduit.users.models import Profile, User
@@ -2620,10 +2616,9 @@ urlpatterns = [
         name="profile_follow",
     ),
 ]
-
 #+end_src
 
-Let's implement the follow functionality in ~templates/profile_detail.html~ now:
+Let's implement the ~follow~ functionality in ~templates/profile_detail.html~ now:
 
 #+begin_src html
 <div class="col-xs-12 col-md-10 offset-md-1">
@@ -3031,7 +3026,6 @@ In ~templates/article_favorite.html~
 #+CAPTION: favorite - after
 #+ATTR_HTML: :width 600
 [[./assets/home - favorite.png]]
-*** TODO ArticleFavoriteView success_url
 ** Feeds
 Now, we need to do something with this ~Favorite~ feature: we'll display a user's favorited articles on their profile.
 
@@ -3234,6 +3228,12 @@ urlpatterns = [
 #+end_src
 
 * Observations                        :noexport:
+** TODO PostgreSQL
+Following the arguments of [[https://htmx-django.com/blog/a-minimalistic-modern-django-boilerplate#docker][A Minimalistic Modern Django Boilerplate]]
+** TODO add ~primary_key=True~ to ~uuid_field~ in /Articles/Slugs/, then add ~query_pk_and_slug=True~ in relevant views
+** TODO replace ~{% url 'profile_detail' username=... %}~ with ~{{ ...profile.get_absolute_url }}~
+** TODO implement ~hl_lines~
+***  w
 ** TODO class:active
 *** [[https://stackoverflow.com/questions/340888/navigation-in-django/341748#341748][Navigation in django - Stack Overflow]]
 *** [[https://stackoverflow.com/questions/340888/navigation-in-django/477719#477719][Navigation in django - Stack Overflow]]
