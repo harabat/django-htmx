@@ -3,10 +3,11 @@
 ## Creating a few new users and articles
 
 To make the following sections more interesting, let's create a new
-users and posts. Run Django shell with and then paste the following into
-your shell (no need to clean it):
+users and posts. Run Django shell with
+`(django) django_tutorial$ python manage.py shell` and then paste the
+following into your shell (no need to clean it):
 
-``` python
+``` { .python }
 In [1]: from conduit.users.models import Profile, User
 In [2]: from conduit.articles.models import Article
 In [3]: from faker import Faker
@@ -42,7 +43,7 @@ relationship.
 
 We need a new field in our `Profile` model in `users/models.py`:
 
-``` python
+``` { .python }
 # other models
 class Profile(models.Model):
     # ...
@@ -62,7 +63,7 @@ follows User B that User B necessarily follows User A).
 We also need to define a few methods that will be helpful later on. In
 `users/models.py`:
 
-``` python
+``` { .python }
 class Profile(models.Model):
     # ...
     def follow(self, profile):
@@ -80,7 +81,7 @@ class Profile(models.Model):
 
 Let's `makemigrations` and `migrate`, since we have modified the model.
 
-``` shell
+``` { .shell }
 (django) django_tutorial$ python manage.py makemigrations
 # ...
 (django) django_tutorial$ python manage.py migrate
@@ -100,7 +101,7 @@ In `users/views.py`, we add `is_following` to the context of
 `ProfileDetailView` to enable our template to know whether the
 authenticated user follows a given profile:
 
-``` python
+``` { .python hl_lines="7" }
 class ProfileDetailView(DetailView):
     # ...
     def get_context_data(self, **kwargs):
@@ -117,7 +118,7 @@ is followed already.
 
 In `users/urls.py`:
 
-``` python
+``` { .python }
 # other imports
 from .views import (
     # ...
@@ -135,10 +136,10 @@ urlpatterns = [
 ]
 ```
 
-Let's implement the follow functionality in
+Let's implement the `follow` functionality in
 `templates/profile_detail.html` now:
 
-``` html
+``` { .html hl_lines="14-15" }
 <div class="col-xs-12 col-md-10 offset-md-1">
   <img src="{{ profile.image }}" class="user-img" alt="{{ profile.user.username }}" />
   <h4>{{ profile.user.username }}</h4>
@@ -158,9 +159,9 @@ Let's implement the follow functionality in
 </div>
 ```
 
-In `templates/profile_follow.html`:
+Create `templates/profile_follow.html`:
 
-``` html
+``` { .html }
 <form
   method="post"
   action="{% url 'profile_follow' username=profile.user.username %}"
@@ -196,7 +197,7 @@ We also expose the follow/unfollow feature on article pages.
 
 In `articles/views.py`:
 
-``` python
+``` { .python }
 class ArticleDetailView(DetailView):
     # ...
     def get_context_data(self, **kwargs):
@@ -211,7 +212,7 @@ class ArticleDetailView(DetailView):
 
 In `templates/article_detail.html`:
 
-``` html
+``` { .html hl_lines="13-16" }
 {% if user == article.author.user %}
   <span>
     <a
@@ -224,16 +225,16 @@ In `templates/article_detail.html`:
     </a>
     {% include 'article_delete.html' %}
   </span>
-{% else %}
-  <span>
-    {% include 'profile_follow.html' with profile=article.author %}
-  </span>
+{% else %}                                                          <!-- new -->
+  <span>                                                            <!-- new -->
+    {% include 'profile_follow.html' with profile=article.author %} <!-- new -->
+  </span>                                                           <!-- new -->
 {% endif %}
 ```
 
 In `templates/profile_follow.html`, we add `style="display:inline"`:
 
-``` html
+``` { .html }
 <form
     method="post"
     action="{% url 'profile_follow' username=profile.user.username %}"
@@ -264,9 +265,9 @@ redirect URL in our `ProfileFollowView`.
 However, it would be better if we could stay on whatever page we are
 when we follow a user. This involves implementing the `next` kwarg.
 
-In `profile_follow.html`:
+In `templates/profile_follow.html`:
 
-``` html
+``` { .html hl_lines="6" }
 <form
     method="post"
     action="{% url 'profile_follow' username=profile.user.username %}"
@@ -291,9 +292,9 @@ In `profile_follow.html`:
 The `next` parameter above just holds the URL that the `profile_follow`
 URL pattern was called from.
 
-In `ProfileFollowView`:
+In `users/views.py`:
 
-``` python
+``` { .python }
 class ProfileFollowView(LoginRequiredMixin, RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         url = self.request.POST.get("next", None)
@@ -318,28 +319,28 @@ We need to go back all the way to the beginning for this one.
 In `articles/views.py`, we need to modify our very first view, `home`,
 so that it can give us a feed of articles written by users we follow:
 
-``` python
+``` { .python hl_lines="6-11" }
 class Home(TemplateView):
     # ...
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["global_feed"] = Article.objects.order_by("-created_at")
-        if self.request.user.is_authenticated:
+        if self.request.user.is_authenticated:                      # new from here
             context["your_articles"] = Article.objects.filter(
                 author__in=self.request.user.profile.follows.all()
             ).order_by("-created_at")
         else:
-            context["your_articles"] = None
+            context["your_articles"] = None                         # new to here
         return context
 ```
 
 In `templates/home.html`:
 
-``` html
+``` { .html hl_lines="4-44" }
 <div class="container page">
   <div class="row">
     <div class="col-md-9">
-      <div class="feed-toggle">
+      <div class="feed-toggle">                 <!-- new from here-->
         <ul class="nav nav-pills outline-active">
           <li class="nav-item">
             {% url 'home' as home %}
@@ -377,7 +378,7 @@ In `templates/home.html`:
         {% include 'article_list.html' with articles=your_articles %}
       {% elif request.path == home_feed %}
         {% include 'article_list.html' with articles=global_feed %}
-      {% endif %}
+      {% endif %}                               <!-- new to here -->
     </div>
   </div>
 </div>
@@ -385,7 +386,7 @@ In `templates/home.html`:
 
 In `articles/urls.py`:
 
-``` python
+``` { .python }
 urlpatterns = [
     # ...
     path("feed", Home.as_view(), name="home_feed"),

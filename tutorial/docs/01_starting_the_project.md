@@ -1,67 +1,94 @@
-# Creating a project
+# Starting the project
+
+## Virtual environment
+
+Let's start this tutorial in earnest.
+
+Before doing anything else, we need to create our virtual environment.
+
+We're working with `conda`
+([tutorial](https://docs.conda.io/en/latest/miniconda.html)), but you
+can work with `virtualenv`
+([tutorial](https://realpython.com/python-virtual-environments-a-primer/)).
+
+``` { .shell }
+conda create --name django
+conda activate django
+conda install django
+```
+
+Now, you have a virtual environment with `django` installed.
 
 ## Project layout
 
-We'll be following the folder structure presented as best practice in
-[Two Scoops of
+We'll be following a simplified version of the folder structure
+described in the excellent [Two Scoops of
 Django](https://www.feldroy.com/books/two-scoops-of-django-3-x) by
-Daniel and Audrey Feldroy, which will yield something like the
-following:
+Daniel and Audrey Feldroy (highly recommended if you want to know what
+constitutes best practice in Django).
 
-    folder_name
-    ├── config/
-    │   ├── __init__.py
-    │   ├── asgi.py
-    │   ├── settings/
-    │   ├── urls.py
-    │   └── wsgi.py
-    ├── project_name/
-    │   ├── app_1/
-    │   ├── app_2/
-    │   ├── static/
-    │   └── templates/
-    ├── .gitignore
-    ├── manage.py
-    └── db.sqlite3
+Our folder structure will look something like the following:
+
+``` { .shell }
+folder_name
+├── config/
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings/
+│   ├── urls.py
+│   └── wsgi.py
+├── project_name/
+│   ├── app_1/
+│   ├── app_2/
+│   ├── static/
+│   └── templates/
+├── .gitignore
+├── manage.py
+└── db.sqlite3
+```
 
 Let's create a folder for our project: we'll name it `django_tutorial`.
 
-``` shell
+``` { .shell }
 (django) ~$ mkdir conduit
 ```
 
 We now create our project, `conduit`:
 
-``` shell
+``` { .shell }
 (django) ~$ cd conduit
 (django) django_tutorial$ django-admin startproject conduit .
 ```
 
 Our folder structure should look like this at this point:
 
-    django_tutorial
-    ├── conduit
-    │   ├── asgi.py
-    │   ├── __init__.py
-    │   ├── settings.py
-    │   ├── urls.py
-    │   └── wsgi.py
-    ├── db.sqlite3
-    └── manage.py
+```
+django_tutorial
+├── conduit
+│   ├── asgi.py
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── db.sqlite3
+└── manage.py
+```
 
 We'll move all the files in the `conduit` folder into the
 `django_tutorial/config` folder, as we explained above. The project
 layout should now be:
 
-    .
-    ├── conduit
-    │── config
-    │   ├── asgi.py
-    │   ├── __init__.py
-    │   ├── settings.py
-    │   ├── urls.py
-    │   └── wsgi.py
-    └── manage.py
+```
+.
+├── conduit
+│── config
+│   ├── asgi.py
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── manage.py
+```
 
 Because we're deviating from Django's generic project layout, we'll have
 to update some lines.
@@ -73,27 +100,20 @@ config from the code, which is a good rule of thumb.
 
 In `asgi.py` and `wsgi.py`:
 
-``` python
+``` { .python }
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 # from os.environ.setdefault("DJANGO_SETTINGS_MODULE", "conduit.settings")
 ```
 
 In `settings.py`:
 
-``` python
+``` { .python }
 ROOT_URLCONF = "config.urls"
 # from ROOT_URLCONF = "conduit.urls"
 
 WSGI_APPLICATION = "config.wsgi.application"
 # from WSGI_APPLICATION = "conduit.wsgi.application"
 ```
-
-## Database
-
-### <span class="todo TODO">TODO</span> PostgreSQL
-
-Following the arguments of [A Minimalistic Modern Django
-Boilerplate](https://htmx-django.com/blog/a-minimalistic-modern-django-boilerplate#docker)
 
 ## App folder structure
 
@@ -106,7 +126,7 @@ should have is the ability to post and read articles. Let's start with
 that (you'll notice that this part is basically a repeat of Django Girls
 tutorial's blog app).
 
-``` shell
+``` { .shell }
 (django) django_tutorial$ cd conduit
 (django) conduit$ django-admin startapp articles
 (django) conduit$ cd articles
@@ -114,7 +134,7 @@ tutorial's blog app).
 
 Our folder structure now looks like this:
 
-``` shell
+``` { .shell }
 django_tutorial
 ├── conduit
 │   ├── articles
@@ -139,19 +159,19 @@ django_tutorial
 We change the `name` line in the file `apps.py` in the `articles`
 folder:
 
-``` python
+``` { .python hl_lines="6" }
 from django.apps import AppConfig
 
 
 class ArticlesConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'conduit.articles'
+    name = 'conduit.articles'               # new
 ```
 
 We also add the line `'conduit.articles',` to INSTALLED_APPS in
 `settings.py`:
 
-``` python
+``` { .python hl_lines="9" }
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -179,25 +199,25 @@ migrations.*”. Scary stuff. Let's just follow the advice.
 First, we need to create the app where we'll do everything that has to
 do with users.
 
-``` shell
+``` { .shell }
 (django) conduit$ django-admin startapp users
 ```
 
-We then change the `name` line in the file `apps.py` in the `articles`
+We then change the `name` line in the file `apps.py` in the `articles/`
 folder:
 
-``` python
+``` { .python hl_lines="6" }
 from django.apps import AppConfig
 
 
 class UsersConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'conduit.users'
+    name = 'conduit.users'                  # new
 ```
 
 Now, in `users/models.py`, add the following:
 
-``` python
+``` { .python }
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -213,10 +233,10 @@ is. This way, we can add any modifications we need later on.
 
 In `users/models.py` we also need to create a `Profile` model: we'll
 explain it in more detail later, but suffice it to say that the
-`Profile` will deal with the everything about our users that is not
+`Profile` will deal with everything about our users that is not
 authentication (logging in and out).
 
-``` python
+``` { .python }
 class Profile(models.Model):
     """Profile model"""
 
@@ -226,7 +246,7 @@ class Profile(models.Model):
 Now, create a superuser in the terminal, so as to be able to access
 Django's admin app later on:
 
-``` shell
+``` { .shell }
 (django) django_tutorial$ python manage.py createsuperuser
 ```
 
@@ -235,11 +255,13 @@ why (detailed explanations will be provided in a later section,
 promise): in your terminal, in the `django_tutorial` folder, run the
 following commands:
 
-    (django) django_tutorial$ python manage.py shell
+```
+(django) django_tutorial$ python manage.py shell
+```
 
 And once you're in the IPython shell:
 
-``` python
+``` { .python }
 Python 3.9.7 | packaged by conda-forge | (default, Sep 29 2021, 19:20:46)
 Type 'copyright', 'credits' or 'license' for more information
 IPython 7.30.1 -- An enhanced Interactive Python. Type '?' for help.
@@ -255,25 +277,25 @@ Finally, we need to tell Django that we're not using the default User
 model. In `settings.py`, add your `users` app to `INSTALLED_APPS` and
 point `AUTH_USER_MODEL` to it:
 
-``` python
+``` { .python hl_lines="4, 7" }
 # other settings
-
 INSTALLED_APPS = [
     # other apps
-    'conduit.users'                  # new
+    'conduit.users'
 ]
 
-AUTH_USER_MODEL = 'users.User'    # new
+AUTH_USER_MODEL = 'users.User'
 ```
 
 ## Create a database
 
 Make the migrations and start the server:
 
-``` shell
+``` { .shell }
 (django) django_tutorial$ python manage.py makemigrations
 (django) django_tutorial$ python manage.py migrate
 (django) django_tutorial$ python manage.py runserver
 ```
 
 Our app, Conduit, is online!
+

@@ -20,7 +20,7 @@ The solution is to tell our `UpdateView` to deal with two forms.
 
 Let's create `users/forms.py` and define two forms, one for each model:
 
-``` python
+``` { .python }
 from django import forms
 from .models import Profile, User
 
@@ -64,17 +64,11 @@ though the characters themselves are masked, while the screenshot on the
 right exposes no information about the password.
 
 <figure>
-<img src="./assets/settings - password field.png" width="200"
-alt="Figure 9: settings - password field with masked characters" />
-<figcaption aria-hidden="true">Figure 9: settings - password field with
-masked characters</figcaption>
+<img src="./assets/settings - password field.png" width="200" alt="Password field with masked characters" /><figcaption aria-hidden="true">Password field with masked characters</figcaption>
 </figure>
 
 <figure>
-<img src="./assets/settings.png" width="200"
-alt="Figure 10: settings - empty password field" />
-<figcaption aria-hidden="true">Figure 10: settings - empty password
-field</figcaption>
+<img src="./assets/settings.png" width="200" alt="Empty password field" /><figcaption aria-hidden="true">Empty password field</figcaption>
 </figure>
 
 We want the password field in our future template to be empty, and we
@@ -96,7 +90,7 @@ hashing.
 Now that our forms are ready, let's create the view. As we said earlier,
 the intuitive choice here is the generic `UpdateView` class-based view.
 
-``` python
+``` { .python }
 # other imports
 from django.views.generic import CreateView, DetailView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -155,7 +149,7 @@ re-render everything with relevant error information).
 
 In `templates/settings.html`:
 
-``` html
+``` { .html }
 {% extends 'base.html' %}
 {% block title %}
   <title>Settings - Conduit</title>
@@ -244,7 +238,7 @@ and in each individual profile.
 
 In `users/urls.py`:
 
-``` python
+``` { .python }
 # other imports
 from .views import Login, Logout, SignUpView, ProfileDetailView, ProfileUpdateView
 
@@ -257,7 +251,7 @@ urlpatterns = [
 
 In `templates/nav.html`:
 
-``` html
+``` { .html }
 <li class="nav-item">
   <a rel="prefetch" href="{% url 'editor_create' %}" class="nav-link">
     <span class="ion-compose"> New Post </span>
@@ -284,7 +278,7 @@ In `templates/nav.html`:
 
 In `templates/profile_detail.html`:
 
-``` html
+``` { .html hl_lines="5-14" }
 <div class="col-xs-12 col-md-10 offset-md-1">
   <img src="{{ profile.image }}" class="user-img" alt="{{ profile.user.username }}" />
   <h4>{{ profile.user.username }}</h4>
@@ -310,3 +304,4 @@ have been simplified if `User` and `Profile` were related through a
 `ForeignKey` (as we could have used [inline
 formsets](https://docs.djangoproject.com/en/4.0/topics/forms/modelforms/#inline-formsets)),
 but that would have gone against common patterns in Django.
+

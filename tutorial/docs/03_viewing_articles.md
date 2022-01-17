@@ -1,4 +1,4 @@
-# Articles
+# Viewing Articles
 
 ## Article view
 
@@ -11,7 +11,7 @@ to *Two Scoops of Django*, and simplify a lot of work.
 
 First, we create a view in `views.py`:
 
-``` python
+``` { .python }
 from django.views.generic import TemplateView, DetailView
 
 
@@ -24,7 +24,7 @@ class ArticleDetailView(DetailView):
 
 Then, we modify the `articles/urls.py` file:
 
-``` python
+``` { .python }
 from .views import Home, ArticleDetailView
 
 urlpatterns = [
@@ -38,7 +38,7 @@ urlpatterns = [
 Now, we create the `article_detail.html` file in our `templates` folder
 and add the following to it:
 
-``` html
+``` { .html }
 {% extends 'base.html' %}
 {% block title %}
     <title>{{ article.title }} - Conduit: Django + HTMX</title>
@@ -76,29 +76,24 @@ and add the following to it:
 Finally, we modify `home.html` so that article previews redirect to
 articles:
 
-``` html
-...
+``` { .html hl_lines="2, 7" }
+<!-- ... -->
 <a href="{{ article.get_absolute_url }}" rel="prefetch" class="preview-link">   <!-- new -->
    <h1>{{ article.title }}</h1>
    <p>{{ article.description }}</p>
    <span>Read more...</span>
 </a>                                                                            <!-- new -->
-...
+<!-- ... -->
 ```
 
 Let's see what it looks like:
 
 <figure>
-<img src="./assets/article_detail.png" width="600"
-alt="Figure 3: article_detail" />
-<figcaption aria-hidden="true">Figure 3: article_detail</figcaption>
+<img src="./assets/article_detail.png" width="600" alt="Individual article in our app" /><figcaption aria-hidden="true">Individual article in our app</figcaption>
 </figure>
 
 <figure>
-<img src="./assets/article_detail - realworld.png" width="600"
-alt="Figure 4: article_detail - canonical RealWorld app" />
-<figcaption aria-hidden="true">Figure 4: article_detail - canonical
-RealWorld app</figcaption>
+<img src="./assets/article_detail - realworld.png" width="600" alt="Individual article in RealWorld app" /><figcaption aria-hidden="true">Individual article in RealWorld app</figcaption>
 </figure>
 
 ## Slugs
@@ -115,7 +110,7 @@ problem is to combine slugs with UUIDs.
 First, we need to modify our `Article` model to include a slug, and to
 update the `get_absolute_url` method:
 
-``` python
+``` { .python hl_lines="3, 4, 8" }
 class Article(models.Model):
     # ...
     slug = models.SlugField(max_length=255, editable=False)             # new
@@ -129,7 +124,7 @@ class Article(models.Model):
 After modifying the model, we need to sync the database, but this will
 return a warning.
 
-``` shell
+``` { .shell }
 (django) django_tutorial$ python manage.py makemigrations
 You are trying to add a non-nullable field 'slug' to article without a default; we can't do that (the database needs something to populate existing rows).
 Please select a fix:
@@ -143,7 +138,7 @@ select `2` to abort and add the `null=True` arg to the slug field, so as
 to be able to migrate and then modify the slug manually through the
 Django admin app:
 
-``` python
+``` { .python hl_lines="3" }
 class Article(models.Model):
     # ...
     slug = models.SlugField(max_length=100, null=True)
@@ -154,7 +149,7 @@ We then run `makemigrations` and `migrate`, then set a unique slug for
 each `Article` through the Django admin app manually. Once we're done,
 we remove the `null=True` arg and add the `editable=False` arg:
 
-``` python
+``` { .python hl_lines="3" }
 class Article(models.Model):
     # ...
     slug = models.SlugField(max_length=255, editable=False)             # new
@@ -163,13 +158,15 @@ class Article(models.Model):
 
 When we migrate, we get a warning:
 
-    (django) django_tutorial$ python manage.py makemigrations
-    You are trying to change the nullable field 'slug' on article to non-nullable without a default; we can't do that (the database needs something to populate existing rows).
-    Please select a fix:
-     1) Provide a one-off default now (will be set on all existing rows with a null value for this column)
-     2) Ignore for now, and let me handle existing rows with NULL myself (e.g. because you added a RunPython or RunSQL operation to handle NULL values in a previous data migration)
-     3) Quit, and let me add a default in models.py
-    Select an option:
+```
+(django) django_tutorial$ python manage.py makemigrations
+You are trying to change the nullable field 'slug' on article to non-nullable without a default; we can't do that (the database needs something to populate existing rows).
+Please select a fix:
+ 1) Provide a one-off default now (will be set on all existing rows with a null value for this column)
+ 2) Ignore for now, and let me handle existing rows with NULL myself (e.g. because you added a RunPython or RunSQL operation to handle NULL values in a previous data migration)
+ 3) Quit, and let me add a default in models.py
+Select an option:
+```
 
 You can safely select `2`, as we already have taken care of the slug
 fields through the Django admin app.
@@ -183,7 +180,7 @@ an Article is saved.
 Let's create a `utils.py` file in the `conduit` folder and add the
 following methods to it:
 
-``` python
+``` { .python }
 from django.utils.text import slugify
 import uuid
 
@@ -219,7 +216,7 @@ practice](https://teddit.ggc-project.de/r/django/comments/p3pgr/overriding_save_
 We create a `signals.py` file in the `articles` folder and add the
 following method to it:
 
-``` python
+``` { .python }
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from .models import Article
@@ -233,19 +230,21 @@ def pre_save_receiver(sender, instance, *args, **kwargs):
 
 In order to activate this signal, we will modify `articles/apps.py`:
 
-    from django.apps import AppConfig
+``` { .python hl_lines="8-9" }
+from django.apps import AppConfig
 
 
-    class ArticlesConfig(AppConfig):
-        default_auto_field = "django.db.models.BigAutoField"
-        name = "conduit.articles"
+class ArticlesConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "conduit.articles"
 
-        def ready(self):                                # new
-            import conduit.articles.signals             # new
+    def ready(self):                                # new
+        import conduit.articles.signals             # new
+```
 
 Let's also change our `urlpatterns` in `articles/urls.py`:
 
-``` python
+``` { .python }
 # other imports
 from .views import Home, ArticleDetailView
 
@@ -262,11 +261,6 @@ you will see that your new article has a slug consisting of its
 slugified title and a UUID:
 
 <figure>
-<img src="./assets/article_detail - slug.png" width="600"
-alt="Figure 5: article_detail - slug" />
-<figcaption aria-hidden="true">Figure 5: article_detail -
-slug</figcaption>
+<img src="./assets/article_detail - slug.png" width="600" alt="Slugs" /><figcaption aria-hidden="true">Slugs</figcaption>
 </figure>
-
-### <span class="todo TODO">TODO</span> add `primary_key=True` to `uuid_field`, then add `query_pk_and_slug=True` in relevant views
 

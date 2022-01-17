@@ -26,7 +26,7 @@ The `User` model will contain everything related to authentication.
 We need an email, a username, and a password. Let's add the following to
 the `User` model in `users/models.py`:
 
-``` python
+``` { .python }
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -60,7 +60,7 @@ We also need a `UserManager`, [as advised by the
 docs](https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#writing-a-manager-for-a-custom-user-model).
 In `models.py`, we add the following, BEFORE we define our `User` model:
 
-``` python
+``` { .python }
 # other imports
 from django.contrib.auth.models import AbstractUser, UserManager
 
@@ -101,7 +101,7 @@ We now need to go back to the `User` model in `users/models.py` and
 indicate to Django that the `UserManager` defined above will manage
 objects of type `User`:
 
-``` python
+``` { .python hl_lines="11" }
 # other
 class User(AbstractUser):
     """User model"""
@@ -126,7 +126,7 @@ your new model.
 We need to register this new `User` model in `users/admins.py`, to have
 access to it in our admin app.
 
-``` python
+``` { .python }
 from django.contrib import admin
 from .models import User
 
@@ -160,7 +160,7 @@ We will allow users to specify a URL to their avatar and to write a
 short bio. This is optional, so we make sure to have `blank=True`. Let's
 add the following to the `Profile` model in `users/models.py`:
 
-``` python
+``` { .python }
 class Profile(models.Model):
     """Profile model"""
 
@@ -187,7 +187,7 @@ Let's follow the docs linked above and code up a signal that creates a
 
 Create a `signals.py` file in the `users` folder and add the following:
 
-``` python
+``` { .python }
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import User, Profile
@@ -206,7 +206,7 @@ def save_profile_for_user(sender, instance, **kwargs):
 
 In order to activate this signal, we will modify `users/apps.py`:
 
-``` python
+``` { .python hl_lines="8-9" }
 from django.apps import AppConfig
 
 
@@ -228,7 +228,7 @@ We need to register this new `Profile` model in `users/admins.py`, to
 have access to it in our admin app, but we want to be able to view
 `User` and `Profile` information for a given user in the same place.
 
-``` python
+``` { .python }
 from django.contrib import admin
 from .models import User, Profile
 

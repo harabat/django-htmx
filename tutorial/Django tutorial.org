@@ -6,19 +6,21 @@
 #+OPTIONS:  author:nil brokenlinks:mark d:nil prop:nil toc:2
 #+PANDOC_OPTIONS: filter:/home/warehouse/.pandoc/filters/keep_attributes_markdown.py
 #+EXPORT_FILE_NAME: docs/readme.md
-#+title: Django tutorial
+#+title: Django + HTMX tutorial
 
-* Django tutorial Readme
+* Readme
 ** Introduction
-We'll build the [[https://github.com/gothinkster/django-realworld-example-app.git][Thinkster's Django RealWorld Example App]] from the ground up, which you can see running at https://demo.realworld.io. The app is called Conduit and is a Medium clone.
+We'll build the [[https://github.com/gothinkster/realworld/][Thinkster's RealWorld Example App]] from the ground up. The app is called Conduit and is a Medium clone: you can see it running at https://demo.realworld.io.
 
-Instead of only building the backend in Django, we'll do both frontend and backend, to show that SSR is still going strong.
+#+CAPTION: The RealWorld app, in all its glory
+#+ATTR_HTML: :width 600
+[[./assets/Conduit - RealWorld.png]]
 
-We'll be following a simplified version of the [[https://github.com/cookiecutter/cookiecutter-django/][cookiecutter/cookiecutter-django]] architecture (made famous by the excellent book [[https://www.feldroy.com/books/two-scoops-of-django-3-x][Two Scoops of Django 3.x]]), but you don't need to have read it to follow.
+Instead of building the backend in Django and doing the frontend with a JavaScript framework (like React or Vue), we'll do both frontend and backend in Django (with some help from HTMX), to show that server-side rendering is still going strong.
 ** Pre-requisites
 - [[https://github.com/DjangoGirls/tutorial][DjangoGirls tutorial]]
 
-  You should have followed the [[https://github.com/DjangoGirls/tutorial][DjangoGirls tutorial]] before starting this one: it is excellent for getting you up to speed, and covers most of the introductory material you'll need, like HTML, CSS, and, of course, Django. We'll assume you have completed that tutorial and won't go into the specifics of anything that has already been covered there.
+  You should have followed the [[https://github.com/DjangoGirls/tutorial][DjangoGirls tutorial]] before starting this one: it is great for getting you up to speed, and covers most of the introductory material you'll need, like HTML, CSS, and, of course, Django. We'll assume you have completed that tutorial and won't go into the specifics of anything that has already been covered there.
 - Python 3.9
 - Django 3.2 (or higher)
 - [[https://docs.conda.io/en/latest/miniconda.html][conda]] or [[https://virtualenv.pypa.io/][virtualenv]] for virtual environments
@@ -28,6 +30,19 @@ We'll be following a simplified version of the [[https://github.com/cookiecutter
     We assume that you know the basics of git. You should ~git commit~ at the end of every chapter.
 
   + [[https://github.com/joke2k/faker][faker]], to avoid creating fake users, articles, etc. manually
+** What we'll be doing
+First, we'll decide on a project and folder structure, to keep the project's complexity in check. We will then do the groundwork required by Django before we can get our app running online.
+
+We'll then dive into the tutorial proper: we'll make our first models, views, templates. We'll also create some articles through the Django admin app to have something nice to look at.
+
+We'll then spend some time on implementing features for viewing, creating, editing, and deleting articles.
+
+We'll do the same for comments.
+
+After that, we'll spend a while on authentication and profile features (which includes follows, favorites, and tags).
+
+Finally, we'll implement HTMX.
+* Starting the project
 ** Virtual environment
 Let's start this tutorial in earnest.
 
@@ -42,15 +57,12 @@ conda install django
 #+end_src
 
 Now, you have a virtual environment with ~django~ installed.
-** What we'll be doing
-First, we'll decide on a project and folder structure, to keep the project's complexity in check. We will then do the groundwork required by Django before we can get our app running online.
-
-We'll then dive into the tutorial proper: we'll  make models,
-* Creating a project
 ** Project layout
-We'll be following the folder structure presented as best practice in [[https://www.feldroy.com/books/two-scoops-of-django-3-x][Two Scoops of Django]] by Daniel and Audrey Feldroy, which will yield something like the following:
+We'll be following a simplified version of the folder structure described in the excellent [[https://www.feldroy.com/books/two-scoops-of-django-3-x][Two Scoops of Django]] by Daniel and Audrey Feldroy (highly recommended if you want to know what constitutes best practice in Django).
 
-#+begin_src
+Our folder structure will look something like the following:
+
+#+begin_src shell
 folder_name
 ├── config/
 │   ├── __init__.py
@@ -166,18 +178,18 @@ django_tutorial
 
 We change the ~name~ line in the file ~apps.py~ in the ~articles~ folder:
 
-#+begin_src python
+#+begin_src python :hl_lines "6"
 from django.apps import AppConfig
 
 
 class ArticlesConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'conduit.articles'
+    name = 'conduit.articles'               # new
 #+end_src
 
 We also add the line ~'conduit.articles',~ to INSTALLED_APPS in ~settings.py~:
 
-#+begin_src python
+#+begin_src python :hl_lines "9"
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -198,15 +210,15 @@ First, we need to create the app where we'll do everything that has to do with u
 (django) conduit$ django-admin startapp users
 #+end_src
 
-We then change the ~name~ line in the file ~apps.py~ in the ~articles~ folder:
+We then change the ~name~ line in the file ~apps.py~ in the ~articles/~ folder:
 
-#+begin_src python
+#+begin_src python :hl_lines "6"
 from django.apps import AppConfig
 
 
 class UsersConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'conduit.users'
+    name = 'conduit.users'                  # new
 #+end_src
 
 Now, in ~users/models.py~, add the following:
@@ -226,7 +238,7 @@ What we're doing here is take the ~AbstractUser~ model and save it as is. This w
 
 # You'll notice that we didn't take the ~AbstractUser~ model, as explained in the docs. The reason is that the default Django User model (the one we'd be subclassing with ~AbstractUser~) has fields that we don't need (~field_name~, ~last_name~), etc., while ~AbstractBaseUser~ is a clean slate.
 
-In ~users/models.py~ we also need to create a ~Profile~ model: we'll explain it in more detail later, but suffice it to say that the ~Profile~ will deal with the everything about our users that is not authentication (logging in and out).
+In ~users/models.py~ we also need to create a ~Profile~ model: we'll explain it in more detail later, but suffice it to say that the ~Profile~ will deal with everything about our users that is not authentication (logging in and out).
 
 #+begin_src python
 class Profile(models.Model):
@@ -263,16 +275,18 @@ In [3]: user.profile = Profile.objects.create(user=user)
 
 Finally, we need to tell Django that we're not using the default User model. In ~settings.py~, add your ~users~ app to ~INSTALLED_APPS~ and point ~AUTH_USER_MODEL~ to it:
 
-#+begin_src python
+#+begin_src python :hl_lines "4, 7"
 # other settings
-
 INSTALLED_APPS = [
     # other apps
-    'conduit.users'                  # new
+    'conduit.users'
 ]
 
-AUTH_USER_MODEL = 'users.User'    # new
+AUTH_USER_MODEL = 'users.User'
 #+end_src
+** Why no REST?                   :noexport:
+We can implement the whole app without building a REST API, so we won't.
+Because we don't use REST API, we don't need to implement JWT authentication.
 ** Create a database
 Make the migrations and start the server:
 
@@ -285,7 +299,7 @@ Make the migrations and start the server:
 Our app, Conduit, is online!
 * First views and templates
 ** Article model
-We'll start by making a model for our articles.
+We'll start by making a model for our articles in ~articles/models.py~.
 The articles need a title, a body (the text), a description, an author, and a creation date.
 
 #+begin_src python
@@ -325,7 +339,7 @@ In order to have something to work with for the rest of the tutorial, we need to
 
 First, register the ~Article~ model in ~articles/admin.py~ by adding the following line:
 
-#+begin_src python
+#+begin_src python :hl_lines "4"
 from django.contrib import admin
 from .models import Article
 
@@ -338,7 +352,7 @@ The default view that the unauthenticated user has is the global feed, or the li
 
 We add the following line in ~django_tutorial/conduit/urls.py~, so that the project-level ~urls.py~ is aware of the urls defined in ~articles/urls.py~:
 
-#+begin_src python
+#+begin_src python :hl_lines "6"
 from django.contrib import admin
 from django.urls import path, include
 
@@ -387,6 +401,7 @@ We need to modify ~settings.py~ so Django is aware of our project's architecture
 Let's define the APPS_DIR below BASE_DIR first:
 
 #+begin_src python
+# ...
 BASE_DIR = Path(__file__).resolve().parent.parent
 APPS_DIR = BASE_DIR / "conduit"
 #+end_src
@@ -394,12 +409,14 @@ APPS_DIR = BASE_DIR / "conduit"
 Let's change the ~DIRS~ line in the ~TEMPLATES~ section in ~settings.py~ like this:
 
 #+begin_src python
+# ...
 "DIRS": [APPS_DIR / "templates"], # changed from "DIRS": []
 #+end_src
 
 Similarly, let's define the ~STATIC_ROOT~ directory below the ~STATIC~ line like this:
 
 #+begin_src python
+# ...
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [APPS_DIR / "static"]
@@ -498,11 +515,11 @@ Let's create the template  and add the following to it:
 The HTML is adapted from other realworld projects (especially the [[https://github.com/sveltejs/realworld/][SvelteKit implementation of the RealWorld app]], because Svelte is unexpectedly close to Django's templating language).
 Because the HTML is little more than a copy-paste, we won't explain its structure and classes: suffice it to say that this is required to have something that looks like the actual Realworld app.
 
-#+CAPTION: home - global feed in our app
+#+CAPTION: Global feed in our app
 #+ATTR_HTML: :width 600
 [[./assets/home - global feed.png]]
 
-#+CAPTION: home - global feed in the canonical RealWorld app
+#+CAPTION: Global feed in the RealWorld app
 #+ATTR_HTML: :width 600
 [[./assets/home - global feed - realworld.png]]
 
@@ -512,7 +529,7 @@ We want to keep our templates as modular as possible, to simplify the structure 
 
 In ~templates/home.html~, we change the following lines:
 
-#+begin_src html
+#+begin_src html :hl_lines "4"
 <div class="container page">
   <div class="row">
     <div class="col-md-9">
@@ -524,7 +541,7 @@ In ~templates/home.html~, we change the following lines:
 
 Our ~templates/article_list.html~ file should look like this:
 
-#+begin_src html
+#+begin_src html :hl_lines "9"
 {% block content %}
   {% if articles|length_is:"0" %}
     <div class="article-preview">
@@ -570,7 +587,7 @@ Let's create a simple navigation bar. Because we have yet to implement authentic
 
 Let's add the following lines to ~base.html~:
 
-#+begin_src html
+#+begin_src html :hl_lines "2"
     <body>
         {% include 'nav.html' %}            <!-- new -->
         <main>
@@ -599,7 +616,7 @@ Let's create ~nav.html~ in our ~templates~ folder and add the following to it:
   </div>
 </nav>
 #+end_src
-* Viewing articles
+* Viewing Articles
 ** Article view
 Next we'll implement the article view.
 
@@ -668,22 +685,22 @@ Now, we create the ~article_detail.html~ file in our ~templates~ folder and add 
 
 Finally, we modify ~home.html~ so that article previews redirect to articles:
 
-#+begin_src html
-...
+#+begin_src html :hl_lines "2, 7"
+<!-- ... -->
 <a href="{{ article.get_absolute_url }}" rel="prefetch" class="preview-link">   <!-- new -->
    <h1>{{ article.title }}</h1>
    <p>{{ article.description }}</p>
    <span>Read more...</span>
 </a>                                                                            <!-- new -->
-...
+<!-- ... -->
 #+end_src
 
 Let's see what it looks like:
 
-#+CAPTION: article_detail
+#+CAPTION: Individual article in our app
 #+ATTR_HTML: :width 600
 [[./assets/article_detail.png]]
-#+CAPTION: article_detail - canonical RealWorld app
+#+CAPTION: Individual article in RealWorld app
 #+ATTR_HTML: :width 600
 [[./assets/article_detail - realworld.png]]
 
@@ -695,7 +712,7 @@ We want the slugs to be unique, but some articles might have the same titles, wh
 *** Defining a slug and a UUID in the model
 First, we need to modify our ~Article~ model to include a slug, and to update the ~get_absolute_url~ method:
 
-#+begin_src python
+#+begin_src python :hl_lines "3, 4, 8"
 class Article(models.Model):
     # ...
     slug = models.SlugField(max_length=255, editable=False)             # new
@@ -719,7 +736,7 @@ Select an option:
 
 We can't select ~1~ because a default is by definition non-unique. We select ~2~ to abort and add the ~null=True~ arg to the slug field, so as to be able to migrate and then modify the slug manually through the Django admin app:
 
-#+begin_src python
+#+begin_src python :hl_lines "3"
 class Article(models.Model):
     # ...
     slug = models.SlugField(max_length=100, null=True)
@@ -728,7 +745,7 @@ class Article(models.Model):
 
 We then run ~makemigrations~ and ~migrate~, then set a unique slug for each ~Article~ through the Django admin app manually. Once we're done, we remove the ~null=True~ arg and add the ~editable=False~ arg:
 
-#+begin_src python
+#+begin_src python :hl_lines "3"
 class Article(models.Model):
     # ...
     slug = models.SlugField(max_length=255, editable=False)             # new
@@ -796,7 +813,7 @@ def pre_save_receiver(sender, instance, *args, **kwargs):
 
 In order to activate this signal, we will modify ~articles/apps.py~:
 
-#+begin_src
+#+begin_src python :hl_lines "8-9"
 from django.apps import AppConfig
 
 
@@ -824,10 +841,10 @@ Let's try creating an Article through the Django admin app.
 
 When going back to http://localhost:8000/ (where your app is running), you will see that your new article has a slug consisting of its slugified title and a UUID:
 
-#+CAPTION: article_detail - slug
+#+CAPTION: Slugs
 #+ATTR_HTML: :width 600
 [[./assets/article_detail - slug.png]]
-* Creating, editing, and deleting articles
+* Creating, editing, and deleting Articles
 We have implemented the features that allow to view articles, but we need to allow users to create, edit, and delete them as well. We'll first implement this functionality, and modify it later to take into account user authentication.
 ** Creating Articles
 Let's allow users to create articles.
@@ -865,7 +882,7 @@ urlpatterns = [
 
 We add a ~New article~ button to the Nav bar in ~nav.html~:
 
-#+begin_src html
+#+begin_src html :hl_lines "3, 6, 8, 13-23"
 <ul class="nav navbar-nav pull-xs-right">
   <li class="nav-item">
     {% url 'home' as home %}                                    <!-- new -->
@@ -960,7 +977,7 @@ NOT NULL constraint failed: articles_article.author_id
 That's because the form doesn't know who the author is, and author is a required field in our model.
 Let's override the ~EditorCreateView~ view's ~form_valid~ method in our ~views.py~ file: before we save the form, we'll set the logged in user (~admin~, for now) as the ~author~:
 
-#+begin_src python
+#+begin_src python :hl_lines "8-12"
 class EditorCreateView(CreateView):
     """create article"""
 
@@ -1016,7 +1033,7 @@ urlpatterns = [
 
 In ~article_detail.html~, we add a button for editing the article and pass ~article.slug~ as an argument to the url (see [[https://docs.djangoproject.com/en/3.2/ref/templates/builtins/#url][the documentation for ~url~ tag]]), given that our URL expects a slug (~editor/<slug:slug>~). The documentation for ):
 
-#+begin_src python
+#+begin_src html :hl_lines "10-19"
                 <div class="article-meta">
                     <div class="info">
                         <span class="author">
@@ -1026,22 +1043,22 @@ In ~article_detail.html~, we add a button for editing the article and pass ~arti
                             {{ article.created_at|date:"F d, Y" }}
                         </span>
                     </div>
-                    <span>                                                              <!-- new -->
-                        <a                                                              <!-- new -->
-                            href="{% url 'editor_update' slug=article.slug %}"          <!-- new -->
-                            class="btn btn-outline-secondary btn-sm"                    <!-- new -->
-                        >                                                               <!-- new -->
-                            <span class="ion-edit">                                    <!-- new -->
-                                Edit Article                                            <!-- new -->
-                            </span>                                                    <!-- new -->
-                        </a>                                                            <!-- new -->
-                    </span>                                                             <!-- new -->
+                    <span>                                                              <!-- new from here -->
+                        <a
+                            href="{% url 'editor_update' slug=article.slug %}"
+                            class="btn btn-outline-secondary btn-sm"
+                        >
+                            <span class="ion-edit">
+                                Edit Article
+                            </span>
+                        </a>
+                    </span>                                                             <!-- new to here -->
                 </div>
 #+end_src
 
 In the ~editor.html~ template, we want to have the form fields prepopulated with the relevant values. When using ~UpdateView~, we have access to the object being updated. Let's add the following to the ~editor.html~ template:
 
-#+begin_src html
+#+begin_src html :hl_lines "8, 17, 26"
                         <fieldset>
                             <fieldset class="form-group">
                                 <input
@@ -1116,27 +1133,27 @@ urlpatterns = [
 Now, create an ~article_delete.html~ file: this will hold the form for deleteing the article.
 
 #+begin_src html
-<form                                                                                       <!-- new  -->
-    method="POST"                                                                           <!-- new  -->
-    action="{% url 'editor_delete' slug=article.slug %}"                                    <!-- new  -->
-    style="display:inline"                                                                  <!-- new  -->
->                                                                                           <!-- new  -->
-    {% csrf_token %}                                                                        <!-- new  -->
-    <button                                                                                 <!-- new  -->
-        class="btn btn-outline-danger btn-sm"                                               <!-- new  -->
-        value="DELETE"                                                                      <!-- new  -->
-        onclick="return confirm('Are you sure you want to delete {{ article.title }}?')"    <!-- new  -->
-    >                                                                                       <!-- new  -->
-        <span class="ion-trash-a">                                                         <!-- new  -->
-            Delete Article                                                                  <!-- new  -->
-        </span>                                                                                <!-- new  -->
-    </button>                                                                               <!-- new  -->
-</form>                                                                                     <!-- new  -->
+<form
+    method="POST"
+    action="{% url 'editor_delete' slug=article.slug %}"
+    style="display:inline"
+>
+    {% csrf_token %}
+    <button
+        class="btn btn-outline-danger btn-sm"
+        value="DELETE"
+        onclick="return confirm('Are you sure you want to delete {{ article.title }}?')"
+    >
+        <span class="ion-trash-a">
+            Delete Article
+        </span>
+    </button>
+</form>
 #+end_src
 
 Now, we want to load this template in ~article_detail.html~ directly, which we achieve with an ~include~ tag:
 
-#+begin_src html
+#+begin_src html :hl_lines "10"
 <span>
     <a
         href="{% url 'editor_update' slug=article.slug %}"
@@ -1196,7 +1213,7 @@ That's because we're using articles' slugs as ForeignKeys for the comments (so t
 
 Now, we need to register our model in ~admin.py~:
 
-#+begin_src python
+#+begin_src python :hl_lines "2, 5"
 from django.contrib import admin
 from .models import Article, Comment        # new
 
@@ -1210,7 +1227,7 @@ We want to be able to view the comments in our ~article_detail.html~ template.
 
 In ~article_detail.html~:
 
-#+begin_src html
+#+begin_src html :hl_lines "9-12"
 <div class="container page">
     <div class="row article-content">
         <div class="col-xs-12">
@@ -1283,7 +1300,7 @@ class CommentCreateView(CreateView):
 
 Now, we need to modify the ~ArticleDetailView~ to make the ~CommentCreateView~'s form available to ~templates/article_detail.html~ through the ~get_context_data~ method:
 
-#+begin_src python
+#+begin_src python :hl_lines "7-10"
 class ArticleDetailView(DetailView):
     """detail view for individual articles"""
 
@@ -1372,7 +1389,7 @@ Create ~comment_create.html~, which corresponds to the ~CommentCreateView~'s for
 
 In ~comments.html~, we include the ~comment_create.html~ template:
 
-#+begin_src html
+#+begin_src html :hl_lines "2-4"
 <div class="col-xs-12 col-md-8 offset-md-2">
     <div>                                           <!-- new -->
         {% include 'comment_create.html' %}         <!-- new -->
@@ -1394,7 +1411,6 @@ class CommentDeleteView(DeleteView):
     model = Comment
     template_name = "article_detail.html"
 
-    # redirect to attached article's detail page upon success
     def get_success_url(self):
         return reverse("article_detail", kwargs={"slug": self.object.article.slug})
 #+end_src
@@ -1416,7 +1432,7 @@ We require ~pk~ as an argument because that's what the ~CommentDeleteView~ needs
 
 In ~comments.html~:
 
-#+begin_src html
+#+begin_src html :hl_lines "8"
 <div class="card-footer">
     <span class="comment-author">
         {{ comment.author }}
@@ -1531,7 +1547,7 @@ class CustomUserManager(UserManager):
 
 We now need to go back to the ~User~ model in ~users/models.py~ and indicate to Django that the ~UserManager~ defined above will manage objects of type ~User~:
 
-#+begin_src python
+#+begin_src python :hl_lines "11"
 # other
 class User(AbstractUser):
     """User model"""
@@ -1613,7 +1629,7 @@ def save_profile_for_user(sender, instance, **kwargs):
 
 In order to activate this signal, we will modify ~users/apps.py~:
 
-#+begin_src python
+#+begin_src python :hl_lines "8-9"
 from django.apps import AppConfig
 
 
@@ -1706,7 +1722,7 @@ urlpatterns = [
 
 For every app that we create, we need to tell ~config/urls.py~ to look at the patterns specified in the app's ~urls.py~ file:
 
-#+begin_src python
+#+begin_src python :hl_lines "4"
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("conduit.articles.urls")),
@@ -1829,7 +1845,7 @@ We don't want to expose the ~New post~ link to unauthenticated users.
 
 In ~nav.html~:
 
-#+begin_src html
+#+begin_src html :hl_lines "16-56"
 <nav class="navbar navbar-light">
   <div class="container">
     <a rel="prefetch" class="navbar-brand" href="/">conduit</a>
@@ -1915,6 +1931,8 @@ Notice that the ~LoginRequiredMixin~ should be at the leftmost position in the i
 
 If you try creating a post from the app, you should get this error:
 
+#+CAPTION: Login error
+#+ATTR_HTML: :width 600
 [[./assets/login - error.png]]
 
 The cause of the problem is given in the line:
@@ -1933,7 +1951,8 @@ While we're at it, let's also make sure that articles and comments can only be e
 
 In ~templates/article_detail.html~, we hide the button for editing and deleting articles from any user who is not the article's author:
 
-#+begin_src html
+#+begin_src html :hl_lines "2, 14"
+<!-- ... -->
 {% if user == article.author.user %}                        <!-- new -->
   <span>
     <a
@@ -1947,14 +1966,17 @@ In ~templates/article_detail.html~, we hide the button for editing and deleting 
     {% include 'article_delete.html' %}
   </span>
 {% endif %}                                                 <!-- new -->
+<!-- ... -->
 #+end_src
 
-In ~templates/comment_comments.html~:
+In ~templates/comments.html~:
 
-#+begin_src html
-{% if user == comment.author.user %}
+#+begin_src html :hl_lines "2, 4"
+<!-- ... -->
+{% if user == comment.author.user %}    <!-- new -->
   {% include 'comment_delete.html' %}
-{% endif %}
+{% endif %}                             <!-- new -->
+<!-- ... -->
 #+end_src
 
 In ~users/views.py~, we make sure that editing or deleting actions are only taken into account if the user is the author of the article or comment:
@@ -1996,7 +2018,7 @@ When you finalise this action by clicking the button ~Sign up~, you'll notice th
 
 In ~users/views.py~, add the following to ~SignUpView~ (as explained in [[https://stackoverflow.com/a/70582911][this StackOverflow answer]]):
 
-#+begin_src python
+#+begin_src python :hl_lines "2-3, 12-27"
 # other imports
 from django.shortcuts import redirect  # new
 from django.contrib.auth import authenticate, login  # new
@@ -2090,7 +2112,7 @@ In the ~templates~ folder, create ~profile_detail.html~:
 Everything should be working now, right? Let's check by going to ~localhost:8000/profile/@admin~, for example.
 Welp, we're getting an error:
 
-#+CAPTION: profile_detail - error
+#+CAPTION: profile_detail error
 #+ATTR_HTML: :width 600
 [[./assets/profile_detail - error.png]]
 
@@ -2098,7 +2120,7 @@ The error tells us that our ~ProfileDetailView~ wants to be called with an objec
 
 We override the view's ~get_object~ method by adding the following to ~users/views.py~:
 
-#+begin_src python
+#+begin_src python :hl_lines "9-12"
 # other imports
 from django.shortcuts import redirect, get_object_or_404
 
@@ -2107,15 +2129,15 @@ class ProfileDetailView(DetailView):
     model = Profile
     template_name = "profile_detail.html"
 
-    def get_object(self, queryset=None):
-        username = self.kwargs.get("username", None)
-        profile = get_object_or_404(User, username=username).profile
-        return profile
+    def get_object(self, queryset=None):                                  # new
+        username = self.kwargs.get("username", None)                    # new
+        profile = get_object_or_404(User, username=username).profile    # new
+        return profile                                                  # new
 #+end_src
 
 Let's try again: we should see an actual profile page (though there isn't much on it yet). Make sure to set a profile image for your ~admin~ user, as everyone else should have a default already set.
 
-#+CAPTION: profile_detail
+#+CAPTION: A view of a profile, sans errors
 #+ATTR_HTML: :width 600
 [[./assets/profile_detail.png]]
 ** Viewing Articles written by each User
@@ -2139,7 +2161,7 @@ This will return all the articles written by the user whose username is specifie
 
 Expose the ~article_list.html~ template in ~templates/profile_detail.html~:
 
-#+begin_src html
+#+begin_src html :hl_lines "18-33"
 {% extends 'base.html' %}
 {% block title %}
     <title>{{ profile.user.username }} - Conduit: Django + HTMX</title>
@@ -2181,15 +2203,15 @@ We now need to link the profile page from all the places our users' usernames ar
 
 In ~templates/article_preview.html~, change the following lines:
 
-#+begin_src html
+#+begin_src html :hl_lines "2-4, 6, 8"
 <div class="article-meta">
-  <a href="{% url 'profile_detail' username=article.author.user.username %}">                    <!-- new -->
-    <img src="{{ article.author.image }}" alt="{{ article.author.user.username }}"/>           <!-- new -->
-  </a>                                                                                           <!-- new -->
+  <a href="{% url 'profile_detail' username=article.author.user.username %}">                   <!-- new -->
+    <img src="{{ article.author.image }}" alt="{{ article.author.user.username }}"/>            <!-- new -->
+  </a>                                                                                          <!-- new -->
   <div class="info">
-    <a href="{% url 'profile_detail' username=article.author.user.username %}" class="author"> <!-- from <span class="author"> -->
+    <a href="{% url 'profile_detail' username=article.author.user.username %}" class="author">  <!-- from <span class="author"> -->
         {{ article.author.user.username }}
-    </a>                                                                                       <!-- from </span> -->
+    </a>                                                                                        <!-- from </span> -->
     <span class="date">
       {{ article.created_at|date:"D M d Y" }}
     </span>
@@ -2199,7 +2221,7 @@ In ~templates/article_preview.html~, change the following lines:
 
 In ~templates/nav.html~:
 
-#+begin_src html
+#+begin_src html :hl_lines "13-24"
 {% if user.is_authenticated %}
   <li class="nav-item">
     {% url 'editor_create' as editor_create %}
@@ -2234,7 +2256,7 @@ In ~templates/nav.html~:
 
 In ~templates/article_detail.html~:
 
-#+begin_src html
+#+begin_src html :hl_lines "2-4, 6, 8"
 <div class="article-meta">
   <a href="{% url 'profile_detail' username=article.author.user.username %}">                  <!-- new -->
     <img src="{{ article.author.image }}" alt="{{ article.author.user.username }}"/>           <!-- new -->
@@ -2251,14 +2273,14 @@ In ~templates/article_detail.html~:
 
 In ~templates/comments.html~:
 
-#+begin_src html
+#+begin_src html :hl_lines "2-5, 7"
 <div class="card-footer">
   <a href="{% url 'profile_detail' username=comment.author.user.username %}" class="comment-author">            <!-- new -->
     <img src="{{ comment.author.image }}" class="comment-author-img" alt="{{ comment.author.user.username }}"/> <!-- new -->
   </a>                                                                                                          <!-- new -->
-  <a href="{% url 'profile_detail' username=comment.author.user.username %}" class="comment-author"> <!-- from <span class="comment-author"> -->
+  <a href="{% url 'profile_detail' username=comment.author.user.username %}" class="comment-author">            <!-- from <span class="comment-author"> -->
       {{ comment.author.user.username }}
-  </a>                                                                                               <!-- from </span>-->
+  </a>                                                                                                          <!-- from </span>-->
   <span class="date-posted">
     {{ comment.created_at|date:"D M d Y" }}
   </span>
@@ -2309,11 +2331,11 @@ The ~ProfileForm~ is self-explanatory.
 The ~UserForm~ is a bit more complicated. Let's go through it in detail.
 We want to our user to be able to update three types of information: the username, the email, and the password. We also want to expose the current username and email values in the template, but we don't want to expose any information about the password. The screenshot below clarifies what we mean here: the screenshot on the right could leak information about the number of characters in our user's password, even though the characters themselves are masked, while the screenshot on the right exposes no information about the password.
 
-#+CAPTION: settings - password field with masked characters
+#+CAPTION: Password field with masked characters
 #+ATTR_HTML: :width 200
 [[./assets/settings - password field.png]]
 
-#+CAPTION: settings - empty password field
+#+CAPTION: Empty password field
 #+ATTR_HTML: :width 200
 [[./assets/settings.png]]
 
@@ -2489,7 +2511,7 @@ In ~templates/nav.html~:
 
 In ~templates/profile_detail.html~:
 
-#+begin_src html
+#+begin_src html :hl_lines "5-14"
 <div class="col-xs-12 col-md-10 offset-md-1">
   <img src="{{ profile.image }}" class="user-img" alt="{{ profile.user.username }}" />
   <h4>{{ profile.user.username }}</h4>
@@ -2586,7 +2608,7 @@ Because the Django Template Language (intentionally) makes it difficult to write
 
 In ~users/views.py~, we add ~is_following~ to the context of ~ProfileDetailView~ to enable our template to know whether the authenticated user follows a given profile:
 
-#+begin_src python
+#+begin_src python :hl_lines "7"
 class ProfileDetailView(DetailView):
     # ...
     def get_context_data(self, **kwargs):
@@ -2621,7 +2643,7 @@ urlpatterns = [
 
 Let's implement the ~follow~ functionality in ~templates/profile_detail.html~ now:
 
-#+begin_src html
+#+begin_src html :hl_lines "14-15"
 <div class="col-xs-12 col-md-10 offset-md-1">
   <img src="{{ profile.image }}" class="user-img" alt="{{ profile.user.username }}" />
   <h4>{{ profile.user.username }}</h4>
@@ -2641,7 +2663,7 @@ Let's implement the ~follow~ functionality in ~templates/profile_detail.html~ no
 </div>
 #+end_src
 
-In ~templates/profile_follow.html~:
+Create ~templates/profile_follow.html~:
 
 #+begin_src html
 <form
@@ -2687,7 +2709,7 @@ class ArticleDetailView(DetailView):
 
 In ~templates/article_detail.html~:
 
-#+begin_src html
+#+begin_src html :hl_lines "13-16"
 {% if user == article.author.user %}
   <span>
     <a
@@ -2700,10 +2722,10 @@ In ~templates/article_detail.html~:
     </a>
     {% include 'article_delete.html' %}
   </span>
-{% else %}
-  <span>
-    {% include 'profile_follow.html' with profile=article.author %}
-  </span>
+{% else %}                                                          <!-- new -->
+  <span>                                                            <!-- new -->
+    {% include 'profile_follow.html' with profile=article.author %} <!-- new -->
+  </span>                                                           <!-- new -->
 {% endif %}
 #+end_src
 
@@ -2724,9 +2746,9 @@ If you play around with the ~Follow~ feature, you will notice that it redirects 
 
 However, it would be better if we could stay on whatever page we are when we follow a user. This involves implementing the ~next~ kwarg.
 
-In ~profile_follow.html~:
+In ~templates/profile_follow.html~:
 
-#+begin_src html
+#+begin_src html :hl_lines "6"
 <form
     method="post"
     action="{% url 'profile_follow' username=profile.user.username %}"
@@ -2750,7 +2772,7 @@ In ~profile_follow.html~:
 
 The ~next~ parameter above just holds the URL that the ~profile_follow~ URL pattern was called from.
 
-In ~ProfileFollowView~:
+In ~users/views.py~:
 
 #+begin_src python
 class ProfileFollowView(LoginRequiredMixin, RedirectView):
@@ -2770,28 +2792,28 @@ We need to go back all the way to the beginning for this one.
 
 In ~articles/views.py~, we need to modify our very first view, ~home~, so that it can give us a feed of articles written by users we follow:
 
-#+begin_src python
+#+begin_src python :hl_lines "6-11"
 class Home(TemplateView):
     # ...
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["global_feed"] = Article.objects.order_by("-created_at")
-        if self.request.user.is_authenticated:
+        if self.request.user.is_authenticated:                      # new from here
             context["your_articles"] = Article.objects.filter(
                 author__in=self.request.user.profile.follows.all()
             ).order_by("-created_at")
         else:
-            context["your_articles"] = None
+            context["your_articles"] = None                         # new to here
         return context
 #+end_src
 
 In ~templates/home.html~:
 
-#+begin_src html
+#+begin_src html :hl_lines "4-44"
 <div class="container page">
   <div class="row">
     <div class="col-md-9">
-      <div class="feed-toggle">
+      <div class="feed-toggle">                 <!-- new from here-->
         <ul class="nav nav-pills outline-active">
           <li class="nav-item">
             {% url 'home' as home %}
@@ -2829,7 +2851,7 @@ In ~templates/home.html~:
         {% include 'article_list.html' with articles=your_articles %}
       {% elif request.path == home_feed %}
         {% include 'article_list.html' with articles=global_feed %}
-      {% endif %}
+      {% endif %}                               <!-- new to here -->
     </div>
   </div>
 </div>
@@ -2922,7 +2944,7 @@ We don't need to modify the views for this: the logic can happen in the template
 
 In ~templates/article_detail.html~:
 
-#+begin_src html
+#+begin_src html :hl_lines "16"
 {% if user == article.author.user %}
   <span>
     <a
@@ -2943,7 +2965,7 @@ In ~templates/article_detail.html~:
 {% endif %}
 #+end_src
 
-In ~templates/article_favorite.html~:
+Create ~templates/article_favorite.html~:
 
 #+begin_src html
 <form
@@ -2975,7 +2997,7 @@ Checking if an article is in a user's ~favorites~ should be done in the view (or
 ** ArticlePreviewView
 In ~templates/article_preview.html~:
 
-#+begin_src html
+#+begin_src html :hl_lines "9-11"
             <div class="info">
                 <a href="{% url 'profile_detail' username=article.author.user.username %}" class="author">
                     {{ article.author.user.username }}
@@ -2991,7 +3013,7 @@ In ~templates/article_preview.html~:
 
 In ~templates/article_favorite.html~
 
-#+begin_src html
+#+begin_src html :hl_lines "16, 22-24"
 <form
     method="post"
     action="{% url 'article_favorite' slug=article.slug %}"
@@ -3021,10 +3043,10 @@ In ~templates/article_favorite.html~
 </form>
 #+end_src
 
-#+CAPTION: favorite - before
+#+CAPTION: Favorite button before
 #+ATTR_HTML: :width 600
 [[./assets/home - favorite - before.png]]
-#+CAPTION: favorite - after
+#+CAPTION: Favorite button after
 #+ATTR_HTML: :width 600
 [[./assets/home - favorite.png]]
 ** Feeds
@@ -3041,9 +3063,7 @@ class ProfileDetailView(DetailView):
         if self.request.user.is_authenticated:
             context["my_articles"] = self.object.articles.order_by("-created_at")
             context["is_following"] = self.object.is_following(self.object)
-            context["favorited_articles"] = self.object.favorites.order_by(         # new
-                "-created_at"                       # new
-            )                                       # new
+            context["favorited_articles"] = self.object.favorites.order_by("-created_at")  # new
         return context
 #+end_src
 
@@ -3062,14 +3082,14 @@ urlpatterns = [
 
 In ~templates/profile_detail.html~:
 
-#+begin_src html
+#+begin_src html :hl_lines "7-15, 17-27, 30, 32-34"
 <div class="container">
   <div class="row">
     <div class="col-xs-12 col-md-10 offset-md-1">
       <div class="articles-toggle">
         <ul class="nav nav-pills outline-active">
           <li class="nav-item">
-            {% url 'profile_detail' username=profile.user.username as profile_detail %}
+            {% url 'profile_detail' username=profile.user.username as profile_detail %}         <!-- new from here -->
             <a
               href="{{ profile_detail }}"
               rel="prefetch"
@@ -3077,9 +3097,9 @@ In ~templates/profile_detail.html~:
                      {% if request.path == profile_detail %}active{% endif %}"
             >
               My Articles
-            </a>
+            </a>                                                                                <!-- new to here -->
           </li>
-          <li class="nav-item">
+          <li class="nav-item">                                                                 <!-- new from here -->
             {% url 'profile_favorites' username=profile.user.username as profile_favorites %}
             <a
               href="{{ profile_favorites }}"
@@ -3089,20 +3109,20 @@ In ~templates/profile_detail.html~:
             >
               Favorited Articles
             </a>
-          </li>
+          </li>                                                                                 <!-- new to here -->
         </ul>
       </div>
-      {% if request.path == profile_detail %}
+      {% if request.path == profile_detail %}                                                   <!-- new -->
         {% include 'article_list.html' with articles=my_articles %}
-      {% elif request.path == profile_favorites %}
-        {% include 'article_list.html' with articles=favorited_articles %}
-      {% endif %}
+      {% elif request.path == profile_favorites %}                                              <!-- new -->
+        {% include 'article_list.html' with articles=favorited_articles %}                      <!-- new -->
+      {% endif %}                                                                               <!-- new -->
     </div>
   </div>
 </div>
 #+end_src
-* Tags
-** Model
+* Tags (coming soon)
+** Model                               :noexport:
 The very last feature that we need to implement is tags.
 
 First, we create the ~Tag~ object itself.
@@ -3110,6 +3130,7 @@ First, we create the ~Tag~ object itself.
 In ~articles/models.py~:
 
 #+begin_src python
+# ...
 class Tag(models.Model):
     tag = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
@@ -3144,25 +3165,18 @@ class Article(models.Model):
 #+end_src
 
 We have modified the models: we need to ~makemigrations~ and ~migrate~.
-** Views
+** Views                               :noexport:
 We will now enable users to specify the tags for their article in the editor.
 
 In ~articles/views.py~:
 
 #+begin_src python
-class EditorCreateView(LoginRequiredMixin, CreateView):
-    # ...
-    fields = ["title", "description", "body", "tags"]
 
-
-class EditorUpdateView(LoginRequiredMixin, UpdateView):
-    # ...
-    fields = ["title", "description", "body", "tags"]
 #+end_src
 
 Now, we want to be able to add and remove tags straight in the editor, like in the following video:
 
-#+CAPTION: editor - tags
+#+CAPTION: Tag workflow in the RealWorld article editor
 #+ATTR_HTML: :width 600
 [[./assets/editor - tags.mp4]]
 
@@ -3176,7 +3190,7 @@ We create ~templates/article_tags.html~:
 
 We include this new template into ~templates/editor.html~:
 
-#+begin_src html
+#+begin_src html :hl_lines "11"
 <!-- ... -->
 <fieldset class="form-group">
   <textarea
@@ -3197,10 +3211,7 @@ We include this new template into ~templates/editor.html~:
 In ~articles/views.py~:
 
 #+begin_src python
-# ...
-from .models import Article, Comment, Tag
 
-# ...
 #+end_src
 
 In ~articles/urls.py~:
@@ -3227,21 +3238,18 @@ urlpatterns = [
     ),
 ]
 #+end_src
-
-* Observations                        :noexport:
+* HTMX (coming soon)
+* Observations                          :noexport:
+** TODO explain why no REST, or include REST
+** TODO make readme.md
+- need to set ~docs_dir: '.'~ somehow
 ** TODO PostgreSQL
 Following the arguments of [[https://htmx-django.com/blog/a-minimalistic-modern-django-boilerplate#docker][A Minimalistic Modern Django Boilerplate]]
+** TODO try embedding gif instead of mp4
 ** TODO add ~primary_key=True~ to ~uuid_field~ in /Articles/Slugs/, then add ~query_pk_and_slug=True~ in relevant views
 ** TODO replace ~{% url 'profile_detail' username=... %}~ with ~{{ ...profile.get_absolute_url }}~
-** TODO implement ~hl_lines~
-***  w
-** TODO class:active
-*** [[https://stackoverflow.com/questions/340888/navigation-in-django/341748#341748][Navigation in django - Stack Overflow]]
-*** [[https://stackoverflow.com/questions/340888/navigation-in-django/477719#477719][Navigation in django - Stack Overflow]]
 ** Changes compared to django-realworld-example-app
 - The =core.TimestampedModel= mostly exists to allow default ordering, which is [[https://docs.djangoproject.com/en/3.2/ref/models/options/#ordering][not recommended]], so we'll do without.
-- We can implement the whole app without building a REST API, so we won't.
-- Because we don't use REST API, we don't need to implement JWT authentication.
 ** Site structure
 - =Nav=
 - home.html
