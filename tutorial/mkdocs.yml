@@ -39,6 +39,8 @@ markdown_extensions:
   # - admonitions  # callouts
   # - tables
   # - pymdownx.details  # information in dropdown
+  - toc:
+      permalink: "#"
   - pymdownx.highlight:
       auto_title: true
       linenums: true
