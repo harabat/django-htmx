@@ -40,7 +40,8 @@
                                 >{{ form.body.value|default_if_none:'' }}</textarea>
                             </fieldset>
                             {{ form.body.errors }}
-                            {% include 'article_tag.html' with article_slug=article.slug %}
+                            {#% include 'article_tag.html' with article_slug=article.slug %#}
+                            {% include 'article_tag.html' %}
                             <button class="btn btn-lg pull-xs-right btn-primary">
                                 Publish Article
                             </button>

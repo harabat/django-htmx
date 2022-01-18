@@ -1,27 +1,48 @@
-<form
-    method="post"
-    action="{% url 'article_tag' article_slug=article_slug %}"
->
-    <input type="hidden" name="next" value="{% url 'editor_update' slug=article_slug %}">
-    {% csrf_token %}
-    <fieldset class="form-group">
+{% comment 'forms' %}
+    <form
+        method="post"
+        action="{% url 'article' article_slug=article_slug %}"
+    >
+        {% comment 'notforms' %}
+        <input type="hidden" name="next" value="{% url 'editor_update' slug=article_slug %}">
+        {% endcomment 'notforms' %}
+        {% csrf_token %}
+{% endcomment %}
+<fieldset class="form-group">
+    <div class='input-group'> <!-- new -->
+        {% url 'editor_create' as editor_create %}
         <input
             class="form-control"
             type="text"
+            {% if request.path == editor_create %}
+                readonly
+                placeholder="You must create the article before you can edit tags"
+            {% endif %}
             placeholder="Enter tags"
-            name="tag"
+            name="{{ form.new_tag.name }}"
         />
-        {% comment %}
-        <div class="tag-list">
-            {% for tag in form.tags %}
-                <a
-                    href="{% url 'article_tag' article_slug=slug tag_slug=tag.slug %}"
-                    class="tag-default tag-pill"
-                >
-                    <span class="ion-close-round"> {{ tag }} </span>
-                </a>
-            {% endfor %}
+        <div class="input-group-append"> <!-- new -->
+            <button
+                class="btn btn-md pull-xs-right btn-secondary"
+                name="add_new_tag"
+                {% if request.path == editor_create %}
+                    disabled
+                {% endif %}
+            >
+                <span>
+                    Add tag
+                </span>
+            </button>
         </div>
-        {% endcomment %}
-    </fieldset>
-</form>
+    </div>
+    <div class="tag-list">
+        {% for tag in article.tags.all %}
+            <button class="btn tag-default tag-pill" name="remove_tag" value="{{ tag }}">
+                <span class="ion-close-round"> {{ tag }} </span>
+                </span>
+        {% endfor %}
+    </div>
+</fieldset>
+{% comment 'forms' %}
+    </form>
+{% endcomment %}
