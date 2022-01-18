@@ -11,6 +11,7 @@ from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, get_object_or_404
 from .models import Article, Comment, Tag
+from .forms import ArticleForm
 
 
 class Home(TemplateView):
@@ -50,7 +51,8 @@ class EditorCreateView(LoginRequiredMixin, CreateView):
     """create article"""
 
     model = Article
-    fields = ["title", "description", "body", "tags"]
+    form_class = ArticleForm
+    # fields = ["title", "description", "body"]
     template_name = "editor.html"
 
     def form_valid(self, form):
@@ -59,17 +61,53 @@ class EditorCreateView(LoginRequiredMixin, CreateView):
         self.object.save()
         return super().form_valid(form)
 
+    # def post(self, request, *args, **kwargs):
+    #     if "add_new_tag" in request.POST:
+    #         new_tag = self.request.POST.get("new_tag")
+    #         if new_tag:
+    #             article = self.get_object()
+    #             article.add_tag(new_tag)
+    #             # return redirect(
+    #             #     reverse_lazy(
+    #             #         "editor_create", kwargs={"slug": self.kwargs.get("slug")}
+    #             #     )
+    #             # )
+    #             return super().post(request, *args, **kwargs)
+    #         else:
+    #             return super().post(request, *args, **kwargs)
+
 
 class EditorUpdateView(LoginRequiredMixin, UpdateView):
     """edit article"""
 
     model = Article
-    fields = ["title", "description", "body", "tags"]
+    form_class = ArticleForm
+    # fields = ["title", "description", "body"]
     template_name = "editor.html"
 
     def post(self, request, *args, **kwargs):
         if request.user == self.get_object().author.user:
-            return super().post(request, *args, **kwargs)
+            if "add_new_tag" in request.POST:
+                new_tag = self.request.POST.get("new_tag")
+                if new_tag:
+                    article = self.get_object()
+                    article.add_tag(new_tag)
+                return redirect(
+                    reverse_lazy(
+                        "editor_update", kwargs={"slug": self.kwargs.get("slug")}
+                    )
+                )
+            elif "remove_tag" in request.POST:
+                tag = request.POST.get("remove_tag")
+                article = self.get_object()
+                article.remove_tag(tag)
+                return redirect(
+                    reverse_lazy(
+                        "editor_update", kwargs={"slug": self.kwargs.get("slug")}
+                    )
+                )
+            else:
+                return super().post(request, *args, **kwargs)
         return redirect(self.get_object().get_absolute_url())
 
 
@@ -152,9 +190,26 @@ class ArticleFavoriteView(RedirectView):
 
 
 class TagAddView(UpdateView):
-    pattern_name = "editor_update"
+    """Add a tag to an Article object"""
+
+    model = Article
+    form_class = ArticleForm
+    template_name = "editor.html"
+    # success_url = reverse_lazy(
+    #     "editor_update", kwargs={"slug": self.kwargs.get("article_slug")}
+    # )
+
+    def get(self, request, *args, **kwargs):
+        import pudb
+
+        pu.db
+        return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        tag = self.request.form.tag
+        import pudb
+
+        pu.db
         return super().post(request, *args, **kwargs)
 
 

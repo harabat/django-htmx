@@ -1,18 +1,22 @@
 site_name: Django + HTMX tutorial
 site_url:
 site_description: A tutorial for building the RealWorld app in Django and HTMX
+repo_url: https://github.com/harabat/django-htmx
+repo_name: harabat/django-htmx
 docs_dir: 'docs'
 theme:
   name: material
   logo: assets/django-logo.png
   favicon: assets/django-logo.png
+  icon:
+    repo: octicons/mark-github-16
   language: en
   # include_homepage_in_sidebar: true  # no effect
   # sticky_navigation: true  # no effect
   # collapse_navigation: true  # no effect
   features:
     - navigation.instant
-    # - navigation.expand
+    - navigation.expand
     - navigation.top
     - search.suggest
   palette:
@@ -29,25 +33,33 @@ theme:
         icon: material/toggle-switch
         name: Switch to light mode
 plugins:
-  - search
+  - search:
+      prebuild_index: true
+      separator: '[\s\-\.]'
+  # - social  # generate social cards
+extra:
+  social:
+    - icon: octicons/mark-github-16
+      link: https://github.com/harabat/django-htmx
+      name: Django + HTMX tutorial on GitHub
 markdown_extensions:
   # https://facelessuser.github.io/pymdown-extensions/extensions/
   # - attr_list  # for align
   # - md_in_html  # better done by pandoc
-  # - admonitions  # callouts
   # - footnotes
-  # - tables
-  # - pymdownx.details  # information in dropdown
+  - admonition  # callouts
+  - tables
+  - pymdownx.details  # information in dropdowns
   - toc:
-      permalink: "#"
+      permalink: "#"  # anchors for headings
   - pymdownx.highlight:
       linenums: true
       use_pygments: true
   - pymdownx.superfences
+  - pymdownx.inlinehilite
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
-  - pymdownx.inlinehilite  # inline code blocks
   # - pymdownx.tabbed  # for tabs
   # - pymdownx.tasklist  # for lists with checkboxes
 nav:
@@ -66,3 +78,4 @@ nav:
   - Favourites: 12_favourites.md
   - Tags: 13_tags_coming_soon.md
   - HTMX: 14_htmx_coming_soon.md
+  - Future tutorials: 15_future_tutorials.md

@@ -3122,7 +3122,7 @@ In ~templates/profile_detail.html~:
 </div>
 #+end_src
 * Tags (coming soon)
-** Model                               :noexport:
+** Model
 The very last feature that we need to implement is tags.
 
 First, we create the ~Tag~ object itself.
@@ -3165,30 +3165,24 @@ class Article(models.Model):
 #+end_src
 
 We have modified the models: we need to ~makemigrations~ and ~migrate~.
-** Views                               :noexport:
+** Views                                                                      :noexport:
 We will now enable users to specify the tags for their article in the editor.
 
-In ~articles/views.py~:
-
-#+begin_src python
-
-#+end_src
-
-Now, we want to be able to add and remove tags straight in the editor, like in the following video:
+We want to be able to add and remove tags straight in the editor, like in the following video:
 
 #+CAPTION: Tag workflow in the RealWorld article editor
 #+ATTR_HTML: :width 600
 [[./assets/editor - tags.mp4]]
 
-We'll have to do a bit of a hack here, to achieve this kind of functionality: we'll include a separate form for tags into the editor form, and this form will update the page whenever a tag is added or removed.
+The thing is, we can't do that in Django only: in order to have actions triggered by the Enter button, we would need to write JavaScript, which we're trying not to do in this tutorial.
 
-We create ~templates/article_tags.html~:
+Add tags to an article through CLI.
 
-#+begin_src html
+We need new form: create ~articles/forms.py~ to add new_tag field.
 
-#+end_src
+Add to ~articles/views.py~ in ~EditorUpdateView~.
 
-We include this new template into ~templates/editor.html~:
+In ~templates/editor.html~, expose tag template.
 
 #+begin_src html :hl_lines "11"
 <!-- ... -->
@@ -3208,12 +3202,16 @@ We include this new template into ~templates/editor.html~:
 <!-- ... -->
 #+end_src
 
-In ~articles/views.py~:
+We'll have to do a bit of a hack here, to achieve this kind of functionality: we'll include a separate form for tags into the editor form, and this form will update the page whenever a tag is added or removed.
 
-#+begin_src python
+In ~templates/article_tag.html~, expose new field and existing tags.
 
-#+end_src
+Create new buttons in ~templates/article_tag.html~.
 
+Override ~post~ in ~EditorUpdateView~ in ~articles/views.py~.
+
+Make tag field readonly and button disabled based on ~request.path~ in ~templates/article_tag.html~.
+*** TODO check whether urls better than buttons with different names         :noexport:
 In ~articles/urls.py~:
 
 #+begin_src python
@@ -3239,13 +3237,22 @@ urlpatterns = [
 ]
 #+end_src
 * HTMX (coming soon)
+* Future tutorials
+- [ ] Django REST framework
+- [ ] Crispy forms
+- [ ] Jinja templates
 * Observations                          :noexport:
 ** TODO explain why no REST, or include REST
 ** TODO make readme.md
-- need to set ~docs_dir: '.'~ somehow
+- need to set ~docs_dir: '.'~ somehow: [[https://www.mkdocs.org/user-guide/configuration/#docs_dir][Configuration - MkDocs]], [[https://www.mkdocs.org/user-guide/writing-your-docs/#index-pages][Writing Your Docs - MkDocs]]
+- [[https://github.com/seleniumbase/SeleniumBase/blob/master/mkdocs.yml][SeleniumBase/mkdocs.yml at master · seleniumbase/SeleniumBase · GitHub]] has this
+** TODO Include emojis and stuff, to look more like [[https://github.com/seleniumbase/SeleniumBase/blob/master/README.md][SeleniumBase/README.md]]
+** TODO set up [[https://squidfunk.github.io/mkdocs-material/setup/setting-up-site-analytics/#custom-site-analytics][analytics]]
 ** TODO PostgreSQL
 Following the arguments of [[https://htmx-django.com/blog/a-minimalistic-modern-django-boilerplate#docker][A Minimalistic Modern Django Boilerplate]]
 ** TODO try embedding gif instead of mp4
+** TODO make pandoc filter to convert inline src blocks into [[https://facelessuser.github.io/pymdown-extensions/extensions/inlinehilite/#overview][inline Markdown code]]
+- Currently, pandoc just skips inline src blocks completely
 ** TODO add ~primary_key=True~ to ~uuid_field~ in /Articles/Slugs/, then add ~query_pk_and_slug=True~ in relevant views
 ** TODO replace ~{% url 'profile_detail' username=... %}~ with ~{{ ...profile.get_absolute_url }}~
 ** Changes compared to django-realworld-example-app

@@ -28,14 +28,10 @@ urlpatterns = [
         ArticleFavoriteView.as_view(),
         name="article_favorite",
     ),
-    path(
-        "article/<slug:article_slug>/tag",
-        TagAddView.as_view(),
-        name="article_tag",
-    ),
-    path(
-        "article/<slug:article_slug>/tag/<slug:tag_slug>/delete",
-        TagDeleteView.as_view(),
-        name="tag_delete",
-    ),
+    # path("article/<slug:article_slug>/tag", TagAddView.as_view(), name="article_tag"),
+    # path(
+    #     "article/<slug:article_slug>/tag/<slug:tag_slug>/delete",
+    #     TagDeleteView.as_view(),
+    #     name="tag_delete",
+    # ),
 ]
