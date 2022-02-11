@@ -3,7 +3,9 @@ site_url:
 site_description: A tutorial for building the RealWorld app in Django and HTMX
 repo_url: https://github.com/harabat/django-htmx
 repo_name: harabat/django-htmx
-docs_dir: 'docs'
+docs_dir: 'tutorial/docs'
+site_dir: 'tutorial/site'
+
 theme:
   name: material
   logo: assets/django-logo.png
@@ -32,23 +34,26 @@ theme:
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
+
 plugins:
   - search:
       prebuild_index: true
       separator: '[\s\-\.]'
   # - social  # generate social cards
+
 extra:
   social:
     - icon: octicons/mark-github-16
       link: https://github.com/harabat/django-htmx
       name: Django + HTMX tutorial on GitHub
+
 markdown_extensions:
   # https://facelessuser.github.io/pymdown-extensions/extensions/
   # - attr_list  # for align
   # - md_in_html  # better done by pandoc
   # - footnotes
   - admonition  # callouts
-  - tables
+  - tables  # tables
   - pymdownx.details  # information in dropdowns
   - toc:
       permalink: "#"  # anchors for headings
@@ -61,7 +66,9 @@ markdown_extensions:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
   # - pymdownx.tabbed  # for tabs
-  # - pymdownx.tasklist  # for lists with checkboxes
+  - pymdownx.tasklist:
+      custom_checkbox: true  # for lists with checkboxes
+
 nav:
   - Readme: index.md
   - Starting the project: 01_starting_the_project.md
@@ -78,4 +85,4 @@ nav:
   - Favourites: 12_favourites.md
   - Tags: 13_tags_coming_soon.md
   - HTMX: 14_htmx_coming_soon.md
-  - Future tutorials: 15_future_tutorials.md
+  - Future extensions: 15_future_extensions.md

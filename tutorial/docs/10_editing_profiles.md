@@ -64,11 +64,11 @@ though the characters themselves are masked, while the screenshot on the
 right exposes no information about the password.
 
 <figure>
-<img src="./assets/settings - password field.png" width="200" alt="Password field with masked characters" /><figcaption aria-hidden="true">Password field with masked characters</figcaption>
+<img src="../assets/settings - password field.png" width="200" alt="Password field with masked characters" /><figcaption aria-hidden="true">Password field with masked characters</figcaption>
 </figure>
 
 <figure>
-<img src="./assets/settings.png" width="200" alt="Empty password field" /><figcaption aria-hidden="true">Empty password field</figcaption>
+<img src="../assets/settings.png" width="200" alt="Empty password field" /><figcaption aria-hidden="true">Empty password field</figcaption>
 </figure>
 
 We want the password field in our future template to be empty, and we

@@ -252,11 +252,11 @@ classes: suffice it to say that this is required to have something that
 looks like the actual Realworld app.
 
 <figure>
-<img src="./assets/home - global feed.png" width="600" alt="Global feed in our app" /><figcaption aria-hidden="true">Global feed in our app</figcaption>
+<img src="../assets/home - global feed.png" width="600" alt="Global feed in our app" /><figcaption aria-hidden="true">Global feed in our app</figcaption>
 </figure>
 
 <figure>
-<img src="./assets/home - global feed - realworld.png" width="600" alt="Global feed in the RealWorld app" /><figcaption aria-hidden="true">Global feed in the RealWorld app</figcaption>
+<img src="../assets/home - global feed - realworld.png" width="600" alt="Global feed in the RealWorld app" /><figcaption aria-hidden="true">Global feed in the RealWorld app</figcaption>
 </figure>
 
 It's starting to look like something, but we can improve the template a

@@ -76,7 +76,7 @@ and add the following to it:
 Finally, we modify `home.html` so that article previews redirect to
 articles:
 
-``` { .html hl_lines="2, 7" }
+``` { .html hl_lines="2 7" }
 <!-- ... -->
 <a href="{{ article.get_absolute_url }}" rel="prefetch" class="preview-link">   <!-- new -->
    <h1>{{ article.title }}</h1>
@@ -89,11 +89,11 @@ articles:
 Let's see what it looks like:
 
 <figure>
-<img src="./assets/article_detail.png" width="600" alt="Individual article in our app" /><figcaption aria-hidden="true">Individual article in our app</figcaption>
+<img src="../assets/article_detail.png" width="600" alt="Individual article in our app" /><figcaption aria-hidden="true">Individual article in our app</figcaption>
 </figure>
 
 <figure>
-<img src="./assets/article_detail - realworld.png" width="600" alt="Individual article in RealWorld app" /><figcaption aria-hidden="true">Individual article in RealWorld app</figcaption>
+<img src="../assets/article_detail - realworld.png" width="600" alt="Individual article in RealWorld app" /><figcaption aria-hidden="true">Individual article in RealWorld app</figcaption>
 </figure>
 
 ## Slugs
@@ -110,7 +110,7 @@ problem is to combine slugs with UUIDs.
 First, we need to modify our `Article` model to include a slug, and to
 update the `get_absolute_url` method:
 
-``` { .python hl_lines="3, 4, 8" }
+``` { .python hl_lines="3 4 8" }
 class Article(models.Model):
     # ...
     slug = models.SlugField(max_length=255, editable=False)             # new
@@ -261,6 +261,6 @@ you will see that your new article has a slug consisting of its
 slugified title and a UUID:
 
 <figure>
-<img src="./assets/article_detail - slug.png" width="600" alt="Slugs" /><figcaption aria-hidden="true">Slugs</figcaption>
+<img src="../assets/article_detail - slug.png" width="600" alt="Slugs" /><figcaption aria-hidden="true">Slugs</figcaption>
 </figure>
 

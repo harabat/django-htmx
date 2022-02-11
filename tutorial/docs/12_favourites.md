@@ -160,7 +160,7 @@ In `templates/article_preview.html`:
 
 In `templates/article_favorite.html`
 
-``` { .html hl_lines="16, 22-24" }
+``` { .html hl_lines="16 22-24" }
 <form
     method="post"
     action="{% url 'article_favorite' slug=article.slug %}"
@@ -191,11 +191,11 @@ In `templates/article_favorite.html`
 ```
 
 <figure>
-<img src="./assets/home - favorite - before.png" width="600" alt="Favorite button before" /><figcaption aria-hidden="true">Favorite button before</figcaption>
+<img src="../assets/home - favorite - before.png" width="600" alt="Favorite button before" /><figcaption aria-hidden="true">Favorite button before</figcaption>
 </figure>
 
 <figure>
-<img src="./assets/home - favorite.png" width="600" alt="Favorite button after" /><figcaption aria-hidden="true">Favorite button after</figcaption>
+<img src="../assets/home - favorite.png" width="600" alt="Favorite button after" /><figcaption aria-hidden="true">Favorite button after</figcaption>
 </figure>
 
 ## Feeds
@@ -233,7 +233,7 @@ urlpatterns = [
 
 In `templates/profile_detail.html`:
 
-``` { .html hl_lines="7-15, 17-27, 30, 32-34" }
+``` { .html hl_lines="7-15 17-27 30 32-34" }
 <div class="container">
   <div class="row">
     <div class="col-xs-12 col-md-10 offset-md-1">

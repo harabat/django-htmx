@@ -58,7 +58,7 @@ Everything should be working now, right? Let's check by going to
 error:
 
 <figure>
-<img src="./assets/profile_detail - error.png" width="600" alt="profile_detail error" /><figcaption aria-hidden="true">profile_detail error</figcaption>
+<img src="../assets/profile_detail - error.png" width="600" alt="profile_detail error" /><figcaption aria-hidden="true">profile_detail error</figcaption>
 </figure>
 
 The error tells us that our `ProfileDetailView` wants to be called with
@@ -89,7 +89,7 @@ isn't much on it yet). Make sure to set a profile image for your `admin`
 user, as everyone else should have a default already set.
 
 <figure>
-<img src="./assets/profile_detail.png" width="600" alt="A view of a profile, sans errors" /><figcaption aria-hidden="true">A view of a profile, sans errors</figcaption>
+<img src="../assets/profile_detail.png" width="600" alt="A view of a profile, sans errors" /><figcaption aria-hidden="true">A view of a profile, sans errors</figcaption>
 </figure>
 
 ## Viewing Articles written by each User
@@ -168,7 +168,7 @@ usernames are exposed.
 
 In `templates/article_preview.html`, change the following lines:
 
-``` { .html hl_lines="2-4, 6, 8" }
+``` { .html hl_lines="2-4 6 8" }
 <div class="article-meta">
   <a href="{% url 'profile_detail' username=article.author.user.username %}">                   <!-- new -->
     <img src="{{ article.author.image }}" alt="{{ article.author.user.username }}"/>            <!-- new -->
@@ -221,7 +221,7 @@ In `templates/nav.html`:
 
 In `templates/article_detail.html`:
 
-``` { .html hl_lines="2-4, 6, 8" }
+``` { .html hl_lines="2-4 6 8" }
 <div class="article-meta">
   <a href="{% url 'profile_detail' username=article.author.user.username %}">                  <!-- new -->
     <img src="{{ article.author.image }}" alt="{{ article.author.user.username }}"/>           <!-- new -->
@@ -238,7 +238,7 @@ In `templates/article_detail.html`:
 
 In `templates/comments.html`:
 
-``` { .html hl_lines="2-5, 7" }
+``` { .html hl_lines="2-5 7" }
 <div class="card-footer">
   <a href="{% url 'profile_detail' username=comment.author.user.username %}" class="comment-author">            <!-- new -->
     <img src="{{ comment.author.image }}" class="comment-author-img" alt="{{ comment.author.user.username }}"/> <!-- new -->
