@@ -515,6 +515,21 @@
   
 
     
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15_future_extensions/" class="md-nav__link">
+        Future extensions
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -923,11 +938,11 @@ point <code>AUTH_USER_MODEL</code> to it:</p>
 <span class="normal">7</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="c1"># other settings</span>
 <span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="c1"># other apps</span>
-    <span class="s1">&#39;conduit.users&#39;</span>
-<span class="p">]</span>
+<span class="hll">    <span class="s1">&#39;conduit.users&#39;</span>
+</span><span class="p">]</span>
 
-<span class="n">AUTH_USER_MODEL</span> <span class="o">=</span> <span class="s1">&#39;users.User&#39;</span>
-</code></pre></div>
+<span class="hll"><span class="n">AUTH_USER_MODEL</span> <span class="o">=</span> <span class="s1">&#39;users.User&#39;</span>
+</span></code></pre></div>
 </td></tr></table>
 <h2 id="create-a-database">Create a database<a class="headerlink" href="#create-a-database" title="Permanent link">#</a></h2>
 <p>Make the migrations and start the server:</p>

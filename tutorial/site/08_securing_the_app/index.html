@@ -508,6 +508,21 @@
   
 
     
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15_future_extensions/" class="md-nav__link">
+        Future extensions
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -741,7 +756,7 @@ in the inheritance list: don't write
 avoid errors.</p>
 <p>If you try creating a post from the app, you should get this error:</p>
 <figure>
-<img src="./assets/login - error.png" width="600" alt="Login error" /><figcaption aria-hidden="true">Login error</figcaption>
+<img src="../assets/login - error.png" width="600" alt="Login error" /><figcaption aria-hidden="true">Login error</figcaption>
 </figure>
 
 <p>The cause of the problem is given in the line:</p>
@@ -774,8 +789,8 @@ deleting articles from any user who is not the article's author:</p>
 <span class="normal">13</span>
 <span class="normal">14</span>
 <span class="normal">15</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="cm">&lt;!-- ... --&gt;</span>
-{% if user == article.author.user %}                        <span class="cm">&lt;!-- new --&gt;</span>
-  <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>
+<span class="hll">{% if user == article.author.user %}                        <span class="cm">&lt;!-- new --&gt;</span>
+</span>  <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">a</span>
       <span class="na">href</span><span class="o">=</span><span class="s">&quot;{% url &#39;editor_update&#39; slug=article.slug %}&quot;</span>
       <span class="na">class</span><span class="o">=</span><span class="s">&quot;btn btn-outline-secondary btn-sm&quot;</span>
@@ -786,8 +801,8 @@ deleting articles from any user who is not the article's author:</p>
     <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
     {% include &#39;article_delete.html&#39; %}
   <span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-{% endif %}                                                 <span class="cm">&lt;!-- new --&gt;</span>
-<span class="cm">&lt;!-- ... --&gt;</span>
+<span class="hll">{% endif %}                                                 <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="cm">&lt;!-- ... --&gt;</span>
 </code></pre></div>
 </td></tr></table>
 <p>In <code>templates/comments.html</code>:</p>
@@ -796,10 +811,10 @@ deleting articles from any user who is not the article's author:</p>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="cm">&lt;!-- ... --&gt;</span>
-{% if user == comment.author.user %}    <span class="cm">&lt;!-- new --&gt;</span>
-  {% include &#39;comment_delete.html&#39; %}
-{% endif %}                             <span class="cm">&lt;!-- new --&gt;</span>
-<span class="cm">&lt;!-- ... --&gt;</span>
+<span class="hll">{% if user == comment.author.user %}    <span class="cm">&lt;!-- new --&gt;</span>
+</span>  {% include &#39;comment_delete.html&#39; %}
+<span class="hll">{% endif %}                             <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="cm">&lt;!-- ... --&gt;</span>
 </code></pre></div>
 </td></tr></table>
 <p>In <code>users/views.py</code>, we make sure that editing or deleting actions are
@@ -897,9 +912,9 @@ ups - but, in our case, we might as well sign in the user automatically.</p>
 <span class="normal">25</span>
 <span class="normal">26</span>
 <span class="normal">27</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="c1"># other imports</span>
-<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span>  <span class="c1"># new</span>
-<span class="kn">from</span> <span class="nn">django.contrib.auth</span> <span class="kn">import</span> <span class="n">authenticate</span><span class="p">,</span> <span class="n">login</span>  <span class="c1"># new</span>
-
+<span class="hll"><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span>  <span class="c1"># new</span>
+</span><span class="hll"><span class="kn">from</span> <span class="nn">django.contrib.auth</span> <span class="kn">import</span> <span class="n">authenticate</span><span class="p">,</span> <span class="n">login</span>  <span class="c1"># new</span>
+</span>
 <span class="c1"># other views</span>
 <span class="k">class</span> <span class="nc">SignUpView</span><span class="p">(</span><span class="n">CreateView</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
@@ -907,23 +922,23 @@ ups - but, in our case, we might as well sign in the user automatically.</p>
     <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;signup.html&quot;</span>
     <span class="n">success_url</span> <span class="o">=</span> <span class="n">reverse_lazy</span><span class="p">(</span><span class="s2">&quot;home&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>  <span class="c1"># new</span>
-        <span class="c1"># create the User object</span>
-        <span class="n">user</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># new</span>
-        <span class="c1"># set password manually</span>
-        <span class="c1"># as otherwise the User will be saved with unhashed password</span>
-        <span class="n">password</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>  <span class="c1"># new</span>
-        <span class="n">user</span><span class="o">.</span><span class="n">set_password</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>  <span class="c1"># new</span>
-        <span class="c1"># save the User object to the database</span>
-        <span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>  <span class="c1"># new</span>
-        <span class="c1"># authenticate your user with unhashed password</span>
-        <span class="c1"># (`authenticate` expects unhashed passwords)</span>
-        <span class="n">email</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">)</span>  <span class="c1"># new</span>
-        <span class="n">authenticated_user</span> <span class="o">=</span> <span class="n">authenticate</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>  <span class="c1"># new</span>
-        <span class="c1"># log in</span>
-        <span class="n">login</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="n">authenticated_user</span><span class="p">)</span>  <span class="c1"># new</span>
-        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">success_url</span><span class="p">)</span>  <span class="c1"># new</span>
-</code></pre></div>
+<span class="hll">    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>  <span class="c1"># new</span>
+</span><span class="hll">        <span class="c1"># create the User object</span>
+</span><span class="hll">        <span class="n">user</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># new</span>
+</span><span class="hll">        <span class="c1"># set password manually</span>
+</span><span class="hll">        <span class="c1"># as otherwise the User will be saved with unhashed password</span>
+</span><span class="hll">        <span class="n">password</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>  <span class="c1"># new</span>
+</span><span class="hll">        <span class="n">user</span><span class="o">.</span><span class="n">set_password</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>  <span class="c1"># new</span>
+</span><span class="hll">        <span class="c1"># save the User object to the database</span>
+</span><span class="hll">        <span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>  <span class="c1"># new</span>
+</span><span class="hll">        <span class="c1"># authenticate your user with unhashed password</span>
+</span><span class="hll">        <span class="c1"># (`authenticate` expects unhashed passwords)</span>
+</span><span class="hll">        <span class="n">email</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">)</span>  <span class="c1"># new</span>
+</span><span class="hll">        <span class="n">authenticated_user</span> <span class="o">=</span> <span class="n">authenticate</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>  <span class="c1"># new</span>
+</span><span class="hll">        <span class="c1"># log in</span>
+</span><span class="hll">        <span class="n">login</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="n">authenticated_user</span><span class="p">)</span>  <span class="c1"># new</span>
+</span><span class="hll">        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">success_url</span><span class="p">)</span>  <span class="c1"># new</span>
+</span></code></pre></div>
 </td></tr></table>
 <p>To make sure you understand what we're doing here: Django hashes
 passwords when creating a new <code>User</code>, but we need to make it explicit

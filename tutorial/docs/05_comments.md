@@ -52,7 +52,7 @@ after that.
 
 Now, we need to register our model in `admin.py`:
 
-``` { .python hl_lines="2, 5" }
+``` { .python hl_lines="2 5" }
 from django.contrib import admin
 from .models import Article, Comment        # new
 

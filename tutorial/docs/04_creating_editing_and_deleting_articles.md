@@ -42,7 +42,7 @@ urlpatterns = [
 
 We add a `New article` button to the Nav bar in `nav.html`:
 
-``` { .html hl_lines="3, 6, 8, 13-23" }
+``` { .html hl_lines="3 6 8 13-23" }
 <ul class="nav navbar-nav pull-xs-right">
   <li class="nav-item">
     {% url 'home' as home %}                                    <!-- new -->
@@ -233,7 +233,7 @@ prepopulated with the relevant values. When using `UpdateView`, we have
 access to the object being updated. Let's add the following to the
 `editor.html` template:
 
-``` { .html hl_lines="8, 17, 26" }
+``` { .html hl_lines="8 17 26" }
 <fieldset>
     <fieldset class="form-group">
         <input

@@ -515,6 +515,21 @@
   
 
     
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15_future_extensions/" class="md-nav__link">
+        Future extensions
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -877,26 +892,26 @@ to include a <code>Favorite</code> button in the <code>article_preview.html</cod
 <span class="s">                 {% endif %}&quot;</span>
   <span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ion-heart&quot;</span><span class="p">&gt;</span>
-      {% if request.path|truncatechars:7 == &#39;article&#39; %}  <span class="cm">&lt;!-- new --&gt;</span>
-        {% if article in user.profile.favorites.all %}
+<span class="hll">      {% if request.path|truncatechars:7 == &#39;article&#39; %}  <span class="cm">&lt;!-- new --&gt;</span>
+</span>        {% if article in user.profile.favorites.all %}
           Unfavorite
         {% else %}
           Favorite
         {% endif %} Article ({{ article.favorited_by.count }})
-      {% else  %}                                         <span class="cm">&lt;!-- new --&gt;</span>
-        {{ article.favorited_by.count }}                  <span class="cm">&lt;!-- new --&gt;</span>
-      {% endif %}                                         <span class="cm">&lt;!-- new --&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+<span class="hll">      {% else  %}                                         <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="hll">        {{ article.favorited_by.count }}                  <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="hll">      {% endif %}                                         <span class="cm">&lt;!-- new --&gt;</span>
+</span>    <span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
   <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
 </code></pre></div>
 </td></tr></table>
 <figure>
-<img src="./assets/home - favorite - before.png" width="600" alt="Favorite button before" /><figcaption aria-hidden="true">Favorite button before</figcaption>
+<img src="../assets/home - favorite - before.png" width="600" alt="Favorite button before" /><figcaption aria-hidden="true">Favorite button before</figcaption>
 </figure>
 
 <figure>
-<img src="./assets/home - favorite.png" width="600" alt="Favorite button after" /><figcaption aria-hidden="true">Favorite button after</figcaption>
+<img src="../assets/home - favorite.png" width="600" alt="Favorite button after" /><figcaption aria-hidden="true">Favorite button after</figcaption>
 </figure>
 
 <h2 id="feeds">Feeds<a class="headerlink" href="#feeds" title="Permanent link">#</a></h2>
@@ -985,35 +1000,35 @@ a user's favorited articles on their profile.</p>
       <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;articles-toggle&quot;</span><span class="p">&gt;</span>
         <span class="p">&lt;</span><span class="nt">ul</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;nav nav-pills outline-active&quot;</span><span class="p">&gt;</span>
           <span class="p">&lt;</span><span class="nt">li</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;nav-item&quot;</span><span class="p">&gt;</span>
-            {% url &#39;profile_detail&#39; username=profile.user.username as profile_detail %}         <span class="cm">&lt;!-- new from here --&gt;</span>
-            <span class="p">&lt;</span><span class="nt">a</span>
-              <span class="na">href</span><span class="o">=</span><span class="s">&quot;{{ profile_detail }}&quot;</span>
-              <span class="na">rel</span><span class="o">=</span><span class="s">&quot;prefetch&quot;</span>
-              <span class="na">class</span><span class="o">=</span><span class="s">&quot;nav-link</span>
-<span class="s">                     {% if request.path == profile_detail %}active{% endif %}&quot;</span>
-            <span class="p">&gt;</span>
-              My Articles
-            <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>                                                                                <span class="cm">&lt;!-- new to here --&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">li</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;nav-item&quot;</span><span class="p">&gt;</span>                                                                 <span class="cm">&lt;!-- new from here --&gt;</span>
-            {% url &#39;profile_favorites&#39; username=profile.user.username as profile_favorites %}
-            <span class="p">&lt;</span><span class="nt">a</span>
-              <span class="na">href</span><span class="o">=</span><span class="s">&quot;{{ profile_favorites }}&quot;</span>
-              <span class="na">rel</span><span class="o">=</span><span class="s">&quot;prefetch&quot;</span>
-              <span class="na">class</span><span class="o">=</span><span class="s">&quot;nav-link</span>
-<span class="s">                     {% if request.path == profile_favorites %}active{% endif %}&quot;</span>
-            <span class="p">&gt;</span>
-              Favorited Articles
-            <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>                                                                                 <span class="cm">&lt;!-- new to here --&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+<span class="hll">            {% url &#39;profile_detail&#39; username=profile.user.username as profile_detail %}         <span class="cm">&lt;!-- new from here --&gt;</span>
+</span><span class="hll">            <span class="p">&lt;</span><span class="nt">a</span>
+</span><span class="hll">              <span class="na">href</span><span class="o">=</span><span class="s">&quot;{{ profile_detail }}&quot;</span>
+</span><span class="hll">              <span class="na">rel</span><span class="o">=</span><span class="s">&quot;prefetch&quot;</span>
+</span><span class="hll">              <span class="na">class</span><span class="o">=</span><span class="s">&quot;nav-link</span>
+</span><span class="hll"><span class="s">                     {% if request.path == profile_detail %}active{% endif %}&quot;</span>
+</span><span class="hll">            <span class="p">&gt;</span>
+</span><span class="hll">              My Articles
+</span><span class="hll">            <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>                                                                                <span class="cm">&lt;!-- new to here --&gt;</span>
+</span>          <span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+<span class="hll">          <span class="p">&lt;</span><span class="nt">li</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;nav-item&quot;</span><span class="p">&gt;</span>                                                                 <span class="cm">&lt;!-- new from here --&gt;</span>
+</span><span class="hll">            {% url &#39;profile_favorites&#39; username=profile.user.username as profile_favorites %}
+</span><span class="hll">            <span class="p">&lt;</span><span class="nt">a</span>
+</span><span class="hll">              <span class="na">href</span><span class="o">=</span><span class="s">&quot;{{ profile_favorites }}&quot;</span>
+</span><span class="hll">              <span class="na">rel</span><span class="o">=</span><span class="s">&quot;prefetch&quot;</span>
+</span><span class="hll">              <span class="na">class</span><span class="o">=</span><span class="s">&quot;nav-link</span>
+</span><span class="hll"><span class="s">                     {% if request.path == profile_favorites %}active{% endif %}&quot;</span>
+</span><span class="hll">            <span class="p">&gt;</span>
+</span><span class="hll">              Favorited Articles
+</span><span class="hll">            <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span><span class="hll">          <span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>                                                                                 <span class="cm">&lt;!-- new to here --&gt;</span>
+</span>        <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
       <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-      {% if request.path == profile_detail %}                                                   <span class="cm">&lt;!-- new --&gt;</span>
-        {% include &#39;article_list.html&#39; with articles=my_articles %}
-      {% elif request.path == profile_favorites %}                                              <span class="cm">&lt;!-- new --&gt;</span>
-        {% include &#39;article_list.html&#39; with articles=favorited_articles %}                      <span class="cm">&lt;!-- new --&gt;</span>
-      {% endif %}                                                                               <span class="cm">&lt;!-- new --&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="hll">      {% if request.path == profile_detail %}                                                   <span class="cm">&lt;!-- new --&gt;</span>
+</span>        {% include &#39;article_list.html&#39; with articles=my_articles %}
+<span class="hll">      {% elif request.path == profile_favorites %}                                              <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="hll">        {% include &#39;article_list.html&#39; with articles=favorited_articles %}                      <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="hll">      {% endif %}                                                                               <span class="cm">&lt;!-- new --&gt;</span>
+</span>    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
   <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 </code></pre></div>

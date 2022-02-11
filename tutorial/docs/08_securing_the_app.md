@@ -101,7 +101,7 @@ avoid errors.
 If you try creating a post from the app, you should get this error:
 
 <figure>
-<img src="./assets/login - error.png" width="600" alt="Login error" /><figcaption aria-hidden="true">Login error</figcaption>
+<img src="../assets/login - error.png" width="600" alt="Login error" /><figcaption aria-hidden="true">Login error</figcaption>
 </figure>
 
 The cause of the problem is given in the line:
@@ -124,7 +124,7 @@ only be edited and deleted by their authors.
 In `templates/article_detail.html`, we hide the button for editing and
 deleting articles from any user who is not the article's author:
 
-``` { .html hl_lines="2, 14" }
+``` { .html hl_lines="2 14" }
 <!-- ... -->
 {% if user == article.author.user %}                        <!-- new -->
   <span>
@@ -144,7 +144,7 @@ deleting articles from any user who is not the article's author:
 
 In `templates/comments.html`:
 
-``` { .html hl_lines="2, 4" }
+``` { .html hl_lines="2 4" }
 <!-- ... -->
 {% if user == comment.author.user %}    <!-- new -->
   {% include 'comment_delete.html' %}
@@ -202,7 +202,7 @@ ups - but, in our case, we might as well sign in the user automatically.
 In `users/views.py`, add the following to `SignUpView` (as explained in
 [this StackOverflow answer](https://stackoverflow.com/a/70582911)):
 
-``` { .python hl_lines="2-3, 12-27" }
+``` { .python hl_lines="2-3 12-27" }
 # other imports
 from django.shortcuts import redirect  # new
 from django.contrib.auth import authenticate, login  # new

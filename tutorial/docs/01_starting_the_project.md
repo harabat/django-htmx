@@ -277,7 +277,7 @@ Finally, we need to tell Django that we're not using the default User
 model. In `settings.py`, add your `users` app to `INSTALLED_APPS` and
 point `AUTH_USER_MODEL` to it:
 
-``` { .python hl_lines="4, 7" }
+``` { .python hl_lines="4 7" }
 # other settings
 INSTALLED_APPS = [
     # other apps

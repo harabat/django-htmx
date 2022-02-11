@@ -501,6 +501,21 @@
   
 
     
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15_future_extensions/" class="md-nav__link">
+        Future extensions
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -646,7 +661,7 @@
 <code>localhost:8000/profile/@admin</code>, for example. Welp, we're getting an
 error:</p>
 <figure>
-<img src="./assets/profile_detail - error.png" width="600" alt="profile_detail error" /><figcaption aria-hidden="true">profile_detail error</figcaption>
+<img src="../assets/profile_detail - error.png" width="600" alt="profile_detail error" /><figcaption aria-hidden="true">profile_detail error</figcaption>
 </figure>
 
 <p>The error tells us that our <code>ProfileDetailView</code> wants to be called with
@@ -684,7 +699,7 @@ which objects to show.</p>
 isn't much on it yet). Make sure to set a profile image for your <code>admin</code>
 user, as everyone else should have a default already set.</p>
 <figure>
-<img src="./assets/profile_detail.png" width="600" alt="A view of a profile, sans errors" /><figcaption aria-hidden="true">A view of a profile, sans errors</figcaption>
+<img src="../assets/profile_detail.png" width="600" alt="A view of a profile, sans errors" /><figcaption aria-hidden="true">A view of a profile, sans errors</figcaption>
 </figure>
 
 <h2 id="viewing-articles-written-by-each-user">Viewing Articles written by each User<a class="headerlink" href="#viewing-articles-written-by-each-user" title="Permanent link">#</a></h2>
@@ -808,14 +823,14 @@ usernames are exposed.</p>
 <span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;article-meta&quot;</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;{% url &#39;profile_detail&#39; username=article.author.user.username %}&quot;</span><span class="p">&gt;</span>                   <span class="cm">&lt;!-- new --&gt;</span>
-    <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;{{ article.author.image }}&quot;</span> <span class="na">alt</span><span class="o">=</span><span class="s">&quot;{{ article.author.user.username }}&quot;</span><span class="p">/&gt;</span>            <span class="cm">&lt;!-- new --&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>                                                                                          <span class="cm">&lt;!-- new --&gt;</span>
-  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;info&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;{% url &#39;profile_detail&#39; username=article.author.user.username %}&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;author&quot;</span><span class="p">&gt;</span>  <span class="cm">&lt;!-- from &lt;span class=&quot;author&quot;&gt; --&gt;</span>
-        {{ article.author.user.username }}
-    <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>                                                                                        <span class="cm">&lt;!-- from &lt;/span&gt; --&gt;</span>
-    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;date&quot;</span><span class="p">&gt;</span>
+<span class="hll">  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;{% url &#39;profile_detail&#39; username=article.author.user.username %}&quot;</span><span class="p">&gt;</span>                   <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="hll">    <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;{{ article.author.image }}&quot;</span> <span class="na">alt</span><span class="o">=</span><span class="s">&quot;{{ article.author.user.username }}&quot;</span><span class="p">/&gt;</span>            <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="hll">  <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>                                                                                          <span class="cm">&lt;!-- new --&gt;</span>
+</span>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;info&quot;</span><span class="p">&gt;</span>
+<span class="hll">    <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;{% url &#39;profile_detail&#39; username=article.author.user.username %}&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;author&quot;</span><span class="p">&gt;</span>  <span class="cm">&lt;!-- from &lt;span class=&quot;author&quot;&gt; --&gt;</span>
+</span>        {{ article.author.user.username }}
+<span class="hll">    <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>                                                                                        <span class="cm">&lt;!-- from &lt;/span&gt; --&gt;</span>
+</span>    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;date&quot;</span><span class="p">&gt;</span>
       {{ article.created_at|date:&quot;D M d Y&quot; }}
     <span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
   <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
@@ -897,14 +912,14 @@ usernames are exposed.</p>
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;article-meta&quot;</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;{% url &#39;profile_detail&#39; username=article.author.user.username %}&quot;</span><span class="p">&gt;</span>                  <span class="cm">&lt;!-- new --&gt;</span>
-    <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;{{ article.author.image }}&quot;</span> <span class="na">alt</span><span class="o">=</span><span class="s">&quot;{{ article.author.user.username }}&quot;</span><span class="p">/&gt;</span>           <span class="cm">&lt;!-- new --&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>                                                                                         <span class="cm">&lt;!-- new --&gt;</span>
-  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;info&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;{% url &#39;profile_detail&#39; username=article.author.user.username %}&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;author&quot;</span><span class="p">&gt;</span> <span class="cm">&lt;!-- from &lt;span class=&quot;author&quot;&gt; --&gt;</span>
-      {{ article.author.user.username }}
-    <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>                                                                                       <span class="cm">&lt;!-- from &lt;/span&gt; --&gt;</span>
-    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;date&quot;</span><span class="p">&gt;</span>
+<span class="hll">  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;{% url &#39;profile_detail&#39; username=article.author.user.username %}&quot;</span><span class="p">&gt;</span>                  <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="hll">    <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;{{ article.author.image }}&quot;</span> <span class="na">alt</span><span class="o">=</span><span class="s">&quot;{{ article.author.user.username }}&quot;</span><span class="p">/&gt;</span>           <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="hll">  <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>                                                                                         <span class="cm">&lt;!-- new --&gt;</span>
+</span>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;info&quot;</span><span class="p">&gt;</span>
+<span class="hll">    <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;{% url &#39;profile_detail&#39; username=article.author.user.username %}&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;author&quot;</span><span class="p">&gt;</span> <span class="cm">&lt;!-- from &lt;span class=&quot;author&quot;&gt; --&gt;</span>
+</span>      {{ article.author.user.username }}
+<span class="hll">    <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>                                                                                       <span class="cm">&lt;!-- from &lt;/span&gt; --&gt;</span>
+</span>    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;date&quot;</span><span class="p">&gt;</span>
       {{ article.created_at|date:&quot;D M d Y&quot; }}
     <span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
   <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
@@ -923,13 +938,13 @@ usernames are exposed.</p>
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;card-footer&quot;</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;{% url &#39;profile_detail&#39; username=comment.author.user.username %}&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;comment-author&quot;</span><span class="p">&gt;</span>            <span class="cm">&lt;!-- new --&gt;</span>
-    <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;{{ comment.author.image }}&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;comment-author-img&quot;</span> <span class="na">alt</span><span class="o">=</span><span class="s">&quot;{{ comment.author.user.username }}&quot;</span><span class="p">/&gt;</span> <span class="cm">&lt;!-- new --&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>                                                                                                          <span class="cm">&lt;!-- new --&gt;</span>
-  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;{% url &#39;profile_detail&#39; username=comment.author.user.username %}&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;comment-author&quot;</span><span class="p">&gt;</span>            <span class="cm">&lt;!-- from &lt;span class=&quot;comment-author&quot;&gt; --&gt;</span>
-      {{ comment.author.user.username }}
-  <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>                                                                                                          <span class="cm">&lt;!-- from &lt;/span&gt;--&gt;</span>
-  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;date-posted&quot;</span><span class="p">&gt;</span>
+<span class="hll">  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;{% url &#39;profile_detail&#39; username=comment.author.user.username %}&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;comment-author&quot;</span><span class="p">&gt;</span>            <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="hll">    <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;{{ comment.author.image }}&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;comment-author-img&quot;</span> <span class="na">alt</span><span class="o">=</span><span class="s">&quot;{{ comment.author.user.username }}&quot;</span><span class="p">/&gt;</span> <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="hll">  <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>                                                                                                          <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="hll">  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;{% url &#39;profile_detail&#39; username=comment.author.user.username %}&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;comment-author&quot;</span><span class="p">&gt;</span>            <span class="cm">&lt;!-- from &lt;span class=&quot;comment-author&quot;&gt; --&gt;</span>
+</span>      {{ comment.author.user.username }}
+<span class="hll">  <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>                                                                                                          <span class="cm">&lt;!-- from &lt;/span&gt;--&gt;</span>
+</span>  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;date-posted&quot;</span><span class="p">&gt;</span>
     {{ comment.created_at|date:&quot;D M d Y&quot; }}
   <span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
   {% include &#39;comment_delete.html&#39; %}
