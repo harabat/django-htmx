@@ -8,7 +8,7 @@ app is called Conduit and is a Medium clone: you can see it running at
 <https://demo.realworld.io>.
 
 <figure>
-<img src="../assets/Conduit - RealWorld.png" width="600" alt="The RealWorld app, in all its glory" /><figcaption aria-hidden="true">The RealWorld app, in all its glory</figcaption>
+<img src="./assets/Conduit - RealWorld.png" width="600" alt="The RealWorld app, in all its glory" /><figcaption aria-hidden="true">The RealWorld app, in all its glory</figcaption>
 </figure>
 
 Instead of building the backend in Django and doing the frontend with a
