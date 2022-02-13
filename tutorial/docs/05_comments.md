@@ -1,6 +1,9 @@
 # Comments
 
-Now that we have articles, we need comments.
+## Introduction
+
+Now that we have articles, we need comments. Gotta give our users a
+voice, right?
 
 ## Model
 

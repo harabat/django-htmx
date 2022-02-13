@@ -1,4 +1,11 @@
-# Authentication
+# Authentication I: Login, Logout, Signup
+
+## Introduction
+
+Here comes authentication. Because it is a bit complicated,
+authentication will take two chapters: one for implementing the login,
+logout, and signup processes, and one for shifting our entire app behind
+these authentication requirements.
 
 ## Auth views
 

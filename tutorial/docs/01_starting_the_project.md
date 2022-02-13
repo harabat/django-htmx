@@ -1,8 +1,13 @@
 # Starting the project
 
-## Virtual environment
+## Introduction
 
 Let's start this tutorial in earnest.
+
+In this chapter, we'll set up everything we'll need to start coding: our
+virtual environment, folders, user model, and database.
+
+## Virtual environment
 
 Before doing anything else, we need to create our virtual environment.
 
@@ -91,12 +96,11 @@ layout should now be:
 ```
 
 Because we're deviating from Django's generic project layout, we'll have
-to update some lines.
-
-You might wonder why we have to fiddle with the settings before even
-starting to code, but this small effort has the benefit of making the
-structure of our project easier to understand and of separating the
-config from the code, which is a good rule of thumb.
+to update some lines in the settings. You might wonder why we have to
+fiddle with the settings before even starting to code, but this small
+effort has the benefit of making the structure of our project easier to
+understand, and of separating the config from the code, which is a habit
+to get into.
 
 In `asgi.py` and `wsgi.py`:
 
@@ -114,6 +118,10 @@ ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
 # from WSGI_APPLICATION = "conduit.wsgi.application"
 ```
+
+Done, we have implemented a project layout that separates the config (in
+the `config` folder) from the code (`conduit` folder) and told Django to
+take this into account.
 
 ## App folder structure
 
@@ -287,13 +295,44 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'users.User'
 ```
 
+## Why no REST?
+
+Because our entire frontend is integrated into Django (through HTML
+templates and HTMX), and given the scope of tutorial, we can implement
+the whole app without building a REST API. So we won't. This has a few
+benefits:
+
+-   we keep the structure of the app simple
+-   we keep the mental load light: no need to understand how Django REST
+    framework (the preferred way of implementing REST API in Django)
+    works, no need to juggle with serializers, routers, renderers, etc.,
+    no need to complicate the codebase
+-   because we don't use REST API, we don't need to implement JWT
+    authentication, which is a general pain: we can just rely on
+    Django's built-in authentication solutions, which are robust and
+    simple to implement.
+
 ## Create a database
 
-Make the migrations and start the server:
+Django uses a sqlite database by default: it's versatile, simple, and
+sufficient for our needs, so we'll go with that, for now.
+
+After any change to a model, we need to sync the database:
 
 ``` { .shell }
 (django) django_tutorial$ python manage.py makemigrations
 (django) django_tutorial$ python manage.py migrate
+```
+
+We'll be doing this many times throughout the tutorial: if your app
+refuses to run at some point, the most likely error is that you forgot
+to migrate, so make sure you keep on top of it.
+
+## Bring the app online
+
+Let's start the server.
+
+``` { .shell }
 (django) django_tutorial$ python manage.py runserver
 ```
 

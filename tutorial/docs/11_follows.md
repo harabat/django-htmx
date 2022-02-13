@@ -1,5 +1,10 @@
 # Follows
 
+## Introduction
+
+In this chapter, we'll let users follow other users, so that they can
+keep abreast of their favourite users' articles.
+
 ## Creating a few new users and articles
 
 To make the following sections more interesting, let's create a new
@@ -30,14 +35,15 @@ In [6]: for i in range(2):
 In [7]: User.objects.get(username='admin').profile.follow(Profile.objects.last())
 ```
 
-This will create 2 users with full profiles and a couple articles each.
+This will create two users with full profiles and a couple articles
+each.
 
 ## Model
 
-We'll now let our users follow other users, ie subscribe to other users'
-articles. This should be a relationship between `Profile` objects, where
-one `Profile` object can follow, and be followed by, many other
-`Profile` objects: we'll use a
+We'll now let our users follow other users, i.e. subscribe to other
+users' articles. This should be a relationship between `Profile`
+objects, where one `Profile` object can follow, and be followed by, many
+other `Profile` objects: we'll use a
 [`ManyToManyField`](https://docs.djangoproject.com/en/4.0/ref/models/fields/#django.db.models.ManyToManyField)
 relationship.
 
@@ -90,7 +96,7 @@ Let's `makemigrations` and `migrate`, since we have modified the model.
 
 ## ProfileDetailView
 
-We need to let users to follow or unfollow other users in our templates.
+We need to let users follow or unfollow other users in our templates.
 This involves some work around checking whether the user is already in
 our `follows` or not. Because the Django Template Language
 (intentionally) makes it difficult to write non-trivial queries within

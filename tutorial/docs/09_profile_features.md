@@ -1,5 +1,11 @@
 # Profile features
 
+## Introduction
+
+Profile features are a central part of our app: users should be able to
+customize their profile, to visit other profiles, and to view the
+articles written by a given user.
+
 ## Viewing Profiles
 
 It's time to allow users to view their own and other users' profiles.

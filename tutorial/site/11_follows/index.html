@@ -334,7 +334,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../07_authentication/" class="md-nav__link">
+      <a href="../07_authentication_i_login_logout_signup/" class="md-nav__link">
         Authentication
       </a>
     </li>
@@ -349,7 +349,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../08_securing_the_app/" class="md-nav__link">
+      <a href="../08_authentication_ii_securing_the_app/" class="md-nav__link">
         Securing the app
       </a>
     </li>
@@ -426,6 +426,13 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#creating-a-few-new-users-and-articles" class="md-nav__link">
@@ -564,6 +571,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#creating-a-few-new-users-and-articles" class="md-nav__link">
     Creating a few new users and articles
   </a>
@@ -623,6 +637,9 @@
 
 
 <h1 id="follows">Follows<a class="headerlink" href="#follows" title="Permanent link">#</a></h1>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">#</a></h2>
+<p>In this chapter, we'll let users follow other users, so that they can
+keep abreast of their favourite users' articles.</p>
 <h2 id="creating-a-few-new-users-and-articles">Creating a few new users and articles<a class="headerlink" href="#creating-a-few-new-users-and-articles" title="Permanent link">#</a></h2>
 <p>To make the following sections more interesting, let's create a new
 users and posts. Run Django shell with
@@ -669,12 +686,13 @@ following into your shell (no need to clean it):</p>
 <span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s1">&#39;admin&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">follow</span><span class="p">(</span><span class="n">Profile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">last</span><span class="p">())</span>
 </code></pre></div>
 </td></tr></table>
-<p>This will create 2 users with full profiles and a couple articles each.</p>
+<p>This will create two users with full profiles and a couple articles
+each.</p>
 <h2 id="model">Model<a class="headerlink" href="#model" title="Permanent link">#</a></h2>
-<p>We'll now let our users follow other users, ie subscribe to other users'
-articles. This should be a relationship between <code>Profile</code> objects, where
-one <code>Profile</code> object can follow, and be followed by, many other
-<code>Profile</code> objects: we'll use a
+<p>We'll now let our users follow other users, i.e. subscribe to other
+users' articles. This should be a relationship between <code>Profile</code>
+objects, where one <code>Profile</code> object can follow, and be followed by, many
+other <code>Profile</code> objects: we'll use a
 <a href="https://docs.djangoproject.com/en/4.0/ref/models/fields/#django.db.models.ManyToManyField"><code>ManyToManyField</code></a>
 relationship.</p>
 <p>We need a new field in our <code>Profile</code> model in <code>users/models.py</code>:</p>
@@ -739,7 +757,7 @@ follows User B that User B necessarily follows User A).</p>
 </code></pre></div>
 </td></tr></table>
 <h2 id="profiledetailview">ProfileDetailView<a class="headerlink" href="#profiledetailview" title="Permanent link">#</a></h2>
-<p>We need to let users to follow or unfollow other users in our templates.
+<p>We need to let users follow or unfollow other users in our templates.
 This involves some work around checking whether the user is already in
 our <code>follows</code> or not. Because the Django Template Language
 (intentionally) makes it difficult to write non-trivial queries within
