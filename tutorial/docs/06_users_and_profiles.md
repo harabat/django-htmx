@@ -19,7 +19,7 @@ the profile logic in a `Profile` model.
 
 ## User model
 
-### User
+### Creating the User model
 
 The `User` model will contain everything related to authentication.
 
@@ -54,7 +54,7 @@ required by Django, we only need to specify `username`. More information
 about the fields can be found in the docs for [the default Django User
 model](https://docs.djangoproject.com/en/4.0/ref/contrib/auth/).
 
-### UserManager
+### Creating the UserManager
 
 We also need a `UserManager`, [as advised by the
 docs](https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#writing-a-manager-for-a-custom-user-model).
@@ -121,7 +121,7 @@ class User(AbstractUser):
 Make sure to `makemigrations` and `migrate`, so that Django is aware of
 your new model.
 
-### admin.py
+### Registering our new model
 
 We need to register this new `User` model in `users/admins.py`, to have
 access to it in our admin app.
@@ -135,7 +135,7 @@ admin.site.register(User)
 
 ## Profile model
 
-### Profile
+### Creating the Profile model
 
 We are following the instructions in the Django docs about [extending a
 User
@@ -177,7 +177,7 @@ class Profile(models.Model):
 As always, whenever you change a model, you should `makemigrations` and
 `migrate`.
 
-### signals.py
+### Automating the creation of profiles for each new user
 
 Since we're defining the `Profile` outside of the `User` model, a
 profile won't be created automatically whenever a user signs up.
@@ -222,7 +222,7 @@ This signal runs whenever a `User` is saved. By checking for `created`,
 we make sure to only initiate a `Profile` for the `User` instance if the
 User has just been created, instead of whenever the instance is updated.
 
-### admin.py
+### Registering our new model
 
 We need to register this new `Profile` model in `users/admins.py`, to
 have access to it in our admin app, but we want to be able to view

@@ -1,9 +1,12 @@
 # Creating, editing, and deleting Articles
 
-We have implemented the features that allow to view articles, but we
+## Introduction
+
+We have implemented the features that allow us to view articles, but we
 need to allow users to create, edit, and delete them as well. We'll
 first implement this functionality, and modify it later to take into
-account user authentication.
+account user authentication (so that only the article's author can edit
+or delete their article).
 
 ## Creating Articles
 
@@ -292,7 +295,7 @@ class EditorDeleteView(DeleteView):
 
 Notice that we're using the `article_detail.html` template. We could use
 a separate one, but that would require to load a new page, which seems
-unnecessary: we'll in a second how we're making this work.
+unnecessary: we'll see in a second how we're making this work.
 
 In `urls.py`:
 

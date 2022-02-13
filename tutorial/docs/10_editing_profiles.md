@@ -4,7 +4,7 @@
 
 We want to allow users to modify their profile information (image, bio)
 and user information (username, email, password) at the same place. That
-is, we want to allow users to update 2 models at the same URL.
+is, we want to allow users to update two models at the same URL.
 Surprisingly, this common use case is not straightforward to implement
 with Django, especially if we're trying to follow good practice and use
 class-based views. Take a break before continuing, as we're going to go
@@ -54,7 +54,7 @@ allows to get a lot of model-relevant form logic for free (Django's
 The `ProfileForm` is self-explanatory.
 
 The `UserForm` is a bit more complicated. Let's go through it in detail.
-We want to our user to be able to update three types of information: the
+We want our user to be able to update three types of information: the
 username, the email, and the password. We also want to expose the
 current username and email values in the template, but we don't want to
 expose any information about the password. The screenshot below
@@ -74,7 +74,7 @@ right exposes no information about the password.
 We want the password field in our future template to be empty, and we
 don't want to force the user to type it out every time they want to
 modify some other information. In other words, we want the password
-field to be optional, ie `required=False`. Furthermore, since this
+field to be optional, i.e. `required=False`. Furthermore, since this
 password field doesn't need any information about the current password,
 we can just create a dummy `new_password` field, instead of linking our
 form to the `User` model's actual `password` attribute. Finally, when we
@@ -127,9 +127,9 @@ hence the `LoginRequiredMixin`.
 
 `UpdateView` expects to deal with a single form by default, and every
 form requires a queryset, and some explicitly-defined `fields` or
-`form_class`. However, we want our `UpdateView` to deal with 2 forms: we
-will pass one form to the view in the way it expects, and the other we
-will pass as extra context data. We tell our `UpdateView` that its
+`form_class`. However, we want our `UpdateView` to deal with two forms:
+we will pass one form to the view in the way it expects, and the other
+we will pass as extra context data. We tell our `UpdateView` that its
 (official) form will be of the class `ProfileForm` and that its queryset
 will be a single instance of the `Profile` model: namely, the users will
 only be able to update their own profile (hence the `get_object`
@@ -140,9 +140,9 @@ to this form by `user_form` in our template. Finally, we need to process
 the two forms, which means that we need to override `UpdateView`'s
 `post` method. We take our whole `POST` request and run it through both
 `ProfileForm` and `UserForm`: this means that we let the forms take in
-the whole of the data, pick what they need (ie what corresponds to their
-fields), and apply it to the relevant objects. If our forms are valid,
-we can save the information. Otherwise, we reject the input (and
+the whole of the data, pick what they need (i.e. what corresponds to
+their fields), and apply it to the relevant objects. If our forms are
+valid, we can save the information. Otherwise, we reject the input (and
 re-render everything with relevant error information).
 
 ## Templates

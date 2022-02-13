@@ -56,7 +56,7 @@ We'll then dive into the tutorial proper: we'll make our first models,
 views, templates. We'll also create some articles through the Django
 admin app to have something nice to look at.
 
-We'll then spend some time on implementing features for viewing,
+Next, we'll spend some time on implementing features for viewing,
 creating, editing, and deleting articles.
 
 We'll do the same for comments.

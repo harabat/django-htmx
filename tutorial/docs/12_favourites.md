@@ -1,5 +1,11 @@
 # Favourites
 
+## Introduction
+
+What if a user wants to bookmark a masterpiece of an article and come
+back to it every once in a while? We'll enable our users to favourite
+specific articles.
+
 ## Model
 
 The second to last feature we need is allowing users to favourite some

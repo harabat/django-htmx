@@ -1,5 +1,10 @@
 # First views and templates
 
+## Introduction
+
+In this chapter, we'll bring an MVP of our app online: it'll have a
+landing page, some articles, and even a navbar!
+
 ## Article model
 
 We'll start by making a model for our articles in `articles/models.py`.
@@ -57,7 +62,14 @@ admin.site.register(Article)            # new
 ```
 
 The server should still be running (otherwise restart it). Log in as the
-superuser you just created and create 3 articles.
+superuser you just created and create three articles in Django admin by
+doing the following:
+
+1.  make sure you're at the URL <http://127.0.0.1:8000/admin/>
+2.  click “:heavy-plus-sign: Add” in the `Articles` section
+3.  specify a title, a description, a body, and the author (you) for the
+    article
+4.  click “Save and add another”
 
 ## Home view
 
@@ -243,7 +255,7 @@ Let's create the template and add the following to it:
 {% endblock %}
 ```
 
-The HTML is adapted from other realworld projects (especially the
+The HTML is adapted from other RealWorld projects (especially the
 [SvelteKit implementation of the RealWorld
 app](https://github.com/sveltejs/realworld/), because Svelte is
 unexpectedly close to Django's templating language). Because the HTML is

@@ -78,8 +78,8 @@ nav:
   - Creating, editing, and deleting Articles: 04_creating_editing_and_deleting_articles.md
   - Comments: 05_comments.md
   - Users and Profiles: 06_users_and_profiles.md
-  - Authentication: 07_authentication.md
-  - Securing the app: 08_securing_the_app.md
+  - Authentication: 07_authentication_i_login_logout_signup.md
+  - Securing the app: 08_authentication_ii_securing_the_app.md
   - Profile features: 09_profile_features.md
   - Editing profiles: 10_editing_profiles.md
   - Follows: 11_follows.md

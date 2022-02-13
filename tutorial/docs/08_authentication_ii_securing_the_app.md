@@ -1,4 +1,12 @@
-# Securing the app
+# Authentication II: Securing the app
+
+## Introduction
+
+This is the second part of our authentication setup: we'll make sure
+that some actions in the app (creating posts, posting comments, etc.)
+are only accessible to authenticated users, while others are only
+accessible to a subset of authenticated users (only the authors of an
+article should be able to edit it, for example).
 
 ## Nav
 

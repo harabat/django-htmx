@@ -1,5 +1,10 @@
 # Viewing Articles
 
+## Introduction
+
+In this chapter, we'll let our users navigate to and read individual
+articles.
+
 ## Article view
 
 Next we'll implement the article view.
