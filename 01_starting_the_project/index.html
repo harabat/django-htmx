@@ -278,6 +278,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#virtual-environment" class="md-nav__link">
     Virtual environment
   </a>
@@ -306,8 +313,22 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#why-no-rest" class="md-nav__link">
+    Why no REST?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#create-a-database" class="md-nav__link">
     Create a database
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bring-the-app-online" class="md-nav__link">
+    Bring the app online
   </a>
   
 </li>
@@ -403,7 +424,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../07_authentication/" class="md-nav__link">
+      <a href="../07_authentication_i_login_logout_signup/" class="md-nav__link">
         Authentication
       </a>
     </li>
@@ -418,7 +439,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../08_securing_the_app/" class="md-nav__link">
+      <a href="../08_authentication_ii_securing_the_app/" class="md-nav__link">
         Securing the app
       </a>
     </li>
@@ -557,6 +578,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#virtual-environment" class="md-nav__link">
     Virtual environment
   </a>
@@ -585,8 +613,22 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#why-no-rest" class="md-nav__link">
+    Why no REST?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#create-a-database" class="md-nav__link">
     Create a database
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bring-the-app-online" class="md-nav__link">
+    Bring the app online
   </a>
   
 </li>
@@ -609,8 +651,11 @@
 
 
 <h1 id="starting-the-project">Starting the project<a class="headerlink" href="#starting-the-project" title="Permanent link">#</a></h1>
-<h2 id="virtual-environment">Virtual environment<a class="headerlink" href="#virtual-environment" title="Permanent link">#</a></h2>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">#</a></h2>
 <p>Let's start this tutorial in earnest.</p>
+<p>In this chapter, we'll set up everything we'll need to start coding: our
+virtual environment, folders, user model, and database.</p>
+<h2 id="virtual-environment">Virtual environment<a class="headerlink" href="#virtual-environment" title="Permanent link">#</a></h2>
 <p>Before doing anything else, we need to create our virtual environment.</p>
 <p>We're working with <code>conda</code>
 (<a href="https://docs.conda.io/en/latest/miniconda.html">tutorial</a>), but you
@@ -715,11 +760,11 @@ layout should now be:</p>
 </code></pre></div>
 </td></tr></table>
 <p>Because we're deviating from Django's generic project layout, we'll have
-to update some lines.</p>
-<p>You might wonder why we have to fiddle with the settings before even
-starting to code, but this small effort has the benefit of making the
-structure of our project easier to understand and of separating the
-config from the code, which is a good rule of thumb.</p>
+to update some lines in the settings. You might wonder why we have to
+fiddle with the settings before even starting to code, but this small
+effort has the benefit of making the structure of our project easier to
+understand, and of separating the config from the code, which is a habit
+to get into.</p>
 <p>In <code>asgi.py</code> and <code>wsgi.py</code>:</p>
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;DJANGO_SETTINGS_MODULE&quot;</span><span class="p">,</span> <span class="s2">&quot;config.settings&quot;</span><span class="p">)</span>
@@ -738,6 +783,9 @@ config from the code, which is a good rule of thumb.</p>
 <span class="c1"># from WSGI_APPLICATION = &quot;conduit.wsgi.application&quot;</span>
 </code></pre></div>
 </td></tr></table>
+<p>Done, we have implemented a project layout that separates the config (in
+the <code>config</code> folder) from the code (<code>conduit</code> folder) and told Django to
+take this into account.</p>
 <h2 id="app-folder-structure">App folder structure<a class="headerlink" href="#app-folder-structure" title="Permanent link">#</a></h2>
 <p>Our app will have a lot of moving parts (articles, profiles, tags,
 etc.). To keep the structure of our app clear, we'll host the logic for
@@ -944,13 +992,37 @@ point <code>AUTH_USER_MODEL</code> to it:</p>
 <span class="hll"><span class="n">AUTH_USER_MODEL</span> <span class="o">=</span> <span class="s1">&#39;users.User&#39;</span>
 </span></code></pre></div>
 </td></tr></table>
+<h2 id="why-no-rest">Why no REST?<a class="headerlink" href="#why-no-rest" title="Permanent link">#</a></h2>
+<p>Because our entire frontend is integrated into Django (through HTML
+templates and HTMX), and given the scope of tutorial, we can implement
+the whole app without building a REST API. So we won't. This has a few
+benefits:</p>
+<ul>
+<li>we keep the structure of the app simple</li>
+<li>we keep the mental load light: no need to understand how Django REST
+    framework (the preferred way of implementing REST API in Django)
+    works, no need to juggle with serializers, routers, renderers, etc.,
+    no need to complicate the codebase</li>
+<li>because we don't use REST API, we don't need to implement JWT
+    authentication, which is a general pain: we can just rely on
+    Django's built-in authentication solutions, which are robust and
+    simple to implement.</li>
+</ul>
 <h2 id="create-a-database">Create a database<a class="headerlink" href="#create-a-database" title="Permanent link">#</a></h2>
-<p>Make the migrations and start the server:</p>
+<p>Django uses a sqlite database by default: it's versatile, simple, and
+sufficient for our needs, so we'll go with that, for now.</p>
+<p>After any change to a model, we need to sync the database:</p>
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="o">(</span>django<span class="o">)</span> django_tutorial$ python manage.py makemigrations
+<span class="normal">2</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="o">(</span>django<span class="o">)</span> django_tutorial$ python manage.py makemigrations
 <span class="o">(</span>django<span class="o">)</span> django_tutorial$ python manage.py migrate
-<span class="o">(</span>django<span class="o">)</span> django_tutorial$ python manage.py runserver
+</code></pre></div>
+</td></tr></table>
+<p>We'll be doing this many times throughout the tutorial: if your app
+refuses to run at some point, the most likely error is that you forgot
+to migrate, so make sure you keep on top of it.</p>
+<h2 id="bring-the-app-online">Bring the app online<a class="headerlink" href="#bring-the-app-online" title="Permanent link">#</a></h2>
+<p>Let's start the server.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="o">(</span>django<span class="o">)</span> django_tutorial$ python manage.py runserver
 </code></pre></div>
 </td></tr></table>
 <p>Our app, Conduit, is online!</p>

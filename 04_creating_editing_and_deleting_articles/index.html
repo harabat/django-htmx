@@ -323,6 +323,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#creating-articles" class="md-nav__link">
     Creating Articles
   </a>
@@ -389,7 +396,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../07_authentication/" class="md-nav__link">
+      <a href="../07_authentication_i_login_logout_signup/" class="md-nav__link">
         Authentication
       </a>
     </li>
@@ -404,7 +411,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../08_securing_the_app/" class="md-nav__link">
+      <a href="../08_authentication_ii_securing_the_app/" class="md-nav__link">
         Securing the app
       </a>
     </li>
@@ -543,6 +550,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#creating-articles" class="md-nav__link">
     Creating Articles
   </a>
@@ -581,10 +595,12 @@
 
 
 <h1 id="creating-editing-and-deleting-articles">Creating, editing, and deleting Articles<a class="headerlink" href="#creating-editing-and-deleting-articles" title="Permanent link">#</a></h1>
-<p>We have implemented the features that allow to view articles, but we
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">#</a></h2>
+<p>We have implemented the features that allow us to view articles, but we
 need to allow users to create, edit, and delete them as well. We'll
 first implement this functionality, and modify it later to take into
-account user authentication.</p>
+account user authentication (so that only the article's author can edit
+or delete their article).</p>
 <h2 id="creating-articles">Creating Articles<a class="headerlink" href="#creating-articles" title="Permanent link">#</a></h2>
 <p>Let's allow users to create articles.</p>
 <p>We define the <code>EditorCreateView</code> view in <code>views.py</code>:</p>
@@ -1030,7 +1046,7 @@ access to the object being updated. Let's add the following to the
 </td></tr></table>
 <p>Notice that we're using the <code>article_detail.html</code> template. We could use
 a separate one, but that would require to load a new page, which seems
-unnecessary: we'll in a second how we're making this work.</p>
+unnecessary: we'll see in a second how we're making this work.</p>
 <p>In <code>urls.py</code>:</p>
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>

@@ -334,7 +334,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../07_authentication/" class="md-nav__link">
+      <a href="../07_authentication_i_login_logout_signup/" class="md-nav__link">
         Authentication
       </a>
     </li>
@@ -349,7 +349,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../08_securing_the_app/" class="md-nav__link">
+      <a href="../08_authentication_ii_securing_the_app/" class="md-nav__link">
         Securing the app
       </a>
     </li>
@@ -598,7 +598,7 @@
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">#</a></h2>
 <p>We want to allow users to modify their profile information (image, bio)
 and user information (username, email, password) at the same place. That
-is, we want to allow users to update 2 models at the same URL.
+is, we want to allow users to update two models at the same URL.
 Surprisingly, this common use case is not straightforward to implement
 with Django, especially if we're trying to follow good practice and use
 class-based views. Take a break before continuing, as we're going to go
@@ -664,7 +664,7 @@ allows to get a lot of model-relevant form logic for free (Django's
 “batteries included” philosophy).</p>
 <p>The <code>ProfileForm</code> is self-explanatory.</p>
 <p>The <code>UserForm</code> is a bit more complicated. Let's go through it in detail.
-We want to our user to be able to update three types of information: the
+We want our user to be able to update three types of information: the
 username, the email, and the password. We also want to expose the
 current username and email values in the template, but we don't want to
 expose any information about the password. The screenshot below
@@ -683,7 +683,7 @@ right exposes no information about the password.</p>
 <p>We want the password field in our future template to be empty, and we
 don't want to force the user to type it out every time they want to
 modify some other information. In other words, we want the password
-field to be optional, ie <code>required=False</code>. Furthermore, since this
+field to be optional, i.e. <code>required=False</code>. Furthermore, since this
 password field doesn't need any information about the current password,
 we can just create a dummy <code>new_password</code> field, instead of linking our
 form to the <code>User</code> model's actual <code>password</code> attribute. Finally, when we
@@ -755,9 +755,9 @@ slowly.</p>
 hence the <code>LoginRequiredMixin</code>.</p>
 <p><code>UpdateView</code> expects to deal with a single form by default, and every
 form requires a queryset, and some explicitly-defined <code>fields</code> or
-<code>form_class</code>. However, we want our <code>UpdateView</code> to deal with 2 forms: we
-will pass one form to the view in the way it expects, and the other we
-will pass as extra context data. We tell our <code>UpdateView</code> that its
+<code>form_class</code>. However, we want our <code>UpdateView</code> to deal with two forms:
+we will pass one form to the view in the way it expects, and the other
+we will pass as extra context data. We tell our <code>UpdateView</code> that its
 (official) form will be of the class <code>ProfileForm</code> and that its queryset
 will be a single instance of the <code>Profile</code> model: namely, the users will
 only be able to update their own profile (hence the <code>get_object</code>
@@ -768,9 +768,9 @@ to this form by <code>user_form</code> in our template. Finally, we need to proc
 the two forms, which means that we need to override <code>UpdateView</code>'s
 <code>post</code> method. We take our whole <code>POST</code> request and run it through both
 <code>ProfileForm</code> and <code>UserForm</code>: this means that we let the forms take in
-the whole of the data, pick what they need (ie what corresponds to their
-fields), and apply it to the relevant objects. If our forms are valid,
-we can save the information. Otherwise, we reject the input (and
+the whole of the data, pick what they need (i.e. what corresponds to
+their fields), and apply it to the relevant objects. If our forms are
+valid, we can save the information. Otherwise, we reject the input (and
 re-render everything with relevant error information).</p>
 <h2 id="templates">Templates<a class="headerlink" href="#templates" title="Permanent link">#</a></h2>
 <p>In <code>templates/settings.html</code>:</p>
