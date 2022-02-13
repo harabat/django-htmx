@@ -13,6 +13,7 @@ theme:
   icon:
     repo: octicons/mark-github-16
   language: en
+  custom_dir: 'tutorial/overrides'
   # include_homepage_in_sidebar: true  # no effect
   # sticky_navigation: true  # no effect
   # collapse_navigation: true  # no effect
