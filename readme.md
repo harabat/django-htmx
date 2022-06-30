@@ -1,7 +1,9 @@
 # Readme
 
 > **Warning**
+>
 > I'm rewriting this tutorial in depth, to improve the structure, the explanations, the code, and implement the "Coming soon" sections.
+>
 > The rewrite is expected to be finished in July/August. 
 
 
@@ -14,7 +16,7 @@ The app is called *Conduit* and is a Medium clone: you can see it
 running at <https://demo.realworld.io>.
 
 <figure>
-<img src="./assets/Conduit - RealWorld.png" width="600"
+<img src="./tutorial/docs/assets/Conduit - RealWorld.png" width="600"
 alt="The RealWorld app, in all its glory" />
 <figcaption aria-hidden="true">The RealWorld app, in all its
 glory</figcaption>
