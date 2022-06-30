@@ -11,14 +11,14 @@ A comment needs a related article, an author, a body, and a date. Let's
 create a `Comment` model in `models.py`:
 
 ``` { .python }
-# other models
+# ...
 
 class Comment(models.Model):
     article = models.ForeignKey(
         Article,
         on_delete=models.CASCADE,
         related_name="comments",
-        to_field="slug",
+        to_field="slug_uuid",
     )
     body = models.TextField()
     author = models.ForeignKey(
@@ -32,7 +32,7 @@ class Comment(models.Model):
         return self.body[:60] + "..."
 
     def get_absolute_url(self):
-        return reverse("article_detail", kwargs={"slug": self.article.slug})
+        return reverse("article_detail", kwargs={"slug_uuid": self.article.slug_uuid})
 ```
 
 Let's `makemigrations` and `migrate`. You should get the following
@@ -42,16 +42,16 @@ error:
 SystemCheckError: System check identified some issues:
 
 ERRORS:
-articles.Comment.article: (fields.E311) 'Article.slug' must be unique because it is referenced by a foreign key.
+articles.Comment.article: (fields.E311) 'Article.slug_uuid' must be unique because it is referenced by a foreign key.
         HINT: Add unique=True to this field or add a UniqueConstraint (without condition) in the model Meta.constraints.
 ```
 
-That's because we're using articles' slugs as ForeignKeys for the
-comments (so that we can filter our comments by the attached articles'
-slugs instead of their UUIDs). This error is easily corrected by adding
-`unique=True` as an argument to the `slug` field in the `Article` model
-in `models.py`. You should be able to `makemigrations` and `migrate`
-after that.
+That's because we're using articles' `slug_uuid` fields as ForeignKeys
+for the comments (so that we can filter our comments by the attached
+articles' `slug_uuid` fields instead of their UUIDs). This error is
+easily corrected by adding `unique=True` as an argument to the
+`slug_uuid` field in the `Article` model in `models.py`. You should be
+able to `makemigrations` and `migrate` after that.
 
 Now, we need to register our model in `admin.py`:
 
@@ -138,10 +138,10 @@ the `get_success_url` because we want the user to be redirected to the
 `ArticleDetailView` upon saving the comment.
 
 ``` { .python }
-# other imports
+# ...
 from .models import Article, Comment
 
-# other models
+# ...
 class CommentCreateView(CreateView):
     """create comment"""
 
@@ -152,12 +152,12 @@ class CommentCreateView(CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user.profile
         form.instance.article = Article.objects.filter(
-            slug=self.kwargs.get("slug")
+            slug_uuid=self.kwargs.get("slug_uuid")
         ).first()
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("article_detail", kwargs={"slug": self.object.article.slug})
+        return reverse("article_detail", kwargs={"slug_uuid": self.object.article.slug_uuid})
 ```
 
 Now, we need to modify the `ArticleDetailView` to make the
@@ -181,14 +181,14 @@ Finally, we create a view that combines `ArticleDetailView` and
 `CommentCreateView`:
 
 ``` { .python }
-# other imports
+# ...
 from django.views.generic import (
-    # other views
+    # ...
     View,
 )
 
 
-# other models
+# ...
 class ArticleCommentView(View):
     """view article and post comments"""
 
@@ -202,27 +202,27 @@ class ArticleCommentView(View):
 ```
 
 We want this new hybrid view to be the one returned by the
-`article/<slug:slug>` path: depending on whether the method is `GET` or
-`POST`, the new view will either return the `ArticleDetailView`, or the
-`CommentCreateView`.
+`article/<slug:slug_uuid>` path: depending on whether the method is
+`GET` or `POST`, the new view will either return the
+`ArticleDetailView`, or the `CommentCreateView`.
 
 In `urls.py`, we replace the `article_detail` path by the following:
 
 ``` { .python }
-# other imports
+# ...
 from .views import (
-    # other views
+    # ...
     ArticleCommentView,
 )
 
 urlpatterns = [
-    # other paths
+    # ...
     path(
-        "article/<slug:slug>",
+        "article/<slug:slug_uuid>",
         ArticleCommentView.as_view(),
         name="article_detail",
     ),
-    # instead of =path("article/<slug:slug>", ArticleCommentView.as_view(), name="article_detail")=
+    # instead of =path("article/<slug:slug_uuid>", ArticleCommentView.as_view(), name="article_detail")=
 ]
 ```
 
@@ -237,7 +237,7 @@ Create `comment_create.html`, which corresponds to the
     <form
         class="card comment-form"
         method="post"
-        action="{% url 'article_detail' slug=object.slug %}"
+        action="{% url 'article_detail' slug_uuid=object.slug_uuid %}"
     >
         {% csrf_token %}
         <div class="card-block">
@@ -285,7 +285,7 @@ class CommentDeleteView(DeleteView):
     template_name = "article_detail.html"
 
     def get_success_url(self):
-        return reverse("article_detail", kwargs={"slug": self.object.article.slug})
+        return reverse("article_detail", kwargs={"slug_uuid": self.object.article.slug_uuid})
 ```
 
 In `urls.py`:
@@ -294,7 +294,7 @@ In `urls.py`:
 urlpatterns = [
     # ...
     path(
-        "article/<slug:slug>/comment/<int:pk>/delete",
+        "article/<slug:slug_uuid>/comment/<int:pk>/delete",
         CommentDeleteView.as_view(),
         name="comment_delete",
     ),
@@ -303,8 +303,8 @@ urlpatterns = [
 
 We require `pk` as an argument because that's what the
 `CommentDeleteView` needs to know which comment to delete. The
-`<slug:slug>` part is unnecessary, but it makes the path more logical, I
-find.
+`<slug:slug_uuid>` part is unnecessary, but it makes the path more
+logical, I find.
 
 In `comments.html`:
 
@@ -326,7 +326,7 @@ Create `comment_delete.html`:
 {% block content %}
     <form
         method="post"
-        action="{% url 'comment_delete' slug=article.slug pk=comment.pk %}"
+        action="{% url 'comment_delete' slug_uuid=article.slug_uuid pk=comment.pk %}"
         class="mod-options"
     >
         {% csrf_token %}

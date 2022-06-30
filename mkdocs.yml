@@ -3,8 +3,8 @@ site_url:
 site_description: A tutorial for building the RealWorld app in Django and HTMX
 repo_url: https://github.com/harabat/django-htmx
 repo_name: harabat/django-htmx
-docs_dir: 'tutorial/docs'
-site_dir: 'tutorial/site'
+docs_dir: "tutorial/docs"
+site_dir: "tutorial/site"
 
 theme:
   name: material
@@ -13,7 +13,7 @@ theme:
   icon:
     repo: octicons/mark-github-16
   language: en
-  custom_dir: 'tutorial/overrides'
+  custom_dir: "tutorial/overrides"
   # include_homepage_in_sidebar: true  # no effect
   # sticky_navigation: true  # no effect
   # collapse_navigation: true  # no effect
@@ -53,11 +53,11 @@ markdown_extensions:
   # - attr_list  # for align
   # - md_in_html  # better done by pandoc
   # - footnotes
-  - admonition  # callouts
-  - tables  # tables
-  - pymdownx.details  # information in dropdowns
+  - admonition # callouts
+  - tables # tables
+  - pymdownx.details # information in dropdowns
   - toc:
-      permalink: "#"  # anchors for headings
+      permalink: "#" # anchors for headings
   - pymdownx.highlight:
       linenums: true
       use_pygments: true
@@ -68,22 +68,23 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
   # - pymdownx.tabbed  # for tabs
   - pymdownx.tasklist:
-      custom_checkbox: true  # for lists with checkboxes
+      custom_checkbox: true # for lists with checkboxes
 
 nav:
   - Readme: index.md
   - Starting the project: 01_starting_the_project.md
-  - First views and templates: 02_first_views_and_templates.md
+  - Home page: 02_home_page.md
   - Viewing Articles: 03_viewing_articles.md
-  - Creating, editing, and deleting Articles: 04_creating_editing_and_deleting_articles.md
-  - Comments: 05_comments.md
-  - Users and Profiles: 06_users_and_profiles.md
-  - Authentication: 07_authentication_i_login_logout_signup.md
-  - Securing the app: 08_authentication_ii_securing_the_app.md
-  - Profile features: 09_profile_features.md
-  - Editing profiles: 10_editing_profiles.md
-  - Follows: 11_follows.md
-  - Favourites: 12_favourites.md
-  - Tags: 13_tags_coming_soon.md
-  - HTMX: 14_htmx_coming_soon.md
-  - Future extensions: 15_future_extensions.md
+  - Slugs: 04_slugs.md
+  - Creating, editing, and deleting Articles: 05_creating_editing_and_deleting_articles.md
+  - Comments: 06_comments.md
+  - Users and Profiles: 07_users_and_profiles.md
+  - Login, Logout, Signup: 08_authentication_i_login_logout_signup.md
+  - Securing the app: 09_authentication_ii_securing_the_app.md
+  - Profile features: 10_profile_features.md
+  - Editing profiles: 11_editing_profiles.md
+  - Follows: 12_follows.md
+  - Favourites: 13_favourites.md
+  - Tags: 14_tags_coming_soon.md
+  - HTMX: 15_htmx_coming_soon.md
+  - Future extensions: 16_future_extensions.md

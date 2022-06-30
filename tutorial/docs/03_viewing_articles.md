@@ -7,265 +7,240 @@ articles.
 
 ## Article view
 
-Next we'll implement the article view.
-
-We'll be working with Class-Based Views: the *Django Girls* tutorial
-only presents Function-Based Views, which are arguably a more intuitive
-option, but CBVs are considered to be best practice, at least according
-to *Two Scoops of Django*, and simplify a lot of work.
+First, we need to implement the article view.
 
 First, we create a view in `views.py`:
 
-``` { .python }
-from django.views.generic import TemplateView, DetailView
+``` { .python hl_lines="1 5-9" }
+from django.views.generic import DetailView, ListView       # new
 
+# ...
 
 class ArticleDetailView(DetailView):
-    """detail view for individual articles"""
+    """Detail view for individual articles."""
 
     model = Article
     template_name = "article_detail.html"
 ```
 
-Then, we modify the `articles/urls.py` file:
+We're continuing to work with class-based views here. The [`DetailView`
+generic display
+view](https://docs.djangoproject.com/en/4.0/ref/class-based-views/generic-display/#detailview)
+allows to view a single instance of an object. We specify the model this
+view will be associated to and the template name.
 
-``` { .python }
-from .views import Home, ArticleDetailView
+## Article URLs and primary keys
+
+We now match a URL to the `ArticleDetailView` in `articles/urls.py`:
+
+``` { .python hl_lines="1 5" }
+from .views import ArticleDetailView, Home                                              # new
 
 urlpatterns = [
     path("", Home.as_view(), name="home"),
-    path("article/<int:pk>", ArticleDetailView.as_view(), name="article_detail"),
+    path("article/<int:pk>", ArticleDetailView.as_view(), name="article_detail"),       # new
 ]
 ```
 
-## Article template
+This is the first time we're actually specifying a URL with arguments.
 
-Now, we create the `article_detail.html` file in our `templates` folder
-and add the following to it:
+Django's [URL dispatcher
+docs](https://docs.djangoproject.com/en/4.0/topics/http/urls/) have a
+lot of information on the ins and outs, but for now we only need to know
+that the current URL comprises an `articles/` prefix and the article's
+key.
+
+The `<int:pk>` parameter here matches any integer, and transfers the
+captured value to `ArticleDetailView`, which tries to identify the
+article based on its primary key (`pk`): primary keys are a way to
+uniquely specify a record in a database. Since we didn't specify how to
+generate primary keys for the `Article` objects in our database, this
+will default to an incrementing integer (the first article will have a
+`pk` of 1, the next will have a `pk` of 2, etc.).
+
+To have an idea, and to practice your shell skills, launch the
+interactive shell (by running `python manage.py shell`) and run the
+following commands:
+
+``` { .python }
+Python 3.9.13 | packaged by conda-forge | (main, May 27 2022, 16:56:21)
+Type 'copyright', 'credits' or 'license' for more information
+IPython 7.33.0 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: from conduit.articles.models import Article
+
+In [2]: Article.objects.all()
+Out[2]: <QuerySet [<Article: ForeignKey>, <Article: ManyToManyField>, <Article: OneToOneField>]>
+
+In [3]: Article.objects.first().pk
+Out[3]: 1
+
+In [4]: Article.objects.last().pk
+Out[4]: 3
+```
+
+The concept of incrementing integers as the primary key has several
+flaws, the main one being that anyone can infer how many articles you
+publish, how many users you have, etc. just by looking at the URL. And
+the URLs are plain unclear. We'll change the primary keys later on.
+
+## get_absolute_url method
+
+In order for `ArticleDetailView` to be able to identify an `Article`
+object from its `pk`, we need to modify the `Article` model in
+`articles/models.py` (don't forget to sync the database immediately
+after):
+
+``` { .python hl_lines="2 10-11" }
+from django.db import models
+from django.shortcuts import reverse                                # new
+
+
+class Article(models.Model):
+    """Article model."""
+
+    # ...
+
+    def get_absolute_url(self):                                     # new
+        return reverse("article_detail", kwargs={"pk": self.pk})    #
+```
+
+The [`get_absolute_url`
+method](https://docs.djangoproject.com/en/4.0/ref/models/instances/#get-absolute-url)
+tells Django how to generate the URL for the instance. The [`reverse`
+function](https://docs.djangoproject.com/en/4.0/ref/urlresolvers/#reverse)
+takes a `urlpattern` (`article_detail` here), required kwargs (the
+instance's `pk` here), and returns a URL, which avoids having to
+hardcode it.
+
+You can have a look at how it works in the shell:
+
+``` { .python }
+In [1]: from conduit.articles.models import Article
+
+In [2]: from django.urls import reverse
+
+In [3]: article = Article.objects.first()
+
+In [4]: reverse('article_detail', kwargs={'pk': article.pk})
+Out[4]: '/article/1'
+```
+
+## Article templates
+
+Like in the previous chapter, after making a view and setting the URL,
+we will now work on templates.
+
+### article_detail.html
+
+We create the `templates/article_detail.html` template with the
+following code:
 
 ``` { .html }
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block title %}
-    <title>{{ article.title }} - Conduit: Django + HTMX</title>
+  <title>{{ article.title }} - Conduit: Django + HTMX</title>
 {% endblock %}
 {% block content %}
-    <div class="article-page">
-        <div class="banner">
-            <div class="container">
-                <h1>{{ article.title }}</h1>
-                <div class="article-meta">
-                    <div class="info">
-                        <span class="author">
-                            {{ article.author.user.username }}
-                        </span>
-                        <span class="date">
-                            {{ article.created_at|date:"D M d Y" }}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container page">
-            <div class="row article-content">
-                <div class="col-xs-12">
-                    <div>
-                        {{ article.body|linebreaks }}
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="article-page">
+    <div class="banner">
+      <div class="container">
+        <h1>{{ article.title }}</h1>
+        {% include "article_meta.html" %}
+      </div>
     </div>
+    <div class="container page">
+      <div class="row article-content">
+        <div class="col-xs-12">
+          <div>
+            {{ article.body|linebreaks }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
 ```
 
-Finally, we modify `home.html` so that article previews redirect to
-articles:
+Not much to explain:
 
-``` { .html hl_lines="2 7" }
+-   we're overriding the `title` block of `base.html` with a
+    `{% block title %}` to display the title of the article (and our
+    app's name): this is an illustration of template inheritance, which
+    we mentioned earlier
+-   in the `content` block of `base.html`:
+    -   we're showing the article's title
+    -   we're including a `templates/article_meta.html` template simply
+        because we're Svelte implementation's
+        \[\[<https://github.com/sveltejs/realworld/blob/master/src/routes/article/%5Bslug%5D/index.svelte>\]\[article/\[slug\]/index.svelte\]\]
+        and we might as well keep to their structure if you ever need to
+        quickly compare things
+    -   the [`linebreaks` template
+        filter](https://docs.djangoproject.com/en/4.0/ref/templates/builtins/#linebreaks)
+        ensures that the line breaks in our articles are properly
+        translated to HTML and rendered.
+
+### article_meta.html
+
+In `templates/article_meta.html`:
+
+``` { .html }
+<div class="article-meta">
+  <div class="info">
+    <span class="author">
+      {{ article.author.user.username }}
+    </span>
+    <span class="date">
+      {{ article.created_at|date:"D M d Y" }}
+    </span>
+  </div>
+</div>
+```
+
+We display the author's username and the article's creation date
+(properly formatted with the [`date` template
+filter](https://docs.djangoproject.com/en/4.0/ref/templates/builtins/#date)).
+
+### article_preview.html
+
+Finally, we modify `template/article_preview.html` so that article
+previews redirect to the full articles:
+
+``` { .html hl_lines="3" }
 <!-- ... -->
-<a href="{{ article.get_absolute_url }}" rel="prefetch" class="preview-link">   <!-- new -->
+<!-- <a href="" rel="prefetch" class="preview-link"> -->                        <!-- from this -->
+<a href="{{ article.get_absolute_url }}" rel="prefetch" class="preview-link">   <!-- to this -->
    <h1>{{ article.title }}</h1>
    <p>{{ article.description }}</p>
    <span>Read more...</span>
-</a>                                                                            <!-- new -->
+</a>
 <!-- ... -->
 ```
+
+We implemented the `get_absolute_url` method in our `Article` model
+earlier, which allows to specify the URLs to instances by calling the
+instance's `get_absolute_url` method.
+
+### Results
+
+Seems like we're ready, doesn't it? If you try to navigate to an article
+in your *Conduit* app, you should be able to view your articles.
 
 Let's see what it looks like:
 
 <figure>
-<img src="../assets/article_detail.png" width="600" alt="Individual article in our app" /><figcaption aria-hidden="true">Individual article in our app</figcaption>
+<img src="./assets/article_detail.png" width="600"
+alt="Individual article in our app" />
+<figcaption aria-hidden="true">Individual article in our
+app</figcaption>
 </figure>
 
 <figure>
-<img src="../assets/article_detail - realworld.png" width="600" alt="Individual article in RealWorld app" /><figcaption aria-hidden="true">Individual article in RealWorld app</figcaption>
+<img src="./assets/article_detail - realworld.png" width="600"
+alt="Individual article in RealWorld app" />
+<figcaption aria-hidden="true">Individual article in RealWorld
+app</figcaption>
 </figure>
 
-## Slugs
-
-We want our article URLs to include slugs, which are easier to read than
-IDs.
-
-We want the slugs to be unique, but some articles might have the same
-titles, which would generate the same slugs. One solution to this
-problem is to combine slugs with UUIDs.
-
-### Defining a slug and a UUID in the model
-
-First, we need to modify our `Article` model to include a slug, and to
-update the `get_absolute_url` method:
-
-``` { .python hl_lines="3 4 8" }
-class Article(models.Model):
-    # ...
-    slug = models.SlugField(max_length=255, editable=False)             # new
-    uuid_field = models.UUIDField(default=uuid.uuid4, editable=False)   # new
-
-    # ...
-    def get_absolute_url(self):
-        return reverse("article_detail", kwargs={"slug": self.slug})    # new
-```
-
-After modifying the model, we need to sync the database, but this will
-return a warning.
-
-``` { .shell }
-(django) django_tutorial$ python manage.py makemigrations
-You are trying to add a non-nullable field 'slug' to article without a default; we can't do that (the database needs something to populate existing rows).
-Please select a fix:
- 1) Provide a one-off default now (will be set on all existing rows with a null value for this column)
- 2) Quit, and let me add a default in models.py
-Select an option:
-```
-
-We can't select `1` because a default is by definition non-unique. We
-select `2` to abort and add the `null=True` arg to the slug field, so as
-to be able to migrate and then modify the slug manually through the
-Django admin app:
-
-``` { .python hl_lines="3" }
-class Article(models.Model):
-    # ...
-    slug = models.SlugField(max_length=100, null=True)
-    # ...
-```
-
-We then run `makemigrations` and `migrate`, then set a unique slug for
-each `Article` through the Django admin app manually. Once we're done,
-we remove the `null=True` arg and add the `editable=False` arg:
-
-``` { .python hl_lines="3" }
-class Article(models.Model):
-    # ...
-    slug = models.SlugField(max_length=255, editable=False)             # new
-    # ...
-```
-
-When we migrate, we get a warning:
-
-```
-(django) django_tutorial$ python manage.py makemigrations
-You are trying to change the nullable field 'slug' on article to non-nullable without a default; we can't do that (the database needs something to populate existing rows).
-Please select a fix:
- 1) Provide a one-off default now (will be set on all existing rows with a null value for this column)
- 2) Ignore for now, and let me handle existing rows with NULL myself (e.g. because you added a RunPython or RunSQL operation to handle NULL values in a previous data migration)
- 3) Quit, and let me add a default in models.py
-Select an option:
-```
-
-You can safely select `2`, as we already have taken care of the slug
-fields through the Django admin app.
-
-### Generate unique slug automatically
-
-We want to avoid manually entering the slugs for every article: the
-generation of a unique slug should be triggered automatically every time
-an Article is saved.
-
-Let's create a `utils.py` file in the `conduit` folder and add the
-following methods to it:
-
-``` { .python }
-from django.utils.text import slugify
-import uuid
-
-def unique_slug_generator(instance):
-    """generate a unique slug for Articles from the title and a UUID"""
-
-    ArticleClass = instance.__class__
-
-    # get max length of ~slug~ as defined in the Article model
-    max_length = ArticleClass._meta.get_field('slug').max_length
-
-    # create slug_uuid by concatenating slugified title and UUID
-    slug = "{slug_field}-{uuid_field}".format(
-        slug_field = slugify(instance.title)[:max_length-36-1],
-        uuid_field = str(instance.uuid_field)
-    )
-
-    # if the slug exists, make another one
-    if ArticleClass.objects.filter(slug=slug).exists():
-        return unique_slug_generator(instance)
-
-    return slug
-```
-
-### Signals
-
-We will now use a signal, a Django utility that allows linking events
-with actions, to call our `unique_slug_generator` every time an Article
-is created. We could override the `Article` model's `save` method
-instead: this is a common method, but not [best
-practice](https://teddit.ggc-project.de/r/django/comments/p3pgr/overriding_save_vs_presave_signals_which_is/).
-
-We create a `signals.py` file in the `articles` folder and add the
-following method to it:
-
-``` { .python }
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
-from .models import Article
-from config.utils import unique_slug_generator
-
-@receiver(pre_save, sender=Article)
-def pre_save_receiver(sender, instance, *args, **kwargs):
-   if not instance.slug:
-       instance.slug = unique_slug_generator(instance)
-```
-
-In order to activate this signal, we will modify `articles/apps.py`:
-
-``` { .python hl_lines="8-9" }
-from django.apps import AppConfig
-
-
-class ArticlesConfig(AppConfig):
-    default_auto_field = "django.db.models.BigAutoField"
-    name = "conduit.articles"
-
-    def ready(self):                                # new
-        import conduit.articles.signals             # new
-```
-
-Let's also change our `urlpatterns` in `articles/urls.py`:
-
-``` { .python }
-# other imports
-from .views import Home, ArticleDetailView
-
-urlpatterns = [
-    # other paths
-    path("article/<slug:slug>", ArticleDetailView.as_view(), name="article_detail"),
-]
-```
-
-Let's try creating an Article through the Django admin app.
-
-When going back to <http://localhost:8000/> (where your app is running),
-you will see that your new article has a slug consisting of its
-slugified title and a UUID:
-
-<figure>
-<img src="../assets/article_detail - slug.png" width="600" alt="Slugs" /><figcaption aria-hidden="true">Slugs</figcaption>
-</figure>
+Getting pretty close!
 

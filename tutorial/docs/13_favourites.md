@@ -56,8 +56,8 @@ class ArticleFavoriteView(RedirectView):
             return super().get_redirect_url(*args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        slug = self.kwargs.get("slug", None)
-        article = get_object_or_404(Article, slug=slug)
+        slug_uuid = self.kwargs.get("slug_uuid", None)
+        article = get_object_or_404(Article, slug_uuid=slug_uuid)
         if request.user.profile.has_favorited(article):
             request.user.profile.unfavorite(article)
         else:
@@ -78,7 +78,7 @@ from .views import (
 urlpatterns = [
     # ...
     path(
-        "article/<slug:slug>/favorite",
+        "article/<slug:slug_uuid>/favorite",
         ArticleFavoriteView.as_view(),
         name="article_favorite",
     ),
@@ -96,7 +96,7 @@ In `templates/article_detail.html`:
 {% if user == article.author.user %}
   <span>
     <a
-      href="{% url 'editor_update' slug=article.slug %}"
+      href="{% url 'editor_update' slug_uuid=article.slug_uuid %}"
       class="btn btn-outline-secondary btn-sm"
     >
       <span class="ion-edit">
@@ -118,7 +118,7 @@ Create `templates/article_favorite.html`:
 ``` { .html }
 <form
     method="post"
-    action="{% url 'article_favorite' slug=article.slug %}"
+    action="{% url 'article_favorite' slug_uuid=article.slug_uuid %}"
     style="display:inline"
 >
   <input type="hidden" name="next" value="{{ request.path }}">
@@ -169,7 +169,7 @@ In `templates/article_favorite.html`
 ``` { .html hl_lines="16 22-24" }
 <form
     method="post"
-    action="{% url 'article_favorite' slug=article.slug %}"
+    action="{% url 'article_favorite' slug_uuid=article.slug_uuid %}"
     style="display:inline"
 >
   <input type="hidden" name="next" value="{{ request.path }}">
@@ -197,11 +197,15 @@ In `templates/article_favorite.html`
 ```
 
 <figure>
-<img src="../assets/home - favorite - before.png" width="600" alt="Favorite button before" /><figcaption aria-hidden="true">Favorite button before</figcaption>
+<img src="../assets/home - favorite - before.png" width="600"
+alt="Favorite button before" />
+<figcaption aria-hidden="true">Favorite button before</figcaption>
 </figure>
 
 <figure>
-<img src="../assets/home - favorite.png" width="600" alt="Favorite button after" /><figcaption aria-hidden="true">Favorite button after</figcaption>
+<img src="../assets/home - favorite.png" width="600"
+alt="Favorite button after" />
+<figcaption aria-hidden="true">Favorite button after</figcaption>
 </figure>
 
 ## Feeds

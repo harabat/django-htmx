@@ -86,7 +86,7 @@ class-based views on the fly.
 In `articles/views.py`, add the following:
 
 ``` { .python }
-# other imports
+# ...
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 class EditorCreateView(LoginRequiredMixin, CreateView):
@@ -109,7 +109,8 @@ avoid errors.
 If you try creating a post from the app, you should get this error:
 
 <figure>
-<img src="../assets/login - error.png" width="600" alt="Login error" /><figcaption aria-hidden="true">Login error</figcaption>
+<img src="../assets/login - error.png" width="600" alt="Login error" />
+<figcaption aria-hidden="true">Login error</figcaption>
 </figure>
 
 The cause of the problem is given in the line:
@@ -137,7 +138,7 @@ deleting articles from any user who is not the article's author:
 {% if user == article.author.user %}                        <!-- new -->
   <span>
     <a
-      href="{% url 'editor_update' slug=article.slug %}"
+      href="{% url 'editor_update' slug_uuid=article.slug_uuid %}"
       class="btn btn-outline-secondary btn-sm"
     >
       <span class="ion-edit">
@@ -165,7 +166,7 @@ only taken into account if the user is the author of the article or
 comment:
 
 ``` { .python }
-# other imports
+# ...
 from django.shortcuts import redirect
 
 # ...
@@ -211,11 +212,11 @@ In `users/views.py`, add the following to `SignUpView` (as explained in
 [this StackOverflow answer](https://stackoverflow.com/a/70582911)):
 
 ``` { .python hl_lines="2-3 12-27" }
-# other imports
+# ...
 from django.shortcuts import redirect  # new
 from django.contrib.auth import authenticate, login  # new
 
-# other views
+# ...
 class SignUpView(CreateView):
     model = User
     fields = ["username", "email", "password"]
