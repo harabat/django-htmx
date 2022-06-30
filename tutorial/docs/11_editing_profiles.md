@@ -64,11 +64,16 @@ though the characters themselves are masked, while the screenshot on the
 right exposes no information about the password.
 
 <figure>
-<img src="../assets/settings - password field.png" width="200" alt="Password field with masked characters" /><figcaption aria-hidden="true">Password field with masked characters</figcaption>
+<img src="../assets/settings - password field.png" width="200"
+alt="Password field with masked characters" />
+<figcaption aria-hidden="true">Password field with masked
+characters</figcaption>
 </figure>
 
 <figure>
-<img src="../assets/settings.png" width="200" alt="Empty password field" /><figcaption aria-hidden="true">Empty password field</figcaption>
+<img src="../assets/settings.png" width="200"
+alt="Empty password field" />
+<figcaption aria-hidden="true">Empty password field</figcaption>
 </figure>
 
 We want the password field in our future template to be empty, and we
@@ -91,11 +96,11 @@ Now that our forms are ready, let's create the view. As we said earlier,
 the intuitive choice here is the generic `UpdateView` class-based view.
 
 ``` { .python }
-# other imports
+# ...
 from django.views.generic import CreateView, DetailView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-# other classes
+# ...
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ProfileForm
     template_name = "settings.html"
@@ -239,12 +244,12 @@ and in each individual profile.
 In `users/urls.py`:
 
 ``` { .python }
-# other imports
+# ...
 from .views import Login, Logout, SignUpView, ProfileDetailView, ProfileUpdateView
 
 
 urlpatterns = [
-    # other paths
+    # ...
     path("settings/", ProfileUpdateView.as_view(), name="settings"),
 ]
 ```

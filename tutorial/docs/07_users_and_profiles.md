@@ -61,10 +61,10 @@ docs](https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#writing-a-m
 In `models.py`, we add the following, BEFORE we define our `User` model:
 
 ``` { .python }
-# other imports
+# ...
 from django.contrib.auth.models import AbstractUser, UserManager
 
-# other models
+# ...
 class CustomUserManager(UserManager):
     """custom UserManager with unique identifier is email instead of username"""
 
@@ -102,7 +102,7 @@ indicate to Django that the `UserManager` defined above will manage
 objects of type `User`:
 
 ``` { .python hl_lines="11" }
-# other
+# ...
 class User(AbstractUser):
     """User model"""
 

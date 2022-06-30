@@ -13,10 +13,10 @@ It's time to allow users to view their own and other users' profiles.
 In `users/views.py`:
 
 ``` { .python }
-# other imports
+# ...
 from django.views.generic import CreateView, DetailView
 
-# other views
+# ...
 class ProfileDetailView(DetailView):
     model = User
     template_name = "profile_detail.html"
@@ -25,12 +25,12 @@ class ProfileDetailView(DetailView):
 In `users/urls.py`:
 
 ``` { .python }
-# other imports
+# ...
 from .views import Login, Logout, SignUpView, ProfileDetailView
 
 
 urlpatterns = [
-    # other paths
+    # ...
     path("profile/@<str:username>", ProfileDetailView.as_view(), name="profile_detail"),
 ]
 ```
@@ -64,7 +64,9 @@ Everything should be working now, right? Let's check by going to
 error:
 
 <figure>
-<img src="../assets/profile_detail - error.png" width="600" alt="profile_detail error" /><figcaption aria-hidden="true">profile_detail error</figcaption>
+<img src="../assets/profile_detail - error.png" width="600"
+alt="profile_detail error" />
+<figcaption aria-hidden="true">profile_detail error</figcaption>
 </figure>
 
 The error tells us that our `ProfileDetailView` wants to be called with
@@ -76,10 +78,10 @@ We override the view's `get_object` method by adding the following to
 `users/views.py`:
 
 ``` { .python hl_lines="9-12" }
-# other imports
+# ...
 from django.shortcuts import redirect, get_object_or_404
 
-# other views
+# ...
 class ProfileDetailView(DetailView):
     model = Profile
     template_name = "profile_detail.html"
@@ -95,7 +97,10 @@ isn't much on it yet). Make sure to set a profile image for your `admin`
 user, as everyone else should have a default already set.
 
 <figure>
-<img src="../assets/profile_detail.png" width="600" alt="A view of a profile, sans errors" /><figcaption aria-hidden="true">A view of a profile, sans errors</figcaption>
+<img src="../assets/profile_detail.png" width="600"
+alt="A view of a profile, sans errors" />
+<figcaption aria-hidden="true">A view of a profile, sans
+errors</figcaption>
 </figure>
 
 ## Viewing Articles written by each User
@@ -108,7 +113,7 @@ In `users/views.py`, override the `get_context_data` method of
 `ProfileDetailView`:
 
 ``` { .python }
-# other views
+# ...
 class ProfileDetailView(DetailView):
     # ...
 

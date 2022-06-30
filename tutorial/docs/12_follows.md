@@ -50,7 +50,7 @@ relationship.
 We need a new field in our `Profile` model in `users/models.py`:
 
 ``` { .python }
-# other models
+# ...
 class Profile(models.Model):
     # ...
     follows = models.ManyToManyField(
@@ -125,7 +125,7 @@ is followed already.
 In `users/urls.py`:
 
 ``` { .python }
-# other imports
+# ...
 from .views import (
     # ...
     ProfileFollowView,
@@ -133,7 +133,7 @@ from .views import (
 
 
 urlpatterns = [
-    # other paths
+    # ...
     path(
         "profile/@<str:username>/follow",
         ProfileFollowView.as_view(),
@@ -222,7 +222,7 @@ In `templates/article_detail.html`:
 {% if user == article.author.user %}
   <span>
     <a
-      href="{% url 'editor_update' slug=article.slug %}"
+      href="{% url 'editor_update' slug_uuid=article.slug_uuid %}"
       class="btn btn-outline-secondary btn-sm"
     >
       <span class="ion-edit">
@@ -326,7 +326,7 @@ In `articles/views.py`, we need to modify our very first view, `home`,
 so that it can give us a feed of articles written by users we follow:
 
 ``` { .python hl_lines="6-11" }
-class Home(TemplateView):
+class Home(ListView):
     # ...
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
