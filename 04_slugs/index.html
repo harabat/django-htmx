@@ -1,0 +1,1335 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A tutorial for building the RealWorld app in Django and HTMX">
+      
+      
+      
+      <link rel="icon" href="../assets/django-logo.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.6">
+    
+    
+      
+        <title>Slugs - Django + HTMX tutorial</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.4a0965b7.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.cbb835fc.min.css">
+        
+      
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+    <script data-goatcounter="https://django-htmx.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#slugs" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Django + HTMX tutorial" class="md-header__button md-logo" aria-label="Django + HTMX tutorial" data-md-component="logo">
+      
+  <img src="../assets/django-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Django + HTMX tutorial
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Slugs
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/harabat/django-htmx" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    harabat/django-htmx
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Django + HTMX tutorial" class="md-nav__button md-logo" aria-label="Django + HTMX tutorial" data-md-component="logo">
+      
+  <img src="../assets/django-logo.png" alt="logo">
+
+    </a>
+    Django + HTMX tutorial
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/harabat/django-htmx" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    harabat/django-htmx
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Readme
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_starting_the_project/" class="md-nav__link">
+        Starting the project
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_home_page/" class="md-nav__link">
+        Home page
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_viewing_articles/" class="md-nav__link">
+        Viewing Articles
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Slugs
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Slugs
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#define-slug-and-uuid-fields-in-the-model" class="md-nav__link">
+    Define slug and UUID fields in the model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#display-slug-and-uuid-fields-in-the-django-admin" class="md-nav__link">
+    Display slug and UUID fields in the Django admin
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generate-unique-slug_uuid-fields-with-utility-functions" class="md-nav__link">
+    Generate unique slug_uuid fields with utility functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#override-save-method-instead-of-creating-signals-alternative" class="md-nav__link">
+    Override save method instead of creating signals (alternative)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generate-slug_uuid-fields-automatically-with-signals" class="md-nav__link">
+    Generate slug_uuid fields automatically with signals
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adapt-urls-and-views-to-slug_uuid-fields" class="md-nav__link">
+    Adapt URLs and views to slug_uuid fields
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#slug-and-uuid_field-instead-of-slug_uuid-alternative" class="md-nav__link">
+    slug and uuid_field instead of slug_uuid (alternative)
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_creating_editing_and_deleting_articles/" class="md-nav__link">
+        Creating, editing, and deleting Articles
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06_comments/" class="md-nav__link">
+        Comments
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07_users_and_profiles/" class="md-nav__link">
+        Users and Profiles
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08_authentication_i_login_logout_signup/" class="md-nav__link">
+        Login, Logout, Signup
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_authentication_ii_securing_the_app/" class="md-nav__link">
+        Securing the app
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10_profile_features/" class="md-nav__link">
+        Profile features
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11_editing_profiles/" class="md-nav__link">
+        Editing profiles
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12_follows/" class="md-nav__link">
+        Follows
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13_favourites/" class="md-nav__link">
+        Favourites
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14_tags_coming_soon/" class="md-nav__link">
+        Tags
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15_htmx_coming_soon/" class="md-nav__link">
+        HTMX
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16_future_extensions/" class="md-nav__link">
+        Future extensions
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#define-slug-and-uuid-fields-in-the-model" class="md-nav__link">
+    Define slug and UUID fields in the model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#display-slug-and-uuid-fields-in-the-django-admin" class="md-nav__link">
+    Display slug and UUID fields in the Django admin
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generate-unique-slug_uuid-fields-with-utility-functions" class="md-nav__link">
+    Generate unique slug_uuid fields with utility functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#override-save-method-instead-of-creating-signals-alternative" class="md-nav__link">
+    Override save method instead of creating signals (alternative)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generate-slug_uuid-fields-automatically-with-signals" class="md-nav__link">
+    Generate slug_uuid fields automatically with signals
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adapt-urls-and-views-to-slug_uuid-fields" class="md-nav__link">
+    Adapt URLs and views to slug_uuid fields
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#slug-and-uuid_field-instead-of-slug_uuid-alternative" class="md-nav__link">
+    slug and uuid_field instead of slug_uuid (alternative)
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/harabat/django-htmx/edit/master/docs/04_slugs.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="slugs">Slugs<a class="headerlink" href="#slugs" title="Permanent link">#</a></h1>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">#</a></h2>
+<p>We mentioned earlier that we didn't like having incrementing integers as
+primary keys for our articles, and we liked even less exposing these
+keys in the URL.</p>
+<p>We want our article URLs to include slugs, which are easier to read than
+IDs.</p>
+<p>We want the slugs to be unique, but some articles might have the same
+titles, which would generate the same slugs. One solution to this
+problem is to combine slugs with UUIDs.</p>
+<p>Before continuing:</p>
+<ul>
+<li>slugs are the result of converting a string of text (generally a
+    title) to a form that can be included in a URL: this generally
+    consists in converting spaces to hyphens, removing special
+    characters, and converting to lowercase</li>
+<li>a universally unique identifier (UUID) is a string of text expected
+    to have an extremely low probability of duplication, without
+    requiring a central authority to create them</li>
+</ul>
+<h2 id="define-slug-and-uuid-fields-in-the-model">Define slug and UUID fields in the model<a class="headerlink" href="#define-slug-and-uuid-fields-in-the-model" title="Permanent link">#</a></h2>
+<p>First, we need to modify our <code>Article</code> model to include <code>slug_uuid</code> and
+<code>uuid_field</code> fields in <code>articles/models.py</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># ...</span>
+<span class="hll"><span class="kn">import</span> <span class="nn">uuid</span>                                                                     <span class="c1"># new</span>
+</span>
+
+<span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+<span class="hll">    <span class="n">slug_uuid</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">SlugField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">editable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>                <span class="c1"># new</span>
+</span><span class="hll">    <span class="n">uuid_field</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">UUIDField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">,</span> <span class="n">editable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>           <span class="c1"># new</span>
+</span></code></pre></div></td></tr></table></div>
+<p>We make both the <code>slug_uuid</code> and <code>uuid_field</code> uneditable because editing
+these fields is too error-prone to be facilitated (though admins will
+always be able to revert this temporarily if they need to).</p>
+<p>After modifying the model, we need to sync the database, but this will
+return a warning.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span> django_tutorial$ python manage.py makemigrations
+<span class="c1"># It is impossible to add a non-nullable field &#39;slug_uuid&#39; to article without specifying a default. This is because the database needs something to populate existing rows.</span>
+<span class="c1"># Please select a fix:</span>
+<span class="c1">#  1) Provide a one-off default now (will be set on all existing rows with a null value for this column)</span>
+<span class="c1">#  2) Quit and manually define a default value in models.py.</span>
+<span class="c1"># Select an option:</span>
+</code></pre></div></td></tr></table></div>
+<p>Selecting <code>1</code> would have little value: a default is by definition
+non-unique, so we'll have to go and edit it later anyway. We select <code>2</code>
+to abort and add the <code>null=True</code> argument to the <code>slug_uuid</code> field: the
+field will become nullable (so the migration will be able to set 0 as
+default) and editable (so we'll be able to modify it manually through
+the Django admin):</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+<span class="hll">    <span class="c1"># slug_uuid = models.SlugField(max_length=100, editable=False)      # from this</span>
+</span><span class="hll">    <span class="n">slug_uuid</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">SlugField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>             <span class="c1"># to this</span>
+</span>    <span class="c1"># ...</span>
+</code></pre></div></td></tr></table></div>
+<p>We run <code>makemigrations</code> and <code>migrate</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span> django_tutorial$ python manage.py makemigrations
+<span class="c1"># Migrations for &#39;articles&#39;:</span>
+<span class="c1">#   conduit/articles/migrations/0002_article_slug_uuid_article_uuid_field.py</span>
+<span class="c1">#     - Add field slug_uuid to article</span>
+<span class="c1">#     - Add field uuid_field to article</span>
+<span class="o">(</span>django<span class="o">)</span> django_tutorial$ python manage.py migrate
+<span class="c1"># Operations to perform:</span>
+<span class="c1">#   Apply all migrations: admin, articles, auth, contenttypes, sessions, users</span>
+<span class="c1"># Running migrations:</span>
+<span class="c1">#   Applying articles.0002_article_slug_uuid_article_uuid_field... OK</span>
+</code></pre></div></td></tr></table></div>
+<p>No error. We can go the Django admin, then set a unique slug for each
+<code>Article</code> manually: you can just slugify the titles you came up by hand,
+so “Making Slugs by Hand” would become “making-slugs-by-hand” for
+example.</p>
+<figure>
+<img src="./assets/admin - editing_slugs.png" width="600"
+alt="Editing slugs" />
+<figcaption aria-hidden="true">Editing slugs</figcaption>
+</figure>
+
+<p>Once we're done, we return to <code>articles/models.py</code> to remove the
+<code>null=True</code> argument and add the <code>editable=False</code> argument to
+<code>slug_uuid</code> again:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+<span class="hll">    <span class="c1"># slug_uuid = models.SlugField(max_length=100, null=True)           # from this</span>
+</span><span class="hll">    <span class="n">slug_uuid</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">SlugField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">editable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>        <span class="c1"># to this</span>
+</span>    <span class="c1"># ...</span>
+</code></pre></div></td></tr></table></div>
+<p>When you make the migrations, you'll get a warning:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span> django_tutorial$ python manage.py makemigrations
+<span class="c1"># It is impossible to change a nullable field &#39;slug_uuid&#39; on article to non-nullable without providing a default. This is because the database needs something to populate existing rows.</span>
+<span class="c1"># Please select a fix:</span>
+<span class="c1">#  1) Provide a one-off default now (will be set on all existing rows with a null value for this column)</span>
+<span class="c1">#  2) Ignore for now. Existing rows that contain NULL values will have to be handled manually, for example with a RunPython or RunSQL operation.</span>
+<span class="c1">#  3) Quit and manually define a default value in models.py.</span>
+<span class="c1"># Select an option: 2</span>
+<span class="c1"># Migrations for &#39;articles&#39;:</span>
+<span class="c1">#   conduit/articles/migrations/0003_alter_article_slug_uuid.py</span>
+<span class="c1">#     - Alter field slug_uuid on article</span>
+</code></pre></div></td></tr></table></div>
+<p>You can safely select <code>2</code>, as we have already taken care of the
+<code>slug_uuid</code> fields through the Django admin app.</p>
+<h2 id="display-slug-and-uuid-fields-in-the-django-admin">Display slug and UUID fields in the Django admin<a class="headerlink" href="#display-slug-and-uuid-fields-in-the-django-admin" title="Permanent link">#</a></h2>
+<p>It'd be nice to be able to view our new fields in the Django admin, but
+non-editable fields are hidden by default.</p>
+<p>In order to display these fields, we need to override how the Django
+admin represents the <code>Article</code> model.</p>
+<p>In <code>articles/admin.py</code>, add the following:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">#...</span>
+
+<span class="hll"><span class="k">class</span> <span class="nc">ArticleAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>               <span class="c1"># new</span>
+</span><span class="hll">    <span class="n">readonly_fields</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;slug_uuid&quot;</span><span class="p">,</span> <span class="s2">&quot;uuid_field&quot;</span><span class="p">)</span>   <span class="c1">#</span>
+</span>
+
+<span class="hll"><span class="c1"># admin.site.register(Article, ArticleAdmin)        # from this</span>
+</span><span class="hll"><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Article</span><span class="p">,</span> <span class="n">ArticleAdmin</span><span class="p">)</span>          <span class="c1"># to this</span>
+</span></code></pre></div></td></tr></table></div>
+<p>Here, we define subclass a <a href="https://docs.djangoproject.com/en/4.0/ref/contrib/admin/#django.contrib.admin.ModelAdmin"><code>ModelAdmin</code>
+class</a>
+(which defines how a model is represented in the Django admin) and add
+the non-editable fields we want to see to the new class's
+<a href="https://docs.djangoproject.com/en/4.0/ref/contrib/admin/#django.contrib.admin.ModelAdmin.readonly_fields"><code>readonly_fields</code>
+attribute</a>.</p>
+<p>If you have a look at some of the existing articles, you'll be able to
+see their <code>slug_uuid</code> and <code>uuid_field</code> fields now.</p>
+<h2 id="generate-unique-slug_uuid-fields-with-utility-functions">Generate unique <code>slug_uuid</code> fields with utility functions<a class="headerlink" href="#generate-unique-slug_uuid-fields-with-utility-functions" title="Permanent link">#</a></h2>
+<p>We want to avoid manually entering the slugs for every article: the
+generation of a unique <code>slug_uuid</code> should be triggered automatically
+every time an <code>Article</code> instance is saved. Because our choice of slug is
+not the simplest, it doesn't come included with Django: we will need to
+create this functionality.</p>
+<p>When we need to define new functions in order to add some new
+functionality to Django, the common pattern is to create a utility
+module (generally a <code>utils.py</code> file) and import the functions from
+there. This enables reuse, allows to keep code in models and views
+short, and facilitates testing. Depending on the scope of the utility
+functions, <code>utils.py</code> can be placed within the project, or simply at the
+level of the app.</p>
+<p>In our case, we only need a function that will create unique slugs for
+articles, the scope of the utility module is the <code>articles</code> app, so we
+create the <code>utils.py</code> file in the <code>articles</code> folder:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">django.utils.text</span> <span class="kn">import</span> <span class="n">slugify</span>
+
+
+<span class="k">def</span> <span class="nf">slug_uuid_generator</span><span class="p">(</span><span class="n">instance</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate a unique slug_uuid for Articles from the title and a UUID.&quot;&quot;&quot;</span>
+    <span class="c1"># if the instance already has a `slug_uuid`, don&#39;t change it</span>
+    <span class="c1"># to avoid changing URLs</span>
+    <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">slug_uuid</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">instance</span><span class="o">.</span><span class="n">slug_uuid</span>
+
+    <span class="c1"># get the instance&#39;s class (`Article`)</span>
+    <span class="n">ArticleClass</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span>
+
+    <span class="c1"># get max length of `slug_uuid` as defined in the `Article` model</span>
+    <span class="n">max_length</span> <span class="o">=</span> <span class="n">ArticleClass</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s2">&quot;slug_uuid&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">max_length</span>
+
+    <span class="n">uuid_field</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">uuid_field</span><span class="p">)</span>
+    <span class="n">uuid_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">uuid_field</span><span class="p">)</span>
+
+    <span class="c1"># slugify instance&#39;s title</span>
+    <span class="c1"># trim slug to leave space for UUID</span>
+    <span class="n">slug_field</span> <span class="o">=</span> <span class="n">slugify</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">title</span><span class="p">)[:</span> <span class="n">max_length</span> <span class="o">-</span> <span class="n">uuid_length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># create `slug_uuid` by concatenating slugified title and UUID</span>
+    <span class="n">slug_uuid</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{slug_field}</span><span class="s2">-</span><span class="si">{uuid_field}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">slug_field</span><span class="o">=</span><span class="n">slug_field</span><span class="p">,</span>
+        <span class="n">uuid_field</span><span class="o">=</span><span class="n">uuid_field</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">slug_uuid</span>
+</code></pre></div></td></tr></table></div>
+<p>This looks complicated, because it is, at our current level.</p>
+<p>What we want to happen is the following: when a new article (ie a new
+instance of the <code>Article</code> model) is saved, we want a function to take
+that instance as an argument, extract its title and UUID, slugify the
+title, concatenate the slug with the UUID, and set the resulting string
+as that instance's <code>slug_uuid</code> field value. There's also a condition: if
+the article already has a <code>slug_uuid</code> (and is being saved after a simple
+update), then we don't want to change the <code>slug_uuid</code>, because that
+would change the URL and <a href="https://www.w3.org/Provider/Style/URI">cool URLs don't
+change</a>.</p>
+<p>Walking through the function step by step, you can check that it is
+exactly what we're doing.</p>
+<h2 id="override-save-method-instead-of-creating-signals-alternative">Override <code>save</code> method instead of creating signals (alternative)<a class="headerlink" href="#override-save-method-instead-of-creating-signals-alternative" title="Permanent link">#</a></h2>
+<p>One way to call <code>slug_uuid_generator</code> at the moment of saving an article
+would be to
+<a href="https://docs.djangoproject.com/en/4.0/topics/db/models/#overriding-model-methods">override</a>
+the <code>Article</code> model's <a href="https://docs.djangoproject.com/en/4.0/ref/models/instances/#saving-objects"><code>save</code>
+method</a>:
+this is a common method, but not <a href="https://teddit.ggc-project.de/r/django/comments/p3pgr/overriding_save_vs_presave_signals_which_is/">best
+practice</a>.</p>
+<p>The next section is rather complicated, so if you prefer to keep things
+simple for now, you can just add the code below to your
+<code>articles/models.py</code> and skip straight to <em>Adapt URLs and views to
+<code>slug_uuid</code> fields</em>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># ...</span>
+<span class="hll"><span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">slug_uuid_generator</span>              <span class="c1"># new</span>
+</span>
+
+<span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+
+<span class="hll">    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>                <span class="c1"># new</span>
+</span><span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">slug_uuid</span> <span class="o">=</span> <span class="n">slug_uuid_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c1">#</span>
+</span><span class="hll">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>               <span class="c1">#</span>
+</span></code></pre></div></td></tr></table></div>
+<p>We advise you to implement signals instead however, both in order to get
+some of that sweet Django learning, but also because this method will
+keep your code readable when your <code>save</code> method overrides start being 50
+lines long.</p>
+<h2 id="generate-slug_uuid-fields-automatically-with-signals">Generate <code>slug_uuid</code> fields automatically with signals<a class="headerlink" href="#generate-slug_uuid-fields-automatically-with-signals" title="Permanent link">#</a></h2>
+<p>The function in the <code>utils.py</code> file should be called at the moment of
+saving a new <code>Article</code> instance: this step does not happen in the
+<code>utils.py</code> file, but in the file we will create next.</p>
+<p>We create the <code>articles/signals.py</code> file and add the following method to
+it:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">pre_save</span>
+<span class="kn">from</span> <span class="nn">django.dispatch</span> <span class="kn">import</span> <span class="n">receiver</span>
+
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Article</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">slug_uuid_generator</span>
+
+
+<span class="nd">@receiver</span><span class="p">(</span><span class="n">pre_save</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">Article</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">generate_slug_uuid_before_article_save</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Call slug_uuid_generator function when saving `Article` instance.&quot;&quot;&quot;</span>
+    <span class="n">instance</span><span class="o">.</span><span class="n">slug_uuid</span> <span class="o">=</span> <span class="n">slug_uuid_generator</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<p>We use a signal to call our <code>slug_uuid_generator</code> every time an
+<code>Article</code> instance is created.
+<a href="https://docs.djangoproject.com/en/4.0/topics/signals/">Signals</a> are a
+Django utility that allows applications (“receivers”) within Django to
+be notified (by “senders”) when certain actions happen.</p>
+<p>In this case, the sender is the <code>Article</code> model. We want our <code>slug_uuid</code>
+to be generated just before an article is saved, so we want to use the
+<a href="https://docs.djangoproject.com/en/4.0/ref/signals/#pre-save"><code>pre_save</code>
+signal</a>,
+which is sent before a model's <code>save</code> method is called.</p>
+<p>The receiver function <code>pre_save_receiver</code> generates a <code>slug_uuid</code> by
+calling <code>slug_uuid_generator</code>. We specify that <code>pre_save_receiver</code> is
+the receiver with the <a href="https://docs.djangoproject.com/en/4.0/topics/signals/#connecting-receiver-functions">receiver
+decorator</a>.</p>
+<p>In order to activate this signal, we will modify <code>articles/apps.py</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">django.apps</span> <span class="kn">import</span> <span class="n">AppConfig</span>
+
+
+<span class="k">class</span> <span class="nc">ArticlesConfig</span><span class="p">(</span><span class="n">AppConfig</span><span class="p">):</span>
+    <span class="n">default_auto_field</span> <span class="o">=</span> <span class="s2">&quot;django.db.models.BigAutoField&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;conduit.articles&quot;</span>
+
+<span class="hll">    <span class="k">def</span> <span class="nf">ready</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>                        <span class="c1"># new</span>
+</span><span class="hll">        <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">signals</span>               <span class="c1"># new</span>
+</span></code></pre></div></td></tr></table></div>
+<p>The <a href="https://docs.djangoproject.com/en/4.0/ref/applications/#django.apps.AppConfig.ready"><code>ready</code>
+method</a>
+allows us to register the signals, and because we are using a <code>receiver</code>
+decorator, the signal handlers are <a href="https://docs.djangoproject.com/en/4.0/topics/signals/#connecting-receiver-functions">connected
+implicitly</a>
+by just importing them.</p>
+<p>We're ready to test our <code>slug_uuid</code> generation: let's try creating an
+Article through the Django admin app. Write some placeholder text in the
+title, description, and body, then select your superuser as the author,
+and save: you should be able to see the article in the Django admin and
+you can check that it has a nice <code>slug_uuid</code> value. Try changing the
+title of that article, save, and check that the <code>slug_uuid</code> has not
+changed.</p>
+<h2 id="adapt-urls-and-views-to-slug_uuid-fields">Adapt URLs and views to <code>slug_uuid</code> fields<a class="headerlink" href="#adapt-urls-and-views-to-slug_uuid-fields" title="Permanent link">#</a></h2>
+<p>Since we want to have <code>slug_uuid</code> parameters in our articles' URLs, we
+need to change <code>urlpatterns</code> in <code>articles/urls.py</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># ...</span>
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># ...</span>
+<span class="hll">    <span class="c1"># path(&quot;article/&lt;int:pk&gt;&quot;, ArticleDetailView.as_view(), name=&quot;article_detail&quot;),     # from this</span>
+</span><span class="hll">    <span class="n">path</span><span class="p">(</span>                                                                               <span class="c1"># to this</span>
+</span><span class="hll">        <span class="s2">&quot;article/&lt;slug:slug_uuid&gt;&quot;</span><span class="p">,</span> <span class="n">ArticleDetailView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;article_detail&quot;</span>  <span class="c1">#</span>
+</span><span class="hll">    <span class="p">),</span>                                                                                  <span class="c1">#</span>
+</span><span class="p">]</span>
+</code></pre></div></td></tr></table></div>
+<p>Here, we tell Django's URL dispatcher to call the <code>ArticleDetailView</code>
+with the <code>slug_uuid</code> parameter, which is matched by the <a href="https://docs.djangoproject.com/en/4.0/topics/http/urls/#path-converters"><code>slug</code> path
+converter</a>
+in the URL.</p>
+<p>We're not finished just yet: if you navigate to your <em>Conduit</em> app at
+<a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> and hover over the article previews, you'll see
+that the hyperlinks still point to URLs with a <code>pk</code> value. To remedy
+this, we need to update the <code>get_absolute_url</code> method in
+<code>articles/models.py</code>, so that our links in templates specify URLs with
+the article's <code>slug_uuid</code> value:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># ...</span>
+
+<span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="hll">        <span class="c1"># return reverse(&quot;article_detail&quot;, kwargs={&quot;pk&quot;: self.pk})              # from this</span>
+</span><span class="hll">        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;article_detail&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;slug_uuid&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">slug_uuid</span><span class="p">})</span>  <span class="c1"># to this</span>
+</span></code></pre></div></td></tr></table></div>
+<p>If you try to view a specific article now, you should get the following
+error:</p>
+<blockquote>
+<p>AttributeError at /article/onetoonefield</p>
+<p>Generic detail view ArticleDetailView must be called with either an
+object pk or a slug in the URLconf.</p>
+<p>Request Method: GET Request URL:
+<a href="http://127.0.0.1:8000/article/onetoonefield">http://127.0.0.1:8000/article/onetoonefield</a></p>
+</blockquote>
+<p>This means that our <code>ArticleDetailView</code>, which is the interface that
+allows to identify the relevant model instance given a specific URL, is
+expecting either a <code>pk</code> or a <code>slug</code> parameter.</p>
+<p>We have a few options:</p>
+<ul>
+<li>we can simply rename our <code>slug_uuid</code> fields to <code>slug</code> and be done
+    with it</li>
+<li>we can teach our <code>ArticleDetailView</code> to identify <code>Article</code> instances
+    based on the <code>slug_uuid</code> field</li>
+</ul>
+<p>By now, you probably know that we're obviously going to choose the…
+second, more complicated option. Because we'll learn more that way.</p>
+<p>In <code>articles/views.py</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">#...</span>
+<span class="hll"><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>                  <span class="c1"># new</span>
+</span>
+<span class="k">class</span> <span class="nc">ArticleDetailView</span><span class="p">(</span><span class="n">DetailView</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+<span class="hll">    <span class="k">def</span> <span class="nf">get_object</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>                                       <span class="c1"># new</span>
+</span><span class="hll">        <span class="n">slug_uuid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;slug_uuid&quot;</span><span class="p">)</span>                <span class="c1">#</span>
+</span><span class="hll">        <span class="k">return</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Article</span><span class="p">,</span> <span class="n">slug_uuid</span><span class="o">=</span><span class="n">slug_uuid</span><span class="p">)</span>  <span class="c1">#</span>
+</span></code></pre></div></td></tr></table></div>
+<p>Looks complicated, doesn't it? Wish we had chosen the easy way out.
+Anyway, let's try to understand.</p>
+<p>When the URL dispatcher gets a request at a specific URL, it passes the
+data from the request (the URL itself, whether the user's logged in,
+whether the user's on a premium plan, etc.) to the view. Inside the
+view, we can access this data. The request data is included into the
+<code>self</code> argument that the <a href="https://docs.djangoproject.com/en/4.0/ref/class-based-views/mixins-single-object/#django.views.generic.detail.SingleObjectMixin.get_object"><code>get_object</code>
+method</a>
+gets. From the request, we can extract the keyword arguments, or the
+kwargs. We're interested in the <code>slug_uuid</code> kwarg, specifically. Once we
+have the <code>slug_uuid</code> value, we can retrieve the desired <code>Article</code> model
+instance.</p>
+<p>When going back to <a href="http://localhost:8000/">http://localhost:8000/</a> (where your app is running),
+you will see that your new article has a <code>slug_uuid</code> consisting of its
+slugified title and a UUID:</p>
+<figure>
+<img src="./assets/article_detail - slug_uuid.png" width="600"
+alt="slug_uuid fields" />
+<figcaption aria-hidden="true"><code>slug_uuid</code>
+fields</figcaption>
+</figure>
+
+<h2 id="slug-and-uuid_field-instead-of-slug_uuid-alternative"><code>slug</code> and <code>uuid_field</code> instead of <code>slug_uuid</code> (alternative)<a class="headerlink" href="#slug-and-uuid_field-instead-of-slug_uuid-alternative" title="Permanent link">#</a></h2>
+<p>We have seen how to override the way instances of a model are retrieved
+by Django, but there is also a much simpler alternative to what we just
+did. Making slugs and UUIDs is a common requirement, so Django
+facilitates tasks around working with such fields.</p>
+<p>The code below assumes that we are back to the very start of this
+chapter, just after finishing the <em>Viewing Articles</em> chapter.</p>
+<p>In our <code>articles/models.py</code>, we create <code>slug</code> and <code>uuid_field</code> fields
+(we have to specify <code>null=True</code>, create <code>slug</code> values for the existing
+articles, then specify <code>editable=False</code>, like we did above):</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># ...</span>
+<span class="hll"><span class="kn">import</span> <span class="nn">uuid</span>                                                                     <span class="c1"># new</span>
+</span>
+
+<span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+<span class="hll">    <span class="n">slug</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">SlugField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">68</span><span class="p">,</span> <span class="n">editable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>                      <span class="c1"># new</span>
+</span><span class="hll">    <span class="n">uuid_field</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">UUIDField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">,</span> <span class="n">editable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>           <span class="c1"># new</span>
+</span></code></pre></div></td></tr></table></div>
+<p>Still in <code>articles/models.py</code>, we override the <code>save</code> method to generate
+slugs at save:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># ...</span>
+<span class="hll"><span class="kn">from</span> <span class="nn">django.utils.text</span> <span class="kn">import</span> <span class="n">slugify</span>
+</span>
+
+<span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+
+<span class="hll">    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class="hll">        <span class="bp">self</span><span class="o">.</span><span class="n">slug</span> <span class="o">=</span> <span class="n">slugify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+</span><span class="hll">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<p>In <code>articles/urls.py</code>, we add our new URL:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># ...</span>
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># path(&quot;article/&lt;int:pk&gt;&quot;, ArticleDetailView.as_view(), name=&quot;article_detail&quot;),                 # from this</span>
+<span class="hll">    <span class="n">path</span><span class="p">(</span>                                                                                           <span class="c1"># to this</span>
+</span><span class="hll">        <span class="s2">&quot;article/&lt;slug:slug&gt;-&lt;uuid:uuid&gt;&quot;</span><span class="p">,</span>                                                          <span class="c1">#</span>
+</span><span class="hll">        <span class="n">ArticleDetailView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span>                                                                <span class="c1">#</span>
+</span><span class="hll">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;article_detail&quot;</span><span class="p">,</span>                                                                      <span class="c1">#</span>
+</span>    <span class="p">),</span>                                                                                              <span class="c1">#</span>
+<span class="p">]</span>
+</code></pre></div></td></tr></table></div>
+<p>In <code>articles/models.py</code>, we adapt <code>get_absolute_url</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># ...</span>
+
+<span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="hll">        <span class="c1"># return reverse(&quot;article_detail&quot;, kwargs={&quot;pk&quot;: self.pk})                  # from this</span>
+</span><span class="hll">        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span>                                                             <span class="c1"># to this</span>
+</span>            <span class="s2">&quot;article_detail&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;slug&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">slug</span><span class="p">,</span> <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">uuid_field</span><span class="p">}</span>   <span class="c1">#</span>
+        <span class="p">)</span>                                                                           <span class="c1">#</span>
+</code></pre></div></td></tr></table></div>
+<p>And finally we adapt the view in <code>articles/views.py</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">#...</span>
+<span class="hll"><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>                                  <span class="c1"># new</span>
+</span>
+<span class="k">class</span> <span class="nc">ArticleDetailView</span><span class="p">(</span><span class="n">DetailView</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+<span class="hll">    <span class="k">def</span> <span class="nf">get_object</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>                                                       <span class="c1"># new</span>
+</span><span class="hll">        <span class="n">slug</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;slug&quot;</span><span class="p">)</span>                                          <span class="c1">#</span>
+</span><span class="hll">        <span class="n">uuid_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uuid&quot;</span><span class="p">)</span>                                    <span class="c1">#</span>
+</span>        <span class="k">return</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Article</span><span class="p">,</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">,</span> <span class="n">uuid_field</span><span class="o">=</span><span class="n">uuid_field</span><span class="p">)</span>     <span class="c1">#</span>
+</code></pre></div></td></tr></table></div>
+
+              
+            </article>
+            
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../03_viewing_articles/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Viewing Articles" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Viewing Articles
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../05_creating_editing_and_deleting_articles/" class="md-footer__link md-footer__link--next" aria-label="Next: Creating, editing, and deleting Articles" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Creating, editing, and deleting Articles
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    <a href="https://github.com/harabat/django-htmx" target="_blank" rel="noopener" title="Django + HTMX tutorial on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.expand", "navigation.top", "search.suggest"], "search": "../assets/javascripts/workers/search.85cb4492.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.a877e258.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1190 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A tutorial for building the RealWorld app in Django and HTMX">
+      
+      
+      
+      <link rel="icon" href="../assets/django-logo.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.6">
+    
+    
+      
+        <title>Comments - Django + HTMX tutorial</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.4a0965b7.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.cbb835fc.min.css">
+        
+      
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+    <script data-goatcounter="https://django-htmx.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#comments" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Django + HTMX tutorial" class="md-header__button md-logo" aria-label="Django + HTMX tutorial" data-md-component="logo">
+      
+  <img src="../assets/django-logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Django + HTMX tutorial
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Comments
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/harabat/django-htmx" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    harabat/django-htmx
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Django + HTMX tutorial" class="md-nav__button md-logo" aria-label="Django + HTMX tutorial" data-md-component="logo">
+      
+  <img src="../assets/django-logo.png" alt="logo">
+
+    </a>
+    Django + HTMX tutorial
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/harabat/django-htmx" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    harabat/django-htmx
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Readme
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_starting_the_project/" class="md-nav__link">
+        Starting the project
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_home_page/" class="md-nav__link">
+        Home page
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_viewing_articles/" class="md-nav__link">
+        Viewing Articles
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_slugs/" class="md-nav__link">
+        Slugs
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_creating_editing_and_deleting_articles/" class="md-nav__link">
+        Creating, editing, and deleting Articles
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Comments
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Comments
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model" class="md-nav__link">
+    Model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#viewing-comments" class="md-nav__link">
+    Viewing comments
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-comments" class="md-nav__link">
+    Creating comments
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deleting-comments" class="md-nav__link">
+    Deleting comments
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07_users_and_profiles/" class="md-nav__link">
+        Users and Profiles
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08_authentication_i_login_logout_signup/" class="md-nav__link">
+        Login, Logout, Signup
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_authentication_ii_securing_the_app/" class="md-nav__link">
+        Securing the app
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10_profile_features/" class="md-nav__link">
+        Profile features
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11_editing_profiles/" class="md-nav__link">
+        Editing profiles
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12_follows/" class="md-nav__link">
+        Follows
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13_favourites/" class="md-nav__link">
+        Favourites
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14_tags_coming_soon/" class="md-nav__link">
+        Tags
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15_htmx_coming_soon/" class="md-nav__link">
+        HTMX
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16_future_extensions/" class="md-nav__link">
+        Future extensions
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model" class="md-nav__link">
+    Model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#viewing-comments" class="md-nav__link">
+    Viewing comments
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-comments" class="md-nav__link">
+    Creating comments
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deleting-comments" class="md-nav__link">
+    Deleting comments
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/harabat/django-htmx/edit/master/docs/06_comments.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="comments">Comments<a class="headerlink" href="#comments" title="Permanent link">#</a></h1>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">#</a></h2>
+<p>Now that we have articles, we need comments. Gotta give our users a
+voice, right?</p>
+<h2 id="model">Model<a class="headerlink" href="#model" title="Permanent link">#</a></h2>
+<p>A comment needs a related article, an author, a body, and a date. Let's
+create a <code>Comment</code> model in <code>models.py</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># ...</span>
+
+<span class="k">class</span> <span class="nc">Comment</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
+        <span class="n">Article</span><span class="p">,</span>
+        <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span>
+        <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;comments&quot;</span><span class="p">,</span>
+        <span class="n">to_field</span><span class="o">=</span><span class="s2">&quot;slug_uuid&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">AUTH_USER_MODEL</span><span class="p">,</span>
+        <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span>
+        <span class="n">related_name</span><span class="o">=</span><span class="s2">&quot;comments&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="p">[:</span><span class="mi">60</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span>
+
+    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;article_detail&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;slug_uuid&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">article</span><span class="o">.</span><span class="n">slug_uuid</span><span class="p">})</span>
+</code></pre></div></td></tr></table></div>
+<p>Let's <code>makemigrations</code> and <code>migrate</code>. You should get the following
+error:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code>SystemCheckError: System check identified some issues:
+
+ERRORS:
+articles.Comment.article: (fields.E311) &#39;Article.slug_uuid&#39; must be unique because it is referenced by a foreign key.
+        HINT: Add unique=True to this field or add a UniqueConstraint (without condition) in the model Meta.constraints.
+</code></pre></div></td></tr></table></div>
+<p>That's because we're using articles' <code>slug_uuid</code> fields as ForeignKeys
+for the comments (so that we can filter our comments by the attached
+articles' <code>slug_uuid</code> fields instead of their UUIDs). This error is
+easily corrected by adding <code>unique=True</code> as an argument to the
+<code>slug_uuid</code> field in the <code>Article</code> model in <code>models.py</code>. You should be
+able to <code>makemigrations</code> and <code>migrate</code> after that.</p>
+<p>Now, we need to register our model in <code>admin.py</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<span class="hll"><span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Article</span><span class="p">,</span> <span class="n">Comment</span>        <span class="c1"># new</span>
+</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Article</span><span class="p">)</span>
+<span class="hll"><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Comment</span><span class="p">)</span>                <span class="c1"># new</span>
+</span></code></pre></div></td></tr></table></div>
+<p>When this is done, go to your admin app and create a few comments for a
+couple articles.</p>
+<h2 id="viewing-comments">Viewing comments<a class="headerlink" href="#viewing-comments" title="Permanent link">#</a></h2>
+<p>We want to be able to view the comments in our <code>article_detail.html</code>
+template.</p>
+<p>In <code>article_detail.html</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;container page&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;row article-content&quot;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;col-xs-12&quot;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+                {{ article.body|linebreaks }}
+            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="hll">    <span class="p">&lt;</span><span class="nt">hr</span> <span class="p">/&gt;</span>                                  <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="hll">    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;row&quot;</span><span class="p">&gt;</span>                       <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="hll">        {% include &#39;comments.html&#39; %}       <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="hll">    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>                                  <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div></td></tr></table></div>
+<p>Now create <code>comments.html</code> in the <code>templates</code> folder and add the
+following:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;col-xs-12 col-md-8 offset-md-2&quot;</span><span class="p">&gt;</span>
+    {% for comment in article.comments.all|dictsortreversed:&#39;created_at&#39; %}
+        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;card&quot;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;card-block&quot;</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;card-text&quot;</span><span class="p">&gt;</span>
+                    {{ comment.body }}
+                <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;card-footer&quot;</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;comment-author&quot;</span><span class="p">&gt;</span>
+                    {{ comment.author.user.username }}
+                <span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;date-posted&quot;</span><span class="p">&gt;</span>
+                    {{ comment.created_at|date:&quot;D M d Y&quot; }}
+                <span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    {% endfor %}
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div></td></tr></table></div>
+<h2 id="creating-comments">Creating comments<a class="headerlink" href="#creating-comments" title="Permanent link">#</a></h2>
+<p>We will now start allowing our users to leave comments on the website.
+We could do this like in the Django Girls tutorial: the
+<code>ArticleDetailView</code> would include a button that would direct to
+<code>CommentCreateView</code> on a separate page, and saving the comment would
+bring the user back to the <code>ArticleDetailView</code>. However, the
+<code>RealWorldApp</code> allows users to create and save their comments directly
+below the article, on the same page, so that's what we're going to try.</p>
+<p>Surprisingly, this is not straightforward to implement in Django,
+because it implies mixing <code>DetailView</code> and <code>CreateView</code> functionalities
+in a single page, which is made difficult by the fact that the
+<code>DetailView</code> doesn't have a POST method, while the <code>CreateView</code> requires
+it. Fortunately, our use case is covered in the Django documentation:
+<a href="https://docs.djangoproject.com/en/4.0/topics/class-based-views/mixins/#an-alternative-better-solution">https://docs.djangoproject.com/en/4.0/topics/class-based-views/mixins/#an-alternative-better-solution</a>.</p>
+<p>First, we'll create a <code>CommentCreateView</code> in <code>users/views.py</code>. We
+override the <code>form_valid</code> method because we need to specify the <code>author</code>
+and <code>article</code> fields required by the <code>Comment</code> model. We also override
+the <code>get_success_url</code> because we want the user to be redirected to the
+<code>ArticleDetailView</code> upon saving the comment.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># ...</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Article</span><span class="p">,</span> <span class="n">Comment</span>
+
+<span class="c1"># ...</span>
+<span class="k">class</span> <span class="nc">CommentCreateView</span><span class="p">(</span><span class="n">CreateView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;create comment&quot;&quot;&quot;</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Comment</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;body&quot;</span><span class="p">]</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;article_detail.html&quot;</span>
+
+    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+        <span class="n">form</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">author</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">profile</span>
+        <span class="n">form</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">slug_uuid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;slug_uuid&quot;</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">form_valid</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;article_detail&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;slug_uuid&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">article</span><span class="o">.</span><span class="n">slug_uuid</span><span class="p">})</span>
+</code></pre></div></td></tr></table></div>
+<p>Now, we need to modify the <code>ArticleDetailView</code> to make the
+<code>CommentCreateView</code>'s form available to <code>templates/article_detail.html</code>
+through the <code>get_context_data</code> method:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">ArticleDetailView</span><span class="p">(</span><span class="n">DetailView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;detail view for individual articles&quot;&quot;&quot;</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Article</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;article_detail.html&quot;</span>
+
+<span class="hll">    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>                   <span class="c1"># new</span>
+</span><span class="hll">        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>        <span class="c1"># new</span>
+</span><span class="hll">        <span class="n">context</span><span class="p">[</span><span class="s2">&quot;form&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CommentCreateView</span><span class="p">()</span><span class="o">.</span><span class="n">get_form</span><span class="p">()</span>    <span class="c1"># new</span>
+</span><span class="hll">        <span class="k">return</span> <span class="n">context</span>                                      <span class="c1"># new</span>
+</span></code></pre></div></td></tr></table></div>
+<p>Finally, we create a view that combines <code>ArticleDetailView</code> and
+<code>CommentCreateView</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># ...</span>
+<span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="c1"># ...</span>
+    <span class="n">View</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="c1"># ...</span>
+<span class="k">class</span> <span class="nc">ArticleCommentView</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;view article and post comments&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">ArticleDetailView</span><span class="o">.</span><span class="n">as_view</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">CommentCreateView</span><span class="o">.</span><span class="n">as_view</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<p>We want this new hybrid view to be the one returned by the
+<code>article/&lt;slug:slug_uuid&gt;</code> path: depending on whether the method is
+<code>GET</code> or <code>POST</code>, the new view will either return the
+<code>ArticleDetailView</code>, or the <code>CommentCreateView</code>.</p>
+<p>In <code>urls.py</code>, we replace the <code>article_detail</code> path by the following:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># ...</span>
+<span class="kn">from</span> <span class="nn">.views</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="c1"># ...</span>
+    <span class="n">ArticleCommentView</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># ...</span>
+    <span class="n">path</span><span class="p">(</span>
+        <span class="s2">&quot;article/&lt;slug:slug_uuid&gt;&quot;</span><span class="p">,</span>
+        <span class="n">ArticleCommentView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;article_detail&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="c1"># instead of =path(&quot;article/&lt;slug:slug_uuid&gt;&quot;, ArticleCommentView.as_view(), name=&quot;article_detail&quot;)=</span>
+<span class="p">]</span>
+</code></pre></div></td></tr></table></div>
+<p>Now that our views.py and urls.py are ready, we need to create the
+templates.</p>
+<p>Create <code>comment_create.html</code>, which corresponds to the
+<code>CommentCreateView</code>'s form:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code>{% block content %}
+    <span class="p">&lt;</span><span class="nt">form</span>
+        <span class="na">class</span><span class="o">=</span><span class="s">&quot;card comment-form&quot;</span>
+        <span class="na">method</span><span class="o">=</span><span class="s">&quot;post&quot;</span>
+        <span class="na">action</span><span class="o">=</span><span class="s">&quot;{% url &#39;article_detail&#39; slug_uuid=object.slug_uuid %}&quot;</span>
+    <span class="p">&gt;</span>
+        {% csrf_token %}
+        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;card-block&quot;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">textarea</span>
+                <span class="na">class</span><span class="o">=</span><span class="s">&quot;form-control&quot;</span>
+                <span class="na">rows</span><span class="o">=</span><span class="s">&quot;3&quot;</span>
+                <span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;Write a comment...&quot;</span>
+                <span class="na">name</span><span class="o">=</span><span class="s">&quot;{{ form.body.name }}&quot;</span>
+            <span class="p">&gt;</span>{{ form.body.value|default_if_none:&#39;&#39; }}<span class="p">&lt;/</span><span class="nt">textarea</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;card-footer&quot;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;btn btn-sm btn-primary&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span><span class="p">&gt;</span>
+                Post Comment
+            <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+{% endblock %}
+</code></pre></div></td></tr></table></div>
+<p>In <code>comments.html</code>, we include the <code>comment_create.html</code> template:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;col-xs-12 col-md-8 offset-md-2&quot;</span><span class="p">&gt;</span>
+<span class="hll">    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>                                           <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="hll">        {% include &#39;comment_create.html&#39; %}         <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="hll">    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>                                          <span class="cm">&lt;!-- new --&gt;</span>
+</span>    {% for comment in article.comments.all|dictsortreversed:&#39;created_at&#39; %}
+    <span class="cm">&lt;!-- ... --&gt;</span>
+</code></pre></div></td></tr></table></div>
+<p>Everything should be working now. Try to create some comments on an
+article.</p>
+<h2 id="deleting-comments">Deleting comments<a class="headerlink" href="#deleting-comments" title="Permanent link">#</a></h2>
+<p>We now want to be able to delete comments.</p>
+<p>In <code>articles/views.py</code>, add the <code>CommentDeleteView</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">CommentDeleteView</span><span class="p">(</span><span class="n">DeleteView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;delete comment&quot;&quot;&quot;</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Comment</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;article_detail.html&quot;</span>
+
+    <span class="k">def</span> <span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;article_detail&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;slug_uuid&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">article</span><span class="o">.</span><span class="n">slug_uuid</span><span class="p">})</span>
+</code></pre></div></td></tr></table></div>
+<p>In <code>urls.py</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># ...</span>
+    <span class="n">path</span><span class="p">(</span>
+        <span class="s2">&quot;article/&lt;slug:slug_uuid&gt;/comment/&lt;int:pk&gt;/delete&quot;</span><span class="p">,</span>
+        <span class="n">CommentDeleteView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;comment_delete&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">]</span>
+</code></pre></div></td></tr></table></div>
+<p>We require <code>pk</code> as an argument because that's what the
+<code>CommentDeleteView</code> needs to know which comment to delete. The
+<code>&lt;slug:slug_uuid&gt;</code> part is unnecessary, but it makes the path more
+logical, I find.</p>
+<p>In <code>comments.html</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;card-footer&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;comment-author&quot;</span><span class="p">&gt;</span>
+        {{ comment.author }}
+    <span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;date-posted&quot;</span><span class="p">&gt;</span>
+        {{ comment.created_at|date:&quot;D M d Y&quot; }}
+    <span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+<span class="hll">    {% include &#39;comment_delete.html&#39; %}             <span class="cm">&lt;!-- new --&gt;</span>
+</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div></td></tr></table></div>
+<p>Create <code>comment_delete.html</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span></pre></div></td><td class="code"><div><pre><span></span><code>{% block content %}
+    <span class="p">&lt;</span><span class="nt">form</span>
+        <span class="na">method</span><span class="o">=</span><span class="s">&quot;post&quot;</span>
+        <span class="na">action</span><span class="o">=</span><span class="s">&quot;{% url &#39;comment_delete&#39; slug_uuid=article.slug_uuid pk=comment.pk %}&quot;</span>
+        <span class="na">class</span><span class="o">=</span><span class="s">&quot;mod-options&quot;</span>
+    <span class="p">&gt;</span>
+        {% csrf_token %}
+        <span class="p">&lt;</span><span class="nt">button</span>
+            <span class="na">style</span><span class="o">=</span><span class="s">&quot;background: none;</span>
+<span class="s">                   border: none;</span>
+<span class="s">                   padding: 0;</span>
+<span class="s">                   margin: 0;</span>
+<span class="s">                   font-size: inherit;</span>
+<span class="s">                   margin-left: 5px;</span>
+<span class="s">                   opacity: 0.6;</span>
+<span class="s">                   cursor: pointer;&quot;</span>
+            <span class="na">value</span><span class="o">=</span><span class="s">&quot;DELETE&quot;</span>
+            <span class="na">class</span><span class="o">=</span><span class="s">&quot;ion-trash-a&quot;</span>
+        <span class="p">&gt;&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+{% endblock %}
+</code></pre></div></td></tr></table></div>
+
+              
+            </article>
+            
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../05_creating_editing_and_deleting_articles/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Creating, editing, and deleting Articles" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Creating, editing, and deleting Articles
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../07_users_and_profiles/" class="md-footer__link md-footer__link--next" aria-label="Next: Users and Profiles" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Users and Profiles
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    <a href="https://github.com/harabat/django-htmx" target="_blank" rel="noopener" title="Django + HTMX tutorial on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.expand", "navigation.top", "search.suggest"], "search": "../assets/javascripts/workers/search.85cb4492.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.a877e258.min.js"></script>
+      
+    
+  </body>
+</html>
