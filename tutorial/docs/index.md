@@ -145,3 +145,4 @@ Thanks to the excellent [Two Scoops of
 Django](https://www.feldroy.com/books/two-scoops-of-django-3-x) by
 Daniel and Audrey Feldroy: highly recommended if you want to be exposed
 to best practice in Django.
+
