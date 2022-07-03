@@ -169,9 +169,15 @@ Not much to explain:
     app's name): this is an illustration of template inheritance, which
     we mentioned earlier
 -   in the `content` block of `base.html`:
+    -   we refer to our object as `article`: the [default
+        `context_object_name`
+        variable](https://docs.djangoproject.com/en/4.0/ref/class-based-views/mixins-single-object/#django.views.generic.detail.SingleObjectMixin.get_context_object_name)
+        (the way you refer to the object that the view is manipulating)
+        in for `DetailView` (among others) is the model's name
+        (`Article`) in lowercase
     -   we're showing the article's title
     -   we're including a `templates/article_meta.html` template simply
-        because we're Svelte implementation's
+        because we're following Svelte implementation's
         \[\[<https://github.com/sveltejs/realworld/blob/master/src/routes/article/%5Bslug%5D/index.svelte>\]\[article/\[slug\]/index.svelte\]\]
         and we might as well keep to their structure if you ever need to
         quickly compare things
@@ -182,7 +188,9 @@ Not much to explain:
 
 ### article_meta.html
 
-In `templates/article_meta.html`:
+We create `templates/article_meta.html`, based on the Svelte
+implementation's
+\[\[[https://github.com/sveltejs/realworld/blob/master/src/routes/article/\\\[slug\\\]/\_ArticleMeta.svelte](https://github.com/sveltejs/realworld/blob/master/src/routes/article/\%5Bslug\%5D/_ArticleMeta.svelte)\]\[\_ArticleMeta.svelte\]\]:
 
 ``` { .html }
 <div class="article-meta">
