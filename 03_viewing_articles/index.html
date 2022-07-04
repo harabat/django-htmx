@@ -11,7 +11,7 @@
       
       
       <link rel="icon" href="../assets/django-logo.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.6">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.8">
     
     
       
@@ -19,7 +19,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.4a0965b7.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.1d29e8d0.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.cbb835fc.min.css">
@@ -896,9 +896,15 @@ following code:</p>
     app's name): this is an illustration of template inheritance, which
     we mentioned earlier</li>
 <li>in the <code>content</code> block of <code>base.html</code>:<ul>
+<li>we refer to our object as <code>article</code>: the <a href="https://docs.djangoproject.com/en/4.0/ref/class-based-views/mixins-single-object/#django.views.generic.detail.SingleObjectMixin.get_context_object_name">default
+    <code>context_object_name</code>
+    variable</a>
+    (the way you refer to the object that the view is manipulating)
+    in for <code>DetailView</code> (among others) is the model's name
+    (<code>Article</code>) in lowercase</li>
 <li>we're showing the article's title</li>
 <li>we're including a <code>templates/article_meta.html</code> template simply
-    because we're Svelte implementation's
+    because we're following Svelte implementation's
     [[<a href="https://github.com/sveltejs/realworld/blob/master/src/routes/article/%5Bslug%5D/index.svelte">https://github.com/sveltejs/realworld/blob/master/src/routes/article/%5Bslug%5D/index.svelte</a>][article/[slug]/index.svelte]]
     and we might as well keep to their structure if you ever need to
     quickly compare things</li>
@@ -910,7 +916,9 @@ following code:</p>
 </li>
 </ul>
 <h3 id="article_metahtml">article_meta.html<a class="headerlink" href="#article_metahtml" title="Permanent link">#</a></h3>
-<p>In <code>templates/article_meta.html</code>:</p>
+<p>We create <code>templates/article_meta.html</code>, based on the Svelte
+implementation's
+[[<a href="https://github.com/sveltejs/realworld/blob/master/src/routes/article/\%5Bslug\%5D/_ArticleMeta.svelte">https://github.com/sveltejs/realworld/blob/master/src/routes/article/\[slug\]/_ArticleMeta.svelte</a>][_ArticleMeta.svelte]]:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1057,10 +1065,10 @@ app</figcaption>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.expand", "navigation.top", "search.suggest"], "search": "../assets/javascripts/workers/search.85cb4492.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.expand", "navigation.top", "search.suggest"], "search": "../assets/javascripts/workers/search.b97dbffb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.a877e258.min.js"></script>
+      <script src="../assets/javascripts/bundle.0238f547.min.js"></script>
       
     
   </body>
