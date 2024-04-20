@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 from .utils import slug_uuid_generator
 
 import uuid
