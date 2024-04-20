@@ -1,6 +1,6 @@
 <form
     method="post"
-    action="{% url 'comment_delete' slug=article.slug pk=comment.pk %}"
+    action="{% url 'comment_delete' slug_uuid=article.slug_uuid pk=comment.pk %}"
     class="mod-options"
 >
   {% csrf_token %}

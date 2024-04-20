@@ -1,5 +1,10 @@
 from django.contrib import admin
 from .models import Article, Comment
 
-admin.site.register(Article)
+
+class ArticleAdmin(admin.ModelAdmin):
+    readonly_fields = ("slug_uuid", "uuid_field")
+
+
+admin.site.register(Article, ArticleAdmin)
 admin.site.register(Comment)

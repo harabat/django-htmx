@@ -2,7 +2,7 @@
     <form
         method="post"
         class="card comment-form"
-        action="{% url 'article_detail' slug=object.slug %}"
+        action="{% url 'article_detail' slug_uuid=object.slug_uuid %}"
     >
         {% csrf_token %}
         <div class="card-block">

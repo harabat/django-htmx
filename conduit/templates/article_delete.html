@@ -1,6 +1,6 @@
 <form
     method="POST"
-    action="{% url 'editor_delete' slug=article.slug %}"
+    action="{% url 'editor_delete' slug_uuid=article.slug_uuid %}"
     style="display:inline"
 >
     {% csrf_token %}

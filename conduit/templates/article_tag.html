@@ -1,10 +1,10 @@
 {% comment 'forms' %}
     <form
         method="post"
-        action="{% url 'article' article_slug=article_slug %}"
+        action="{% url 'article' article_slug_uuid=article_slug_uuid %}"
     >
         {% comment 'notforms' %}
-        <input type="hidden" name="next" value="{% url 'editor_update' slug=article_slug %}">
+        <input type="hidden" name="next" value="{% url 'editor_update' slug_uuid=article_slug_uuid %}">
         {% endcomment 'notforms' %}
         {% csrf_token %}
 {% endcomment %}

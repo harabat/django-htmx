@@ -22,7 +22,7 @@
                     {% if user == article.author.user %}
                         <span>
                             <a
-                                href="{% url 'editor_update' slug=article.slug %}"
+                                href="{% url 'editor_update' slug_uuid=article.slug_uuid %}"
                                 class="btn btn-outline-secondary btn-sm"
                             >
                                 <span class="ion-edit">

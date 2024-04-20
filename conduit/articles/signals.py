@@ -1,10 +1,10 @@
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from .models import Article
-from config.utils import unique_slug_generator
+from .utils import slug_uuid_generator
 
 
 @receiver(pre_save, sender=Article)
-def pre_save_receiver(sender, instance, *args, **kwargs):
-    if not instance.slug:
-        instance.slug = unique_slug_generator(instance)
+def generate_slug_uuid_before_article_save(sender, instance, *args, **kwargs):
+    """Call slug_uuid_generator function when saving `Article` instance."""
+    instance.slug_uuid = slug_uuid_generator(instance)

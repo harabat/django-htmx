@@ -37,6 +37,10 @@ class ArticleDetailView(DetailView):
     model = Article
     template_name = "article_detail.html"
 
+    def get_object(self):
+        slug_uuid = self.kwargs.get("slug_uuid")
+        return get_object_or_404(Article, slug_uuid=slug_uuid)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["form"] = CommentCreateView().get_form_class()
@@ -69,7 +73,7 @@ class EditorCreateView(LoginRequiredMixin, CreateView):
     #             article.add_tag(new_tag)
     #             # return redirect(
     #             #     reverse_lazy(
-    #             #         "editor_create", kwargs={"slug": self.kwargs.get("slug")}
+    #             #         "editor_create", kwargs={"slug_uuid": self.kwargs.get("slug_uuid")}
     #             #     )
     #             # )
     #             return super().post(request, *args, **kwargs)
@@ -85,6 +89,10 @@ class EditorUpdateView(LoginRequiredMixin, UpdateView):
     # fields = ["title", "description", "body"]
     template_name = "editor.html"
 
+    def get_object(self):
+        slug_uuid = self.kwargs.get("slug_uuid")
+        return get_object_or_404(Article, slug_uuid=slug_uuid)
+
     def post(self, request, *args, **kwargs):
         if request.user == self.get_object().author.user:
             if "add_new_tag" in request.POST:
@@ -94,7 +102,7 @@ class EditorUpdateView(LoginRequiredMixin, UpdateView):
                     article.add_tag(new_tag)
                 return redirect(
                     reverse_lazy(
-                        "editor_update", kwargs={"slug": self.kwargs.get("slug")}
+                        "editor_update", kwargs={"slug_uuid": self.kwargs.get("slug_uuid")}
                     )
                 )
             elif "remove_tag" in request.POST:
@@ -103,7 +111,7 @@ class EditorUpdateView(LoginRequiredMixin, UpdateView):
                 article.remove_tag(tag)
                 return redirect(
                     reverse_lazy(
-                        "editor_update", kwargs={"slug": self.kwargs.get("slug")}
+                        "editor_update", kwargs={"slug_uuid": self.kwargs.get("slug_uuid")}
                     )
                 )
             else:
@@ -138,12 +146,14 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user.profile
         form.instance.article = Article.objects.filter(
-            slug=self.kwargs.get("slug")
+            slug_uuid=self.kwargs.get("slug_uuid")
         ).first()
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("article_detail", kwargs={"slug": self.object.article.slug})
+        return reverse(
+            "article_detail", kwargs={"slug_uuid": self.object.article.slug_uuid}
+        )
 
 
 class ArticleCommentView(View):
@@ -170,7 +180,7 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
         return redirect(self.get_object().get_absolute_url())
 
     def get_success_url(self):
-        return reverse("article_detail", kwargs={"slug": self.kwargs.get("slug")})
+        return reverse("article_detail", kwargs={"slug_uuid": self.kwargs.get("slug_uuid")})
 
 
 class ArticleFavoriteView(RedirectView):
@@ -184,8 +194,8 @@ class ArticleFavoriteView(RedirectView):
             return super().get_redirect_url(*args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        slug = self.kwargs.get("slug", None)
-        article = get_object_or_404(Article, slug=slug)
+        slug_uuid = self.kwargs.get("slug_uuid", None)
+        article = get_object_or_404(Article, slug_uuid=slug_uuid)
         if request.user.profile.has_favorited(article):
             request.user.profile.unfavorite(article)
         else:
@@ -200,7 +210,7 @@ class TagAddView(UpdateView):
     form_class = ArticleForm
     template_name = "editor.html"
     # success_url = reverse_lazy(
-    #     "editor_update", kwargs={"slug": self.kwargs.get("article_slug")}
+    #     "editor_update", kwargs={"slug_uuid": self.kwargs.get("article_slug_uuid")}
     # )
 
     def get(self, request, *args, **kwargs):
@@ -223,6 +233,6 @@ class TagDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse(
-            "article_detail", kwargs={"slug": self.kwargs.get("article_slug")}
+            "article_detail", kwargs={"slug_uuid": self.kwargs.get("article_slug_uuid")}
         )
         return super().get_success_url()
