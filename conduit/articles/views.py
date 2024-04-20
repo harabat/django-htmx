@@ -118,6 +118,10 @@ class EditorDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("home")
     template_name = "article_detail.html"
 
+    def get_object(self):
+        slug_uuid = self.kwargs.get("slug_uuid")
+        return get_object_or_404(Article, slug_uuid=slug_uuid)
+
     def post(self, request, *args, **kwargs):
         if request.user == self.get_object().author.user:
             return super().post(request, *args, **kwargs)
