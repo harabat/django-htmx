@@ -13,30 +13,30 @@
                         <fieldset>
                             <fieldset class="form-group">
                                 <input
-    class="form-control form-control-lg"
-    type="text"
-    placeholder="Article Title"
-    name="{{ form.title.name }}"
-    value="{{ form.title.value|default_if_none:'' }}"
+                                    class="form-control form-control-lg"
+                                    type="text"
+                                    placeholder="Article Title"
+                                    name="{{ form.title.name }}"
+                                    value="{{ form.title.value|default_if_none:'' }}"
                                 />
                             </fieldset>
                             {{ form.title.errors }}
                             <fieldset class="form-group">
                                 <input
-    class="form-control"
-    type="text"
-    placeholder="What's this article about?"
-    name="{{ form.description.name }}"
-    value="{{ form.description.value|default_if_none:'' }}"
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="What's this article about?"
+                                    name="{{ form.description.name }}"
+                                    value="{{ form.description.value|default_if_none:'' }}"
                                 />
                             </fieldset>
                             {{ form.description.errors }}
                             <fieldset class="form-group">
                                 <textarea
-    class="form-control"
-    rows="8"
-    placeholder="Write your article (in markdown)"
-    name="{{ form.body.name }}"
+                                    class="form-control"
+                                    rows="8"
+                                    placeholder="Write your article (in markdown)"
+                                    name="{{ form.body.name }}"
                                 >{{ form.body.value|default_if_none:'' }}</textarea>
                             </fieldset>
                             {{ form.body.errors }}

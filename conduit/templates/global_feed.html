@@ -39,7 +39,7 @@
                                     </span>
                                 </div>
                                 {% comment %}
-                                    {#if user}
+                                    {#% if user %#}
                                     <div class="pull-xs-right">
                                         <button
                                             class="btn btn-sm {article.favorited ? 'btn-primary' : 'btn-outline-primary'}"
@@ -49,7 +49,7 @@
                                             {article.favoritesCount}
                                         </button>
                                     </div>
-                                    {/if}
+                                    {#% endif %#}
                                 {% endcomment %}
                             </div>
                             <!-- <a href="/article/{article.slug}" rel="prefetch" class="preview-link"> -->
@@ -58,9 +58,9 @@
                             <span>Read more...</span>
                             {% comment %}
                                 <ul class="tag-list">
-                                    {#each article.tagList as tag}
-                                    <li class="tag-default tag-pill tag-outline"><a href="/?tag={tag}">{tag}</a></li>
-                                    {/each}
+                                    {#% for tag in article.tagList %#}
+                                        <li class="tag-default tag-pill tag-outline"><a href="/?tag={{ tag }}">{{ tag }}</a></li>
+                                    {#% endfor %#}
                                 </ul>
                             {% endcomment %}
                             <!-- </a> -->
