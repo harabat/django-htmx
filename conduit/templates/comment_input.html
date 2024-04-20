@@ -1,7 +1,7 @@
 {% block content %}
     <form
-        class="card comment-form"
         method="post"
+        class="card comment-form"
         action="{% url 'article_detail' slug=object.slug %}"
     >
         {% csrf_token %}

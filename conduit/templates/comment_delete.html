@@ -1,21 +1,19 @@
-{% block content %}
-    <form
-        method="post"
-        action="{% url 'comment_delete' slug=article.slug pk=comment.pk %}"
-        class="mod-options"
-    >
-        {% csrf_token %}
-        <button
-            style="background: none;
-                   border: none;
-                   padding: 0;
-                   margin: 0;
-                   font-size: inherit;
-                   margin-left: 5px;
-                   opacity: 0.6;
-                   cursor: pointer;"
-            value="DELETE"
-            class="ion-trash-a"
-        ></button>
-    </form>
-{% endblock %}
+<form
+    method="post"
+    action="{% url 'comment_delete' slug=article.slug pk=comment.pk %}"
+    class="mod-options"
+>
+  {% csrf_token %}
+  <button
+      style="background: none;
+             border: none;
+             padding: 0;
+             margin: 0;
+             font-size: inherit;
+             margin-left: 5px;
+             opacity: 0.6;
+             cursor: pointer;"
+      value="DELETE"
+      class="ion-trash-a"
+  ></button>
+</form>
