@@ -4,7 +4,8 @@ from django.views.generic import CreateView, DetailView, UpdateView, RedirectVie
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import User, Profile
+from django.contrib.auth import get_user_model
+from .models import Profile
 from .forms import ProfileForm, UserForm
 
 
@@ -23,7 +24,7 @@ class Logout(LogoutView):
 
 
 class SignUpView(CreateView):
-    model = User
+    model = get_user_model()
     fields = ["username", "email", "password"]
     template_name = "signup.html"
     success_url = reverse_lazy("home")
@@ -50,7 +51,7 @@ class ProfileDetailView(DetailView):
 
     def get_object(self, queryset=None):
         username = self.kwargs.get("username", None)
-        profile = get_object_or_404(User, username=username).profile
+        profile = get_object_or_404(get_user_model(), username=username).profile
         return profile
 
     def get_context_data(self, **kwargs):
@@ -76,7 +77,7 @@ class ProfileFollowView(LoginRequiredMixin, RedirectView):
 
     def post(self, request, *args, **kwargs):
         username = self.kwargs.get("username", None)
-        profile = get_object_or_404(User, username=username).profile
+        profile = get_object_or_404(get_user_model(), username=username).profile
         if request.user.profile.is_following(profile):
             request.user.profile.unfollow(profile)
         else:

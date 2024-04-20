@@ -1,5 +1,6 @@
 from django import forms
-from .models import Profile, User
+from django.contrib.auth import get_user_model
+from .models import Profile
 
 
 class ProfileForm(forms.ModelForm):
@@ -12,7 +13,7 @@ class UserForm(forms.ModelForm):
     new_password = forms.CharField(required=False)
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ["username", "email", "new_password"]
 
     def save(self, commit=True):
