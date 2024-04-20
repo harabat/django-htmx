@@ -32,7 +32,7 @@ class Home(TemplateView):
 
 
 class ArticleDetailView(DetailView):
-    """detail view for individual articles"""
+    """Detail view for individual articles."""
 
     model = Article
     template_name = "article_detail.html"
@@ -78,7 +78,7 @@ class EditorCreateView(LoginRequiredMixin, CreateView):
 
 
 class EditorUpdateView(LoginRequiredMixin, UpdateView):
-    """edit article"""
+    """View for editing articles."""
 
     model = Article
     form_class = ArticleForm
@@ -112,7 +112,7 @@ class EditorUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class EditorDeleteView(LoginRequiredMixin, DeleteView):
-    """delete article"""
+    """View for deleting articles."""           #
 
     model = Article
     success_url = reverse_lazy("home")
@@ -129,7 +129,7 @@ class EditorDeleteView(LoginRequiredMixin, DeleteView):
 
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
-    """create comment"""
+    """View for creating comments."""
 
     model = Comment
     fields = ["body"]
@@ -147,7 +147,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
 
 class ArticleCommentView(View):
-    """view article and post comments"""
+    """View for viewing articles and posting comments."""
 
     def get(self, request, *args, **kwargs):
         view = ArticleDetailView.as_view()
@@ -159,7 +159,7 @@ class ArticleCommentView(View):
 
 
 class CommentDeleteView(LoginRequiredMixin, DeleteView):
-    """delete comment"""
+    """View for deleting comments."""
 
     model = Comment
     template_name = "article_detail.html"
