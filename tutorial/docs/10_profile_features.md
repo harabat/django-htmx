@@ -2,9 +2,7 @@
 
 ## Introduction
 
-Profile features are a central part of our app: users should be able to
-customize their profile, to visit other profiles, and to view the
-articles written by a given user.
+Profile features are a central part of our app: users should be able to customize their profile, to visit other profiles, and to view the articles written by a given user.
 
 ## Viewing Profiles
 
@@ -12,7 +10,7 @@ It's time to allow users to view their own and other users' profiles.
 
 In `users/views.py`:
 
-``` { .python }
+``` { .python  }
 # ...
 from django.views.generic import CreateView, DetailView
 
@@ -24,7 +22,7 @@ class ProfileDetailView(DetailView):
 
 In `users/urls.py`:
 
-``` { .python }
+``` { .python  }
 # ...
 from .views import Login, Logout, SignUpView, ProfileDetailView
 
@@ -37,7 +35,7 @@ urlpatterns = [
 
 In the `templates` folder, create `profile_detail.html`:
 
-``` { .html }
+``` { .html  }
 {% extends 'base.html' %}
 {% block title %}
     <title>{{ profile.user.username }} - Conduit: Django + HTMX</title>
@@ -59,23 +57,16 @@ In the `templates` folder, create `profile_detail.html`:
 {% endblock %}
 ```
 
-Everything should be working now, right? Let's check by going to
-`localhost:8000/profile/@admin`, for example. Welp, we're getting an
-error:
+Everything should be working now, right? Let's check by going to `localhost:8000/profile/@admin`, for example. Welp, we're getting an error:
 
-<figure>
-<img src="../assets/profile_detail - error.png" width="600"
-alt="profile_detail error" />
-<figcaption aria-hidden="true">profile_detail error</figcaption>
+<figure width="600">
+<img src="../assets/profile_detail - error.png" />
+<figcaption>profile_detail error</figcaption>
 </figure>
 
-The error tells us that our `ProfileDetailView` wants to be called with
-an object primary key or a slug, while we're calling it with a
-`username`. The solution is simple: we just change how the view decides
-which objects to show.
+The error tells us that our `ProfileDetailView` wants to be called with an object primary key or a slug, while we're calling it with a `username`. The solution is simple: we just change how the view decides which objects to show.
 
-We override the view's `get_object` method by adding the following to
-`users/views.py`:
+We override the view's `get_object` method by adding the following to `users/views.py`:
 
 ``` { .python hl_lines="9-12" }
 # ...
@@ -92,27 +83,20 @@ class ProfileDetailView(DetailView):
         return profile                                                  # new
 ```
 
-Let's try again: we should see an actual profile page (though there
-isn't much on it yet). Make sure to set a profile image for your `admin`
-user, as everyone else should have a default already set.
+Let's try again: we should see an actual profile page (though there isn't much on it yet). Make sure to set a profile image for your `admin` user, as everyone else should have a default already set.
 
-<figure>
-<img src="../assets/profile_detail.png" width="600"
-alt="A view of a profile, sans errors" />
-<figcaption aria-hidden="true">A view of a profile, sans
-errors</figcaption>
+<figure width="600">
+<img src="../assets/profile_detail.png" />
+<figcaption>A view of a profile, sans errors</figcaption>
 </figure>
 
 ## Viewing Articles written by each User
 
-Whenever we visit a user's profile, we want to see all the articles
-written by that specific user. We could make a `ListView`, but passing
-the list to our `DetailView`'s context is simpler.
+Whenever we visit a user's profile, we want to see all the articles written by that specific user. We could make a `ListView`, but passing the list to our `DetailView`'s context is simpler.
 
-In `users/views.py`, override the `get_context_data` method of
-`ProfileDetailView`:
+In `users/views.py`, override the `get_context_data` method of `ProfileDetailView`:
 
-``` { .python }
+``` { .python  }
 # ...
 class ProfileDetailView(DetailView):
     # ...
@@ -124,15 +108,9 @@ class ProfileDetailView(DetailView):
         return context
 ```
 
-This will return all the articles written by the user whose username is
-specified in the URL: for example, `/profile/@admin` will return all the
-articles written by `admin`. Technically, we could have obtained this
-queryset directly in the template with something like
-`{{ profile.articles.order_by|dictsortreversed:"created_at" }}`, but
-dealing with logic in views makes for clearer code and easier debugging.
+This will return all the articles written by the user whose username is specified in the URL: for example, `/profile/@admin` will return all the articles written by `admin`. Technically, we could have obtained this queryset directly in the template with something like `{{ profile.articles.order_by|dictsortreversed:"created_at" }}`, but dealing with logic in views makes for clearer code and easier debugging.
 
-Expose the `article_list.html` template in
-`templates/profile_detail.html`:
+Expose the `article_list.html` template in `templates/profile_detail.html`:
 
 ``` { .html hl_lines="18-33" }
 {% extends 'base.html' %}
@@ -174,8 +152,7 @@ Expose the `article_list.html` template in
 
 ## Links to Profiles in templates
 
-We now need to link the profile page from all the places our users'
-usernames are exposed.
+We now need to link the profile page from all the places our users' usernames are exposed.
 
 In `templates/article_preview.html`, change the following lines:
 
@@ -247,7 +224,7 @@ In `templates/article_detail.html`:
   </div>
 ```
 
-In `templates/comments.html`:
+In `templates/comment_container.html`:
 
 ``` { .html hl_lines="2-5 7" }
 <div class="card-footer">

@@ -2,19 +2,15 @@
 
 ## Introduction
 
-What if a user wants to bookmark a masterpiece of an article and come
-back to it every once in a while? We'll enable our users to favourite
-specific articles.
+What if a user wants to bookmark a masterpiece of an article and come back to it every once in a while? We'll enable our users to favourite specific articles.
 
 ## Model
 
-The second to last feature we need is allowing users to favourite some
-articles, so that they are added to the user's profile for everyone to
-see.
+The second to last feature we need is allowing users to favourite some articles, so that they are added to the user's profile for everyone to see.
 
 In `users/models.py`:
 
-``` { .python }
+``` { .python  }
 class Profile(models.Model):
     # ...
     favorites = models.ManyToManyField(
@@ -38,7 +34,7 @@ class Profile(models.Model):
 
 In `articles/views.py`:
 
-``` { .python }
+``` { .python  }
 from django.views.generic import (
     # ...
     RedirectView
@@ -67,7 +63,7 @@ class ArticleFavoriteView(RedirectView):
 
 In `articles/urls.py`:
 
-``` { .python }
+``` { .python  }
 # ...
 from django.shortcuts import redirect, get_object_or_404
 from .views import (
@@ -87,8 +83,7 @@ urlpatterns = [
 
 ## ArticleDetailView
 
-We don't need to modify the views for this: the logic can happen in the
-templates.
+We don't need to modify the views for this: the logic can happen in the templates.
 
 In `templates/article_detail.html`:
 
@@ -115,7 +110,7 @@ In `templates/article_detail.html`:
 
 Create `templates/article_favorite.html`:
 
-``` { .html }
+``` { .html  }
 <form
     method="post"
     action="{% url 'article_favorite' slug_uuid=article.slug_uuid %}"
@@ -141,10 +136,7 @@ Create `templates/article_favorite.html`:
 </form>
 ```
 
-Checking if an article is in a user's `favorites` should be done in the
-view (or, even better, the model) instead of the template, but we would
-have to change our templates' structure and write new views if we wanted
-to include a `Favorite` button in the `article_preview.html` template.
+Checking if an article is in a user's `favorites` should be done in the view (or, even better, the model) instead of the template, but we would have to change our templates' structure and write new views if we wanted to include a `Favorite` button in the `article_preview.html` template.
 
 ## ArticlePreviewView
 
@@ -196,26 +188,23 @@ In `templates/article_favorite.html`
 </form>
 ```
 
-<figure>
-<img src="../assets/home - favorite - before.png" width="600"
-alt="Favorite button before" />
-<figcaption aria-hidden="true">Favorite button before</figcaption>
+<figure width="600">
+<img src="../assets/home - favorite - before.png" />
+<figcaption>Favorite button before</figcaption>
 </figure>
 
-<figure>
-<img src="../assets/home - favorite.png" width="600"
-alt="Favorite button after" />
-<figcaption aria-hidden="true">Favorite button after</figcaption>
+<figure width="600">
+<img src="../assets/home - favorite.png" />
+<figcaption>Favorite button after</figcaption>
 </figure>
 
 ## Feeds
 
-Now, we need to do something with this `Favorite` feature: we'll display
-a user's favorited articles on their profile.
+Now, we need to do something with this `Favorite` feature: we'll display a user's favorited articles on their profile.
 
 In `users/views.py`:
 
-``` { .python }
+``` { .python  }
 class ProfileDetailView(DetailView):
     # ...
 
@@ -230,7 +219,7 @@ class ProfileDetailView(DetailView):
 
 In `users/urls.py`:
 
-``` { .python }
+``` { .python  }
 urlpatterns = [
     # ...
     path(

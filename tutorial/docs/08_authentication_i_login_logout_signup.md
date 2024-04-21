@@ -2,21 +2,17 @@
 
 ## Introduction
 
-Here comes authentication. Because it is a bit complicated,
-authentication will take two chapters: one for implementing the login,
-logout, and signup processes, and one for shifting our entire app behind
-these authentication requirements.
+Here comes authentication. Because it is a bit complicated, authentication will take two chapters: one for implementing the login, logout, and signup processes, and one for shifting our entire app behind these authentication requirements.
 
 ## Auth views
 
-In `users/views.py`, we take advantage of the generic `LoginView`,
-`LogoutView`, and `CreateView` to implement our authentication logic:
+In `users/views.py`, we take advantage of the generic `LoginView`, `LogoutView`, and `CreateView` to implement our authentication logic:
 
-``` { .python }
+``` { .python  }
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
-from .models import User
+from django.contrib.auth import get_user_model
 
 
 class Login(LoginView):
@@ -34,7 +30,7 @@ class Logout(LogoutView):
 
 
 class SignUpView(CreateView):
-    model = User
+    model = get_user_model()
     fields = ["username", "email", "password"]
     template_name = "signup.html"
     success_url = reverse_lazy("home")
@@ -45,22 +41,13 @@ class SignUpView(CreateView):
         return super().get(request, *args, **kwargs)
 ```
 
-We don't have to specify much to the generic views, they're quite
-full-featured as is. What we did here is indicate where the templates
-live and where the views redirect to (the
-[defaults](https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url)
-are `accounts/profile` for `LoginView` and `None` for `LogoutView`). We
-also overrode the `get` method in `LoginView` and `SignUpView`, so that
-already authenticated users who for some reason visit the login page are
-automatically redirected to the `home` URL. We didn't specify a template
-for `LogoutView` because it's not necessary.
+We don't have to specify much to the generic views, they're quite full-featured as is. What we did here is indicate where the templates live and where the views redirect to (the [defaults](https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url) are `accounts/profile` for `LoginView` and `None` for `LogoutView`). We also overrode the `get` method in `LoginView` and `SignUpView`, so that already authenticated users who for some reason visit the login page are automatically redirected to the `home` URL. We didn't specify a template for `LogoutView` because it's not necessary.
 
 ## Auth urls
 
-Let's deal with the URL patterns now. Create `users/urls.py` and add the
-following:
+Let's deal with the URL patterns now. Create `users/urls.py` and add the following:
 
-``` { .python }
+``` { .python  }
 from django.urls import path
 from .views import Login, Logout, SignUp
 
@@ -72,8 +59,7 @@ urlpatterns = [
 ]
 ```
 
-For every app that we create, we need to tell `config/urls.py` to look
-at the patterns specified in the app's `urls.py` file:
+For every app that we create, we need to tell `config/urls.py` to look at the patterns specified in the app's `urls.py` file:
 
 ``` { .python hl_lines="4" }
 urlpatterns = [
@@ -89,7 +75,7 @@ urlpatterns = [
 
 Let's create `login.html` in the `templates` folder:
 
-``` { .html }
+``` { .html  }
 {% extends 'base.html' %}
 {% block title %}
     <title>Sign in - Conduit: Django + HTMX</title>
@@ -135,19 +121,13 @@ Let's create `login.html` in the `templates` folder:
 {% endblock %}
 ```
 
-Notice that we are using `form.username` to authenticate. I initially
-was trying to work with `form.email`, because that was the field we
-chose to authenticate with, but it kept throwing errors: Django didn't
-see the field, didn't POST the value that I gave it, and asked for the
-username every time. It took me a while, but I realised that our
-username *is* the email. `form.username` is effectively querying what
-the `USERNAME_FIELD` is. Not straightforward though.
+Notice that we are using `form.username` to authenticate. I initially was trying to work with `form.email`, because that was the field we chose to authenticate with, but it kept throwing errors: Django didn't see the field, didn't POST the value that I gave it, and asked for the username every time. It took me a while, but I realised that our username *is* the email. `form.username` is effectively querying what the `USERNAME_FIELD` is. Not straightforward though.
 
 ### signup.html
 
 Create `signup.html`:
 
-``` { .html }
+``` { .html  }
 {% extends 'base.html' %}
 {% block title %}
     <title>Sign up - Conduit: Django + HTMX</title>

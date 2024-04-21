@@ -4,18 +4,9 @@
 
 Time to work on our users and profiles.
 
-[The Django docs
-say](https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#specifying-a-custom-user-model)
-“*it may be more suitable to store app-specific user information in a
-model that has a relation with your custom user model. That allows each
-app to specify its own user data requirements without potentially
-conflicting or breaking assumptions by other apps. It also means that
-you would keep your user model as simple as possible, focused on
-authentication, and following the minimum requirements Django expects
-custom user models to meet.*”.
+[The Django docs say](https://docs.djangoproject.com/en/5.0/topics/auth/customizing/#specifying-a-custom-user-model) “*it may be more suitable to store app-specific user information in a model that has a relation with your custom user model. That allows each app to specify its own user data requirements without potentially conflicting or breaking assumptions by other apps. It also means that you would keep your user model as simple as possible, focused on authentication, and following the minimum requirements Django expects custom user models to meet.*”.
 
-This is why we'll have the authentication logic in a `User` model and
-the profile logic in a `Profile` model.
+This is why we'll have the authentication logic in a `User` model and the profile logic in a `Profile` model.
 
 ## User model
 
@@ -23,10 +14,9 @@ the profile logic in a `Profile` model.
 
 The `User` model will contain everything related to authentication.
 
-We need an email, a username, and a password. Let's add the following to
-the `User` model in `users/models.py`:
+We need an email, a username, and a password. Let's add the following to the `User` model in `users/models.py`:
 
-``` { .python }
+``` { .python  }
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -44,23 +34,13 @@ class User(AbstractUser):
         self.email
 ```
 
-The `username` field is the unique human-readable identifier that we can
-represent users with in our app. The `email` field holds the email users
-will be logging in with. We specify this in `USERNAME_FIELD`. The
-`password` field is already provided by `AbstractUser`.
-`REQUIRED_FIELDS` is the list of field users will be prompted for at
-sign up: because the `USERNAME_FIELD` and the `password` are already
-required by Django, we only need to specify `username`. More information
-about the fields can be found in the docs for [the default Django User
-model](https://docs.djangoproject.com/en/4.0/ref/contrib/auth/).
+The `username` field is the unique human-readable identifier that we can represent users with in our app. The `email` field holds the email users will be logging in with. We specify this in `USERNAME_FIELD`. The `password` field is already provided by `AbstractUser`. `REQUIRED_FIELDS` is the list of field users will be prompted for at sign up: because the `USERNAME_FIELD` and the `password` are already required by Django, we only need to specify `username`. More information about the fields can be found in the docs for [the default Django User model](https://docs.djangoproject.com/en/5.0/ref/contrib/auth/).
 
 ### Creating the UserManager
 
-We also need a `UserManager`, [as advised by the
-docs](https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#writing-a-manager-for-a-custom-user-model).
-In `models.py`, we add the following, BEFORE we define our `User` model:
+We also need a `UserManager`, [as advised by the docs](https://docs.djangoproject.com/en/5.0/topics/auth/customizing/#writing-a-manager-for-a-custom-user-model). In `models.py`, we add the following (make sure to place the class definition BEFORE the class definition for the `User` model):
 
-``` { .python }
+``` { .python  }
 # ...
 from django.contrib.auth.models import AbstractUser, UserManager
 
@@ -97,9 +77,7 @@ class CustomUserManager(UserManager):
 
 `create_user` and `create_superuser` are self-explanatory.
 
-We now need to go back to the `User` model in `users/models.py` and
-indicate to Django that the `UserManager` defined above will manage
-objects of type `User`:
+We now need to go back to the `User` model in `users/models.py` and indicate to Django that the `UserManager` defined above will manage objects of type `User`:
 
 ``` { .python hl_lines="11" }
 # ...
@@ -118,15 +96,13 @@ class User(AbstractUser):
         return self.email
 ```
 
-Make sure to `makemigrations` and `migrate`, so that Django is aware of
-your new model.
+Make sure to `makemigrations` and `migrate`, so that Django is aware of your new model.
 
 ### Registering our new model
 
-We need to register this new `User` model in `users/admins.py`, to have
-access to it in our admin app.
+We need to register this new `User` model in `users/admins.py`, to have access to it in our admin app.
 
-``` { .python }
+``` { .python  }
 from django.contrib import admin
 from .models import User
 
@@ -137,30 +113,20 @@ admin.site.register(User)
 
 ### Creating the Profile model
 
-We are following the instructions in the Django docs about [extending a
-User
-model](https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model).
-We need to store some information about our users in the database. Each
-`User` object should be related to a single `Profile`, and vice-versa:
-we'll use a
-[`OneToOneField`](https://docs.djangoproject.com/en/4.0/ref/models/fields/#onetoonefield)
-relationship.
+We are following the instructions in the Django docs about [extending a User model](https://docs.djangoproject.com/en/5.0/topics/auth/customizing/#extending-the-existing-user-model). We need to store some information about our users in the database. Each `User` object should be related to a single `Profile`, and vice-versa: we'll use a [`OneToOneField`](https://docs.djangoproject.com/en/5.0/ref/models/fields/#onetoonefield) relationship.
 
 Our `Profile` needs the following fields:
 
--   image
--   bio
--   articles
--   comments
+- image
+- bio
+- articles
+- comments
 
-We have already taken care of the two last fields in the `Article` and
-`Comment` models through the `ForeignKey` relationships.
+We have already taken care of the two last fields in the `Article` and `Comment` models through the `ForeignKey` relationships.
 
-We will allow users to specify a URL to their avatar and to write a
-short bio. This is optional, so we make sure to have `blank=True`. Let's
-add the following to the `Profile` model in `users/models.py`:
+We will allow users to specify a URL to their avatar and to write a short bio. This is optional, so we make sure to have `blank=True`. Let's add the following to the `Profile` model in `users/models.py`:
 
-``` { .python }
+``` { .python  }
 class Profile(models.Model):
     """Profile model"""
 
@@ -174,32 +140,32 @@ class Profile(models.Model):
         return self.user.username
 ```
 
-As always, whenever you change a model, you should `makemigrations` and
-`migrate`.
+As always, whenever you change a model, you should `makemigrations` and `migrate`.
 
 ### Automating the creation of profiles for each new user
 
-Since we're defining the `Profile` outside of the `User` model, a
-profile won't be created automatically whenever a user signs up.
+Since we're defining the `Profile` outside of the `User` model, a profile won't be created automatically whenever a user signs up.
 
-Let's follow the docs linked above and code up a signal that creates a
-`Profile` at user sign-up.
+What we want is to be notified when a new User instance is created (generally at sign-up), so that we can create a Profile model. To achieve this, we need to use [signals](https://docs.djangoproject.com/en/5.0/topics/signals/).
+
+Django already takes care of sending the signal for new User instances, so we only need to define a [receiver](https://docs.djangoproject.com/en/5.0/topics/signals/#connecting-to-signals-sent-by-specific-senders) function. We want to be notified after a new instance is saved, so we'll use the [post_save](https://docs.djangoproject.com/en/5.0/ref/signals/#post-save) signal.
 
 Create a `signals.py` file in the `users` folder and add the following:
 
-``` { .python }
+``` { .python  }
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import User, Profile
+from django.contrib.auth import get_user_model
+from .models import Profile
 
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=get_user_model())
 def create_profile_for_user(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=get_user_model())
 def save_profile_for_user(sender, instance, **kwargs):
     instance.profile.save()
 ```
@@ -218,17 +184,15 @@ class UsersConfig(AppConfig):
         import conduit.users.signals        # new
 ```
 
-This signal runs whenever a `User` is saved. By checking for `created`,
-we make sure to only initiate a `Profile` for the `User` instance if the
-User has just been created, instead of whenever the instance is updated.
+This signal runs whenever a `User` is saved. By checking for `created`, we make sure to only initiate a `Profile` for the `User` instance if the User has just been created, instead of whenever the instance is updated.
 
 ### Registering our new model
 
-We need to register this new `Profile` model in `users/admins.py`, to
-have access to it in our admin app, but we want to be able to view
-`User` and `Profile` information for a given user in the same place.
+We need to register this new `Profile` model in `users/admins.py`, to have access to it in our admin app, but we want to be able to view `User` and `Profile` information for a given user in the same place.
 
-``` { .python }
+For this, we subclass a [StackedInline](https://docs.djangoproject.com/en/5.0/ref/contrib/admin/#django.contrib.admin.StackedInline) class and define a custom `ModelAdmin`:
+
+``` { .python  }
 from django.contrib import admin
 from .models import User, Profile
 
@@ -239,15 +203,13 @@ class ProfileInline(admin.StackedInline):
 
 
 class UserAdmin(admin.ModelAdmin):
-    model = User
     inlines = [ProfileInline]
 
 
 admin.site.register(User, UserAdmin)
 ```
 
-You'll notice that this code is much shorter than [what the docs
-say](https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model):
-we're trying to keep it simple, so we'll do without some of the quality
-of life improvements that a more intricate code would allow.
+You'll notice that this code is much shorter than [what the docs say](https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#extending-the-existing-user-model): we're trying to keep it simple, so we'll do without some of the quality of life improvements that a more intricate code would allow.
+
+When you go to Django admin, the `User` model fields will seem out of order: this is because the `AbstractUser` fields will be shown before the fields explicitly defined in the `User` model, but you can order them by adding a [ModelAdmin.fields](https://docs.djangoproject.com/en/5.0/ref/contrib/admin/#django.contrib.admin.ModelAdmin.fields) option.
 

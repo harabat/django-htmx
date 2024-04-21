@@ -2,27 +2,18 @@
 
 ## Introduction
 
-We want to allow users to modify their profile information (image, bio)
-and user information (username, email, password) at the same place. That
-is, we want to allow users to update two models at the same URL.
-Surprisingly, this common use case is not straightforward to implement
-with Django, especially if we're trying to follow good practice and use
-class-based views. Take a break before continuing, as we're going to go
-into the weeds here.
+We want to allow users to modify their profile information (image, bio) and user information (username, email, password) at the same place. That is, we want to allow users to update two models at the same URL. Surprisingly, this common use case is not straightforward to implement with Django, especially if we're trying to follow good practice and use class-based views. Take a break before continuing, as we're going to go into the weeds here.
 
-Cool, let's recap what we're doing. We have two models (`User` and
-`Profile`), which happen to be related with a `OneToOneField`. We want
-to update these models in one place. Intuitively, we'll reach for the
-`UpdateView`. The problem is that `UpdateView` expects a single model.
-The solution is to tell our `UpdateView` to deal with two forms.
+Cool, let's recap what we're doing. We have two models (`User` and `Profile`), which happen to be related with a `OneToOneField`. We want to update these models in one place. Intuitively, we'll reach for the `UpdateView`. The problem is that `UpdateView` expects a single model. The solution is to tell our `UpdateView` to deal with two forms.
 
 ## Forms
 
 Let's create `users/forms.py` and define two forms, one for each model:
 
-``` { .python }
+``` { .python  }
 from django import forms
-from .models import Profile, User
+from django.contrib.auth import get_user_model
+from .models import Profile
 
 
 class ProfileForm(forms.ModelForm):
@@ -35,7 +26,7 @@ class UserForm(forms.ModelForm):
     new_password = forms.CharField(required=False)
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ["username", "email", "new_password"]
 
     def save(self, commit=True):
@@ -47,55 +38,29 @@ class UserForm(forms.ModelForm):
         return user
 ```
 
-[`ModelForm`](https://docs.djangoproject.com/en/4.0/topics/forms/modelforms/)
-allows to get a lot of model-relevant form logic for free (Django's
-“batteries included” philosophy).
+[`ModelForm`](https://docs.djangoproject.com/en/5.0/topics/forms/modelforms/) allows to get a lot of model-relevant form logic for free (Django's “batteries included” philosophy).
 
 The `ProfileForm` is self-explanatory.
 
-The `UserForm` is a bit more complicated. Let's go through it in detail.
-We want our user to be able to update three types of information: the
-username, the email, and the password. We also want to expose the
-current username and email values in the template, but we don't want to
-expose any information about the password. The screenshot below
-clarifies what we mean here: the screenshot on the right could leak
-information about the number of characters in our user's password, even
-though the characters themselves are masked, while the screenshot on the
-right exposes no information about the password.
+The `UserForm` is a bit more complicated. Let's go through it in detail. We want our user to be able to update three types of information: the username, the email, and the password. We also want to expose the current username and email values in the template, but we don't want to expose any information about the password. The screenshot below clarifies what we mean here: the screenshot on the right could leak information about the number of characters in our user's password, even though the characters themselves are masked, while the screenshot on the right exposes no information about the password.
 
-<figure>
-<img src="../assets/settings - password field.png" width="200"
-alt="Password field with masked characters" />
-<figcaption aria-hidden="true">Password field with masked
-characters</figcaption>
+<figure width="200">
+<img src="../assets/settings - password field.png" />
+<figcaption>Password field with masked characters</figcaption>
 </figure>
 
-<figure>
-<img src="../assets/settings.png" width="200"
-alt="Empty password field" />
-<figcaption aria-hidden="true">Empty password field</figcaption>
+<figure width="200">
+<img src="../assets/settings.png" />
+<figcaption>Empty password field</figcaption>
 </figure>
 
-We want the password field in our future template to be empty, and we
-don't want to force the user to type it out every time they want to
-modify some other information. In other words, we want the password
-field to be optional, i.e. `required=False`. Furthermore, since this
-password field doesn't need any information about the current password,
-we can just create a dummy `new_password` field, instead of linking our
-form to the `User` model's actual `password` attribute. Finally, when we
-save the form, we only want to update the password if the user has
-actually changed it on the form, so we need to override the form's
-`save` method. Also, because Django saves hashes of passwords, instead
-of the raw password strings, in its database, we need to use the `User`
-object's `set_password` method, which takes care of the password
-hashing.
+We want the password field in our future template to be empty, and we don't want to force the user to type it out every time they want to modify some other information. In other words, we want the password field to be optional, i.e. `required=False`. Furthermore, since this password field doesn't need any information about the current password, we can just create a dummy `new_password` field, instead of linking our form to the `User` model's actual `password` attribute. Finally, when we save the form, we only want to update the password if the user has actually changed it on the form, so we need to override the form's `save` method. Also, because Django saves hashes of passwords, instead of the raw password strings, in its database, we need to use the `User` object's `set_password` method, which takes care of the password hashing.
 
 ## Views
 
-Now that our forms are ready, let's create the view. As we said earlier,
-the intuitive choice here is the generic `UpdateView` class-based view.
+Now that our forms are ready, let's create the view. As we said earlier, the intuitive choice here is the generic `UpdateView` class-based view.
 
-``` { .python }
+``` { .python  }
 # ...
 from django.views.generic import CreateView, DetailView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -124,37 +89,17 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         return super().post(request, *args, **kwargs)
 ```
 
-Again, this is a significant amount of code, so let's go through it
-slowly.
+Again, this is a significant amount of code, so let's go through it slowly.
 
-Only logged-in users should be able to edit their profile information,
-hence the `LoginRequiredMixin`.
+Only logged-in users should be able to edit their profile information, hence the `LoginRequiredMixin`.
 
-`UpdateView` expects to deal with a single form by default, and every
-form requires a queryset, and some explicitly-defined `fields` or
-`form_class`. However, we want our `UpdateView` to deal with two forms:
-we will pass one form to the view in the way it expects, and the other
-we will pass as extra context data. We tell our `UpdateView` that its
-(official) form will be of the class `ProfileForm` and that its queryset
-will be a single instance of the `Profile` model: namely, the users will
-only be able to update their own profile (hence the `get_object`
-override). The additional form that `ProfileUpdateView` needs to deal
-with will be of class `UserForm` and will have `self.request.user` as
-its queryset. We also tell `ProfileUpdateView` that we'll want to refer
-to this form by `user_form` in our template. Finally, we need to process
-the two forms, which means that we need to override `UpdateView`'s
-`post` method. We take our whole `POST` request and run it through both
-`ProfileForm` and `UserForm`: this means that we let the forms take in
-the whole of the data, pick what they need (i.e. what corresponds to
-their fields), and apply it to the relevant objects. If our forms are
-valid, we can save the information. Otherwise, we reject the input (and
-re-render everything with relevant error information).
+`UpdateView` expects to deal with a single form by default, and every form requires a queryset, and some explicitly-defined `fields` or `form_class`. However, we want our `UpdateView` to deal with two forms: we will pass one form to the view in the way it expects, and the other we will pass as extra context data. We tell our `UpdateView` that its (official) form will be of the class `ProfileForm` and that its queryset will be a single instance of the `Profile` model: namely, the users will only be able to update their own profile (hence the `get_object` override). The additional form that `ProfileUpdateView` needs to deal with will be of class `UserForm` and will have `self.request.user` as its queryset. We also tell `ProfileUpdateView` that we'll want to refer to this form by `user_form` in our template. Finally, we need to process the two forms, which means that we need to override `UpdateView`'s `post` method. We take our whole `POST` request and run it through both `ProfileForm` and `UserForm`: this means that we let the forms take in the whole of the data, pick what they need (i.e. what corresponds to their fields), and apply it to the relevant objects. If our forms are valid, we can save the information. Otherwise, we reject the input (and re-render everything with relevant error information).
 
 ## Templates
 
 In `templates/settings.html`:
 
-``` { .html }
+``` { .html  }
 {% extends 'base.html' %}
 {% block title %}
   <title>Settings - Conduit</title>
@@ -234,16 +179,13 @@ In `templates/settings.html`:
 {% endblock %}
 ```
 
-The template is quite simple, for a change: we refer to the
-`ProfileUpdateView`'s main form by `form`, and to the additional form by
-`user_form`.
+The template is quite simple, for a change: we refer to the `ProfileUpdateView`'s main form by `form`, and to the additional form by `user_form`.
 
-Finally, let's specify a URL to `settings` and add a link in the navbar
-and in each individual profile.
+Finally, let's specify a URL to `settings` and add a link in the navbar and in each individual profile.
 
 In `users/urls.py`:
 
-``` { .python }
+``` { .python  }
 # ...
 from .views import Login, Logout, SignUpView, ProfileDetailView, ProfileUpdateView
 
@@ -256,7 +198,7 @@ urlpatterns = [
 
 In `templates/nav.html`:
 
-``` { .html }
+``` { .html  }
 <li class="nav-item">
   <a rel="prefetch" href="{% url 'editor_create' %}" class="nav-link">
     <span class="ion-compose"> New Post </span>
@@ -301,12 +243,5 @@ In `templates/profile_detail.html`:
 </div>
 ```
 
-We should add that all of this would have been much easier if we had a
-single model dealing with `User` and `Profile` information, instead of
-separating the two (as we could have kept a generic `UpdateView`), but
-that would have gone against best practice. Similarly, our task would
-have been simplified if `User` and `Profile` were related through a
-`ForeignKey` (as we could have used [inline
-formsets](https://docs.djangoproject.com/en/4.0/topics/forms/modelforms/#inline-formsets)),
-but that would have gone against common patterns in Django.
+We should add that all of this would have been much easier if we had a single model dealing with `User` and `Profile` information, instead of separating the two (as we could have kept a generic `UpdateView`), but that would have gone against best practice. Similarly, our task would have been simplified if `User` and `Profile` were related through a `ForeignKey` (as we could have used [inline formsets](https://docs.djangoproject.com/en/5.0/topics/forms/modelforms/#inline-formsets)), but that would have gone against common patterns in Django.
 
