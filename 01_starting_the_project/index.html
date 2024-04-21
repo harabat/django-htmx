@@ -10,8 +10,15 @@
       
       
       
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../02_home_page/">
+      
+      
       <link rel="icon" href="../assets/django-logo.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.8">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
     
     
       
@@ -19,14 +26,17 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.1d29e8d0.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.bcfcd587.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.cbb835fc.min.css">
-        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
       
       
+
+
     
+    
+      
     
     
       
@@ -38,11 +48,12 @@
       
     
     
-    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
     <script data-goatcounter="https://django-htmx.goatcounter.com/count"
             async src="//gc.zgo.at/count.js"></script>
 
+    
     
   </head>
   
@@ -54,11 +65,8 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="indigo">
   
-    
-    
-      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -78,7 +86,9 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="Django + HTMX tutorial" class="md-header__button md-logo" aria-label="Django + HTMX tutorial" data-md-component="logo">
       
@@ -86,6 +96,7 @@
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
+      
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
@@ -105,31 +116,39 @@
       </div>
     </div>
     
-      <form class="md-header__option" data-md-component="palette">
-        
-          
-          
-          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
-          
-            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-            </label>
-          
-        
-          
-          
-          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
-          
-            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
-            </label>
-          
-        
-      </form>
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
       <label class="md-header__button md-icon" for="__search">
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
@@ -138,12 +157,15 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
@@ -157,7 +179,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -169,7 +191,7 @@
         <a href="https://github.com/harabat/django-htmx" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
   </div>
   <div class="md-source__repository">
     harabat/django-htmx
@@ -199,6 +221,7 @@
                     
 
 
+
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href=".." title="Django + HTMX tutorial" class="md-nav__button md-logo" aria-label="Django + HTMX tutorial" data-md-component="logo">
@@ -213,7 +236,7 @@
       <a href="https://github.com/harabat/django-htmx" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
   </div>
   <div class="md-source__repository">
     harabat/django-htmx
@@ -225,14 +248,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href=".." class="md-nav__link">
-        Readme
+        
+  
+  <span class="md-ellipsis">
+    Readme
+  </span>
+  
+
       </a>
     </li>
   
@@ -240,28 +268,39 @@
     
       
       
-      
-
   
   
     
   
   
+  
     <li class="md-nav__item md-nav__item--active">
       
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
         
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Starting the project
+          
+  
+  <span class="md-ellipsis">
+    Starting the project
+  </span>
+  
+
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Starting the project
+        
+  
+  <span class="md-ellipsis">
+    Starting the project
+  </span>
+  
+
       </a>
       
         
@@ -281,77 +320,99 @@
       
         <li class="md-nav__item">
   <a href="#introduction" class="md-nav__link">
-    Introduction
+    <span class="md-ellipsis">
+      Introduction
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#virtual-environment" class="md-nav__link">
-    Virtual environment
+    <span class="md-ellipsis">
+      Virtual environment
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#project-layout-and-folder-structure" class="md-nav__link">
-    Project layout and folder structure
+    <span class="md-ellipsis">
+      Project layout and folder structure
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#articles-application" class="md-nav__link">
-    articles application
+    <span class="md-ellipsis">
+      articles application
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#users-app-and-user-model" class="md-nav__link">
-    users app and User model
+    <span class="md-ellipsis">
+      users app and User model
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#create-a-database" class="md-nav__link">
-    Create a database
+    <span class="md-ellipsis">
+      Create a database
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#create-a-superuser" class="md-nav__link">
-    Create a superuser
+    <span class="md-ellipsis">
+      Create a superuser
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#profile-model" class="md-nav__link">
-    Profile model
+    <span class="md-ellipsis">
+      Profile model
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#start-the-server" class="md-nav__link">
-    Start the server
+    <span class="md-ellipsis">
+      Start the server
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#article-model" class="md-nav__link">
-    Article model
+    <span class="md-ellipsis">
+      Article model
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#using-the-django-admin" class="md-nav__link">
-    Using the Django admin
+    <span class="md-ellipsis">
+      Using the Django admin
+    </span>
   </a>
   
 </li>
@@ -366,14 +427,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../02_home_page/" class="md-nav__link">
-        Home page
+        
+  
+  <span class="md-ellipsis">
+    Home page
+  </span>
+  
+
       </a>
     </li>
   
@@ -381,14 +447,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../03_viewing_articles/" class="md-nav__link">
-        Viewing Articles
+        
+  
+  <span class="md-ellipsis">
+    Viewing Articles
+  </span>
+  
+
       </a>
     </li>
   
@@ -396,14 +467,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../04_slugs/" class="md-nav__link">
-        Slugs
+        
+  
+  <span class="md-ellipsis">
+    Slugs
+  </span>
+  
+
       </a>
     </li>
   
@@ -411,14 +487,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../05_creating_editing_and_deleting_articles/" class="md-nav__link">
-        Creating, editing, and deleting Articles
+        
+  
+  <span class="md-ellipsis">
+    Creating, editing, and deleting Articles
+  </span>
+  
+
       </a>
     </li>
   
@@ -426,14 +507,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../06_comments/" class="md-nav__link">
-        Comments
+        
+  
+  <span class="md-ellipsis">
+    Comments
+  </span>
+  
+
       </a>
     </li>
   
@@ -441,14 +527,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../07_users_and_profiles/" class="md-nav__link">
-        Users and Profiles
+        
+  
+  <span class="md-ellipsis">
+    Users and Profiles
+  </span>
+  
+
       </a>
     </li>
   
@@ -456,14 +547,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../08_authentication_i_login_logout_signup/" class="md-nav__link">
-        Login, Logout, Signup
+        
+  
+  <span class="md-ellipsis">
+    Login, Logout, Signup
+  </span>
+  
+
       </a>
     </li>
   
@@ -471,14 +567,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../09_authentication_ii_securing_the_app/" class="md-nav__link">
-        Securing the app
+        
+  
+  <span class="md-ellipsis">
+    Securing the app
+  </span>
+  
+
       </a>
     </li>
   
@@ -486,14 +587,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../10_profile_features/" class="md-nav__link">
-        Profile features
+        
+  
+  <span class="md-ellipsis">
+    Profile features
+  </span>
+  
+
       </a>
     </li>
   
@@ -501,14 +607,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../11_editing_profiles/" class="md-nav__link">
-        Editing profiles
+        
+  
+  <span class="md-ellipsis">
+    Editing profiles
+  </span>
+  
+
       </a>
     </li>
   
@@ -516,14 +627,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../12_follows/" class="md-nav__link">
-        Follows
+        
+  
+  <span class="md-ellipsis">
+    Follows
+  </span>
+  
+
       </a>
     </li>
   
@@ -531,14 +647,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../13_favourites/" class="md-nav__link">
-        Favourites
+        
+  
+  <span class="md-ellipsis">
+    Favourites
+  </span>
+  
+
       </a>
     </li>
   
@@ -546,14 +667,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../14_tags_coming_soon/" class="md-nav__link">
-        Tags
+        
+  
+  <span class="md-ellipsis">
+    Tags
+  </span>
+  
+
       </a>
     </li>
   
@@ -561,14 +687,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../15_htmx_coming_soon/" class="md-nav__link">
-        HTMX
+        
+  
+  <span class="md-ellipsis">
+    HTMX
+  </span>
+  
+
       </a>
     </li>
   
@@ -576,14 +707,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../16_future_extensions/" class="md-nav__link">
-        Future extensions
+        
+  
+  <span class="md-ellipsis">
+    Future extensions
+  </span>
+  
+
       </a>
     </li>
   
@@ -617,77 +753,99 @@
       
         <li class="md-nav__item">
   <a href="#introduction" class="md-nav__link">
-    Introduction
+    <span class="md-ellipsis">
+      Introduction
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#virtual-environment" class="md-nav__link">
-    Virtual environment
+    <span class="md-ellipsis">
+      Virtual environment
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#project-layout-and-folder-structure" class="md-nav__link">
-    Project layout and folder structure
+    <span class="md-ellipsis">
+      Project layout and folder structure
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#articles-application" class="md-nav__link">
-    articles application
+    <span class="md-ellipsis">
+      articles application
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#users-app-and-user-model" class="md-nav__link">
-    users app and User model
+    <span class="md-ellipsis">
+      users app and User model
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#create-a-database" class="md-nav__link">
-    Create a database
+    <span class="md-ellipsis">
+      Create a database
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#create-a-superuser" class="md-nav__link">
-    Create a superuser
+    <span class="md-ellipsis">
+      Create a superuser
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#profile-model" class="md-nav__link">
-    Profile model
+    <span class="md-ellipsis">
+      Profile model
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#start-the-server" class="md-nav__link">
-    Start the server
+    <span class="md-ellipsis">
+      Start the server
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#article-model" class="md-nav__link">
-    Article model
+    <span class="md-ellipsis">
+      Article model
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#using-the-django-admin" class="md-nav__link">
-    Using the Django admin
+    <span class="md-ellipsis">
+      Using the Django admin
+    </span>
   </a>
   
 </li>
@@ -700,14 +858,14 @@
               </div>
             
           
-          <div class="md-content" data-md-component="content">
-            <article class="md-content__inner md-typeset">
-              
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
                 
-  <a href="https://github.com/harabat/django-htmx/edit/master/docs/01_starting_the_project.md" title="Edit this page" class="md-content__button md-icon">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+                  
 
+  
+  
 
 
 <h1 id="starting-the-project">Starting the project<a class="headerlink" href="#starting-the-project" title="Permanent link">#</a></h1>
@@ -715,31 +873,22 @@
 <p>Let's start this tutorial in earnest.</p>
 <p>In this chapter:</p>
 <ul>
-<li>we'll set up everything we'll need to start coding (our virtual
-    environment and our project directories)</li>
-<li>we'll learn how to structure a Django project, how to create
-    applications, how to change settings</li>
-<li>we'll write several models, create a database, use the famed Django
-    admin, and finally get our app running locally.</li>
+<li>we'll set up everything we'll need to start coding (our virtual environment and our project directories)</li>
+<li>we'll learn how to structure a Django project, how to create applications, how to change settings</li>
+<li>we'll write several models, create a database, use the famed Django admin, and finally get our app running locally.</li>
 </ul>
 <h2 id="virtual-environment">Virtual environment<a class="headerlink" href="#virtual-environment" title="Permanent link">#</a></h2>
 <p>Before doing anything else, we need to create our virtual environment.</p>
-<p>We're working with <code>conda</code>
-(<a href="https://docs.conda.io/en/latest/miniconda.html">tutorial</a>), but you
-can use your favourite virtual lib, like <code>virtualenv</code>
-(<a href="https://realpython.com/python-virtual-environments-a-primer/">tutorial</a>).</p>
+<p>We're working with <code>conda</code> (<a href="https://docs.conda.io/en/latest/miniconda.html">tutorial</a>), but you can use your favourite virtual lib, like <code>virtualenv</code> (<a href="https://realpython.com/python-virtual-environments-a-primer/">tutorial</a>).</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>~$ conda create --name django
-<span class="o">(</span>django<span class="o">)</span> ~$ conda activate django
-<span class="o">(</span>django<span class="o">)</span> ~$ conda install django faker
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>~$<span class="w"> </span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>django
+<span class="o">(</span>django<span class="o">)</span><span class="w"> </span>~$<span class="w"> </span>conda<span class="w"> </span>activate<span class="w"> </span>django
+<span class="o">(</span>django<span class="o">)</span><span class="w"> </span>~$<span class="w"> </span>conda<span class="w"> </span>install<span class="w"> </span>django<span class="w"> </span>faker
 </code></pre></div></td></tr></table></div>
 <p>Now, you have a virtual environment with <code>django</code> and <code>faker</code> installed.</p>
 <h2 id="project-layout-and-folder-structure">Project layout and folder structure<a class="headerlink" href="#project-layout-and-folder-structure" title="Permanent link">#</a></h2>
-<p>We'll be following a simplified version of the folder structure
-described in the <a href="https://www.feldroy.com/books/two-scoops-of-django-3-x">Two Scoops of
-Django</a> by
-Daniel and Audrey Feldroy.</p>
+<p>We'll be following a simplified version of the folder structure described in the <a href="https://www.feldroy.com/books/two-scoops-of-django-3-x">Two Scoops of Django</a> by Daniel and Audrey Feldroy.</p>
 <p>We want our folder structure to look something like the following:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
@@ -756,30 +905,28 @@ Daniel and Audrey Feldroy.</p>
 <span class="normal">13</span>
 <span class="normal">14</span>
 <span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code>folder_name
-├── config/
-│   ├── __init__.py
-│   ├── asgi.py
-│   ├── settings/
-│   ├── urls.py
-│   └── wsgi.py
-├── project_name/
-│   ├── app_1/
-│   ├── app_2/
-│   ├── static/
-│   └── templates/
-├── .gitignore
-├── manage.py
-└── db.sqlite3
+├──<span class="w"> </span>config/
+│<span class="w">   </span>├──<span class="w"> </span>__init__.py
+│<span class="w">   </span>├──<span class="w"> </span>asgi.py
+│<span class="w">   </span>├──<span class="w"> </span>settings/
+│<span class="w">   </span>├──<span class="w"> </span>urls.py
+│<span class="w">   </span>└──<span class="w"> </span>wsgi.py
+├──<span class="w"> </span>project_name/
+│<span class="w">   </span>├──<span class="w"> </span>app_1/
+│<span class="w">   </span>├──<span class="w"> </span>app_2/
+│<span class="w">   </span>├──<span class="w"> </span>static/
+│<span class="w">   </span>└──<span class="w"> </span>templates/
+├──<span class="w"> </span>.gitignore
+├──<span class="w"> </span>manage.py
+└──<span class="w"> </span>db.sqlite3
 </code></pre></div></td></tr></table></div>
 <p>Before we get there, however, we need to go through the Django defaults.</p>
-<p>Let's create a folder for our project: we'll name it <code>django_tutorial</code>.
-After that, we'll create our project, <code>conduit</code>, inside
-<code>django_tutorial</code>:</p>
+<p>Let's create a folder for our project: we'll name it <code>django_tutorial</code>. After that, we'll create our project, <code>conduit</code>, inside <code>django_tutorial</code>:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span> ~$ mkdir django_tutorial
-<span class="o">(</span>django<span class="o">)</span> ~$ <span class="nb">cd</span> django_tutorial
-<span class="o">(</span>django<span class="o">)</span> django_tutorial$ django-admin startproject conduit .
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span><span class="w"> </span>~$<span class="w"> </span>mkdir<span class="w"> </span>django_tutorial
+<span class="o">(</span>django<span class="o">)</span><span class="w"> </span>~$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>django_tutorial
+<span class="o">(</span>django<span class="o">)</span><span class="w"> </span>django_tutorial$<span class="w"> </span>django-admin<span class="w"> </span>startproject<span class="w"> </span>conduit<span class="w"> </span>.
 </code></pre></div></td></tr></table></div>
 <div class="admonition advice">
 <p class="admonition-title">Advice</p>
@@ -802,9 +949,7 @@ After that, we'll create our project, <code>conduit</code>, inside
 │   └── wsgi.py
 └── manage.py
 </code></pre></div></td></tr></table></div>
-<p>We'll move all the files in the <code>conduit</code> folder into the
-<code>django_tutorial/config</code> folder, as we explained above. The project
-layout should now be:</p>
+<p>We'll move all the files in the <code>conduit</code> folder into the <code>django_tutorial/config</code> folder, as we explained above. The project layout should now be:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -823,14 +968,8 @@ layout should now be:</p>
 │   └── wsgi.py
 └── manage.py
 </code></pre></div></td></tr></table></div>
-<p>Because we're deviating from Django's generic project layout, we'll have
-to update some lines in the settings. You might wonder why we have to
-fiddle with the settings before even starting to code, but this small
-effort has the benefit of making the structure of our project easier to
-understand, and of separating the config from the code, which is a good
-habit to get into.</p>
-<p>In <code>config/asgi.py</code>, <code>config/wsgi.py</code>, and <code>./manage.py</code>, we update the
-location of our <code>settings.py</code> file:</p>
+<p>Because we're deviating from Django's generic project layout, we'll have to update some lines in the settings. You might wonder why we have to fiddle with the settings before even starting to code, but this small effort has the benefit of making the structure of our project easier to understand, and of separating the config from the code, which is a good habit to get into.</p>
+<p>In <code>config/asgi.py</code>, <code>config/wsgi.py</code>, and <code>./manage.py</code>, we update the location of our <code>settings.py</code> file:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -854,27 +993,17 @@ location of our <code>settings.py</code> file:</p>
 <span class="hll"><span class="c1"># WSGI_APPLICATION = &quot;conduit.wsgi.application&quot;     # from this</span>
 </span><span class="hll"><span class="n">WSGI_APPLICATION</span> <span class="o">=</span> <span class="s2">&quot;config.wsgi.application&quot;</span>        <span class="c1"># to this</span>
 </span></code></pre></div></td></tr></table></div>
-<p>Done! We have implemented a project layout that separates the config (in
-the <code>config</code> folder) from the code (in the <code>conduit</code> folder) and told
-Django to take this into account.</p>
-<p>Our app will have a lot of moving parts (articles, profiles, tags,
-etc.). To keep the structure of our app clear, we'll host the logic for
-each of these parts in separate folders.</p>
+<p>Done! We have implemented a project layout that separates the config (in the <code>config</code> folder) from the code (in the <code>conduit</code> folder) and told Django to take this into account.</p>
+<p>Our app will have a lot of moving parts (articles, profiles, tags, etc.). To keep the structure of our app clear, we'll host the logic for each of these parts in separate folders.</p>
 <p>We'll build <em>Conduit</em> step by step.</p>
 <h2 id="articles-application"><code>articles</code> application<a class="headerlink" href="#articles-application" title="Permanent link">#</a></h2>
-<p>The most basic function that the <em>Conduit</em> app should have is the
-ability to post and read articles. Let's start with that (you'll notice
-that this part is basically a repeat of <a href="https://github.com/DjangoGirls/tutorial">DjangoGirls
-tutorial</a>'s blog app).</p>
-<p>We'll create an <code>articles</code>
-<a href="https://docs.djangoproject.com/en/4.0/ref/applications/#projects-and-applications">application</a>
-(a package that provides a specific set of features) that will hold all
-the logic that is related to dealing with articles.</p>
+<p>The most basic function that the <em>Conduit</em> app should have is the ability to post and read articles. Let's start with that (you'll notice that this part is basically a repeat of <a href="https://github.com/DjangoGirls/tutorial">DjangoGirls tutorial</a>'s blog app).</p>
+<p>We'll create an <code>articles</code> <a href="https://docs.djangoproject.com/en/5.0/ref/applications/#projects-and-applications">application</a> (a package that provides a specific set of features) that will hold all the logic that is related to dealing with articles.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span> django_tutorial$ <span class="nb">cd</span> conduit
-<span class="o">(</span>django<span class="o">)</span> conduit$ django-admin startapp articles
-<span class="o">(</span>django<span class="o">)</span> conduit$ <span class="nb">cd</span> articles
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span><span class="w"> </span>django_tutorial$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>conduit
+<span class="o">(</span>django<span class="o">)</span><span class="w"> </span>conduit$<span class="w"> </span>django-admin<span class="w"> </span>startapp<span class="w"> </span>articles
+<span class="o">(</span>django<span class="o">)</span><span class="w"> </span>conduit$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>articles
 </code></pre></div></td></tr></table></div>
 <p>Our folder structure now looks like this:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
@@ -895,26 +1024,25 @@ the logic that is related to dealing with articles.</p>
 <span class="normal">16</span>
 <span class="normal">17</span>
 <span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code>django_tutorial
-├── conduit
-│   ├── articles
-│   │   ├── admin.py
-│   │   ├── apps.py
-│   │   ├── __init__.py
-│   │   ├── migrations
-│   │   │   └── __init__.py
-│   │   ├── models.py
-│   │   ├── tests.py
-│   │   └── views.py
-├── config
-│   ├── asgi.py
-│   ├── __init__.py
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
-└── manage.py
+├──<span class="w"> </span>conduit
+│<span class="w">   </span>├──<span class="w"> </span>articles
+│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>admin.py
+│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>apps.py
+│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>__init__.py
+│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>migrations
+│<span class="w">   </span>│<span class="w">   </span>│<span class="w">   </span>└──<span class="w"> </span>__init__.py
+│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>models.py
+│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>tests.py
+│<span class="w">   </span>│<span class="w">   </span>└──<span class="w"> </span>views.py
+├──<span class="w"> </span>config
+│<span class="w">   </span>├──<span class="w"> </span>asgi.py
+│<span class="w">   </span>├──<span class="w"> </span>__init__.py
+│<span class="w">   </span>├──<span class="w"> </span>settings.py
+│<span class="w">   </span>├──<span class="w"> </span>urls.py
+│<span class="w">   </span>└──<span class="w"> </span>wsgi.py
+└──<span class="w"> </span>manage.py
 </code></pre></div></td></tr></table></div>
-<p>Because of our folder structure, we will need to make a small adjustment
-in the file <code>articles/apps.py</code>:</p>
+<p>Because of our folder structure, we will need to make a small adjustment in the file <code>articles/apps.py</code>:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -929,10 +1057,7 @@ in the file <code>articles/apps.py</code>:</p>
 <span class="hll">    <span class="c1"># name = &quot;articles&quot;             # from this</span>
 </span><span class="hll">    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;conduit.articles&quot;</span>       <span class="c1"># to this</span>
 </span></code></pre></div></td></tr></table></div>
-<p>We also add the <code>articles</code> application to the <a href="https://docs.djangoproject.com/en/4.0/ref/settings/#std-setting-INSTALLED_APPS"><code>INSTALLED_APPS</code>
-setting</a>
-in <code>config/settings.py</code>, in order to let Django know about our new app
-<code>articles</code>:</p>
+<p>We also add the <code>articles</code> application to the <a href="https://docs.djangoproject.com/en/5.0/ref/settings/#std-setting-INSTALLED_APPS"><code>INSTALLED_APPS</code> setting</a> in <code>config/settings.py</code>, in order to let Django know about our new app <code>articles</code>:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -952,22 +1077,12 @@ in <code>config/settings.py</code>, in order to let Django know about our new ap
 </span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="users-app-and-user-model"><code>users</code> app and <code>User</code> model<a class="headerlink" href="#users-app-and-user-model" title="Permanent link">#</a></h2>
-<p><a href="https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#substituting-a-custom-user-model">The Django docs warn
-you</a>:
-“<em>If you're starting a new project, it's highly recommended to set up a
-custom user model, even if the default User model is sufficient for you.
-[…] Changing AUTH_USER_MODEL after you've created database tables is
-significantly more difficult […]. This change can't be done
-automatically and requires manually fixing your schema, moving your data
-from the old user table, and possibly manually reapplying some
-migrations.</em>”.</p>
+<p><a href="https://docs.djangoproject.com/en/5.0/topics/auth/customizing/#substituting-a-custom-user-model">The Django docs warn you</a>: “<em>If you're starting a new project, it's highly recommended to set up a custom user model, even if the default User model is sufficient for you. […] Changing AUTH_USER_MODEL after you've created database tables is significantly more difficult […]. This change can't be done automatically and requires manually fixing your schema, moving your data from the old user table, and possibly manually reapplying some migrations.</em>”.</p>
 <p>Scary stuff. Let's just follow the advice.</p>
-<p>First, we need to create the app where we'll put all the logic that has
-to do with users.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span> conduit$ django-admin startapp users
+<p>First, we need to create the app where we'll put all the logic that has to do with users.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span><span class="w"> </span>conduit$<span class="w"> </span>django-admin<span class="w"> </span>startapp<span class="w"> </span>users
 </code></pre></div></td></tr></table></div>
-<p>We remember to take into account our folder structure in
-<code>users/apps.py</code>:</p>
+<p>We remember to take into account our folder structure in <code>users/apps.py</code>:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -982,8 +1097,7 @@ to do with users.</p>
 <span class="hll">    <span class="c1"># name = &quot;users&quot;            # from this</span>
 </span><span class="hll">    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;conduit.users&quot;</span>      <span class="c1"># to this</span>
 </span></code></pre></div></td></tr></table></div>
-<p>And we add the new <code>users</code> application to our <code>INSTALLED_APPS</code> in
-<code>config/settings.py</code>:</p>
+<p>And we add the new <code>users</code> application to our <code>INSTALLED_APPS</code> in <code>config/settings.py</code>:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1007,46 +1121,26 @@ to do with users.</p>
 
 
 <span class="hll"><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">AbstractUser</span><span class="p">):</span>
-</span><span class="hll">    <span class="sd">&quot;&quot;&quot;Custom user model.&quot;&quot;&quot;</span>
+</span><span class="hll"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom user model.&quot;&quot;&quot;</span>
 </span><span class="hll">
 </span><span class="hll">    <span class="k">pass</span>
 </span></code></pre></div></td></tr></table></div>
-<p>What we're doing here is exactly <a href="https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#using-a-custom-user-model-when-starting-a-project">what the Django docs advise us to
-do</a>:
-we take the <code>AbstractUser</code> model and save it as is, which will provide
-us with a custom user model. This way, we can add any modifications that
-we need later on.</p>
-<p>Finally, we need to tell Django that we're not using the default <code>User</code>
-model. In <code>config/settings.py</code>, point
-<a href="https://docs.djangoproject.com/en/4.0/ref/settings/#std-setting-AUTH_USER_MODEL"><code>AUTH_USER_MODEL</code></a>
-to it:</p>
+<p>What we're doing here is exactly <a href="https://docs.djangoproject.com/en/5.0/topics/auth/customizing/#using-a-custom-user-model-when-starting-a-project">what the Django docs advise us to do</a>: we take the <code>AbstractUser</code> model and save it as is, which will provide us with a custom user model. This way, we can add any modifications that we need later on.</p>
+<p>Finally, we need to tell Django that we're not using the default <code>User</code> model. In <code>config/settings.py</code>, point <a href="https://docs.djangoproject.com/en/5.0/ref/settings/#std-setting-AUTH_USER_MODEL"><code>AUTH_USER_MODEL</code></a> to it:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># ...</span>
 <span class="hll"><span class="n">AUTH_USER_MODEL</span> <span class="o">=</span> <span class="s2">&quot;users.User&quot;</span>      <span class="c1"># new</span>
 </span></code></pre></div></td></tr></table></div>
 <p>Great, our <code>user</code> application and our custom <code>User</code> model are ready.</p>
 <h2 id="create-a-database">Create a database<a class="headerlink" href="#create-a-database" title="Permanent link">#</a></h2>
-<p>Django uses a SQLite database by default: it's versatile, simple, and
-sufficient for our needs. Django also supports other databases, notably
-PostgreSQL, which is what we would want to use if our app was expected
-to grow fast, but for now we will stay with SQLite.</p>
+<p>Django uses a SQLite database by default: it's versatile, simple, and sufficient for our needs. Django also supports other databases, notably PostgreSQL, which is what we would want to use if our app was expected to grow fast, but for now we will stay with SQLite.</p>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
-<p>We would arguably learn more by setting up a PosgreSQL database: SQLite</p>
+<p>We would arguably learn more by setting up a PosgreSQL database: SQLite is a “set it and forget it”, “just works” type of thing. Since learning more is the point of this tutorial, we might shift to PostgreSQL at some point.</p>
 </div>
-<p>is a “set it and forget it”, “just works” type of thing. Since learning
-more is the point of this tutorial, we might shift to PostgreSQL at some
-point.</p>
-<p>After any change to a model, we need to sync the database so that the
-changes <a href="https://docs.djangoproject.com/en/4.0/topics/migrations/">can be propagated into the database
-schema</a>. If
-you don't yet know what that means, no worries: we'll have a much closer
-look at what exactly is in our database, and what happens when we run
-migrations.</p>
-<p>Specifically in this case, we want Django to create an <code>Article</code> table
-that will hold our articles.</p>
-<p>Since we changed the <code>Articles</code> model, we will run the following
-commands:</p>
+<p>After any change to a model, we need to sync the database so that the changes <a href="https://docs.djangoproject.com/en/5.0/topics/migrations/">can be propagated into the database schema</a>. If you don't yet know what that means, no worries: we'll have a much closer look at what exactly is in our database, and what happens when we run migrations.</p>
+<p>Specifically in this case, we want Django to create an <code>Article</code> table that will hold our articles.</p>
+<p>Since we changed the <code>Articles</code> model, we will run the following commands:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1072,10 +1166,10 @@ commands:</p>
 <span class="normal">23</span>
 <span class="normal">24</span>
 <span class="normal">25</span>
-<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span> django_tutorial$ python manage.py makemigrations
+<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span><span class="w"> </span>django_tutorial$<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>makemigrations
 <span class="c1"># Operations to perform:</span>
 <span class="c1">#   Apply all migrations: admin, auth, contenttypes, sessions, users</span>
-<span class="o">(</span>django<span class="o">)</span> django_tutorial$ python manage.py migrate
+<span class="o">(</span>django<span class="o">)</span><span class="w"> </span>django_tutorial$<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>migrate
 <span class="c1"># Operations to perform:</span>
 <span class="c1">#   Apply all migrations: admin, auth, contenttypes, sessions, users</span>
 <span class="c1"># Running migrations:</span>
@@ -1099,24 +1193,16 @@ commands:</p>
 <span class="c1">#   Applying admin.0003_logentry_add_action_flag_choices... OK</span>
 <span class="c1">#   Applying sessions.0001_initial... OK</span>
 </code></pre></div></td></tr></table></div>
-<p>We'll be doing this many times throughout the tutorial: if your app
-refuses to run at some point, the most likely error (from experience) is
-that you forgot to migrate, so make sure you keep on top of it.</p>
+<p>We'll be doing this many times throughout the tutorial: if your app refuses to run at some point, the most likely error (from experience) is that you forgot to migrate, so make sure you keep on top of it.</p>
 <h2 id="create-a-superuser">Create a superuser<a class="headerlink" href="#create-a-superuser" title="Permanent link">#</a></h2>
-<p>One of Django's greatest advantages is its admin app: it is considered
-so helpful that you probably will see it mentioned in most discussions
-about Django.</p>
-<p>To be able to access the admin app (which we will do in a later
-section), we need a
-<a href="https://docs.djangoproject.com/en/4.0/topics/auth/default/#creating-superusers">superuser</a>.
-Run the following and fill the values (you don't need a real email or a
-strong password here):</p>
+<p>One of Django's greatest advantages is its admin app: it is considered so helpful that you probably will see it mentioned in most discussions about Django.</p>
+<p>To be able to access the admin app (which we will do in a later section), we need a <a href="https://docs.djangoproject.com/en/5.0/topics/auth/default/#creating-superusers">superuser</a>. Run the following and fill the values (you don't need a real email or a strong password here):</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
-<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span> django_tutorial$ python manage.py createsuperuser
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span><span class="w"> </span>django_tutorial$<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>createsuperuser
 <span class="c1"># Username (leave blank to use $CURRENTUSER): admin</span>
 <span class="c1"># Email address: admin@example.com</span>
 <span class="c1"># Password:</span>
@@ -1124,10 +1210,7 @@ strong password here):</p>
 <span class="c1"># Superuser created successfully.</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="profile-model"><code>Profile</code> model<a class="headerlink" href="#profile-model" title="Permanent link">#</a></h2>
-<p>In <code>users/models.py</code> we also need to create a <code>Profile</code> model: we'll
-explain it in more detail later, but suffice it to say that the
-<code>Profile</code> will deal with everything about our users that is not
-authentication (ie logging in and out).</p>
+<p>In <code>users/models.py</code> we also need to create a <code>Profile</code> model: we'll explain it in more detail later, but suffice it to say that the <code>Profile</code> will deal with everything about our users that is not authentication (ie logging in and out).</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1139,75 +1222,43 @@ authentication (ie logging in and out).</p>
 <span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># ...</span>
 
 <span class="hll"><span class="k">class</span> <span class="nc">Profile</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span class="hll">    <span class="sd">&quot;&quot;&quot;Profile model associated to each User object.&quot;&quot;&quot;</span>
+</span><span class="hll"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Profile model associated to each User object.&quot;&quot;&quot;</span>
 </span><span class="hll">
 </span><span class="hll">    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
-</span>
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span>
-</code></pre></div></td></tr></table></div>
+</span><span class="hll">
+</span><span class="hll">    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="hll">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span>
+</span></code></pre></div></td></tr></table></div>
 <p>We'll go through the code step by step:</p>
 <ul>
-<li>The docs for the <a href="https://docs.djangoproject.com/en/4.0/ref/models/fields/#onetoonefield"><code>OneToOneField</code> model
-    field</a>
-    read: “<em>A one-to-one relationship. Conceptually, this is similar to
-    a ForeignKey with unique=True, but the “reverse” side of the
-    relation will directly return a single object. This is most useful
-    as the primary key of a model which “extends” another model in some
-    way</em>”. This is exactly we need, because each <code>User</code> has one
-    associated <code>Profile</code>, and each <code>Profile</code> corresponds to a single
-    <code>User</code>.</li>
-<li><a href="https://docs.djangoproject.com/en/4.0/ref/models/fields/#django.db.models.ForeignKey.on_delete"><code>on_delete</code> is a required
-    argument</a>
-    for <code>OneToOneField</code> and specifies what happens when the model
-    instance is deleted.</li>
-<li>the <a href="https://docs.djangoproject.com/en/4.0/ref/models/instances/#str"><code>__str__</code>
-    method</a>
-    tells Django what the string representation of the model should be:
-    this is how specific model instances will be represented in the
-    Django admin app, in the shell, in the error messages, in the
-    templates, etc. Here, we specify that we want our profiles to be
-    referenced by the associated user's username.</li>
+<li>The docs for the <a href="https://docs.djangoproject.com/en/5.0/ref/models/fields/#onetoonefield"><code>OneToOneField</code> model field</a> read: “<em>A one-to-one relationship. Conceptually, this is similar to a ForeignKey with unique=True, but the “reverse” side of the relation will directly return a single object. This is most useful as the primary key of a model which “extends” another model in some way</em>”. This is exactly we need, because each <code>User</code> has one associated <code>Profile</code>, and each <code>Profile</code> corresponds to a single <code>User</code>.</li>
+<li><a href="https://docs.djangoproject.com/en/5.0/ref/models/fields/#django.db.models.ForeignKey.on_delete"><code>on_delete</code> is a required argument</a> for <code>OneToOneField</code> and specifies what happens when the model instance is deleted.</li>
+<li>the <a href="https://docs.djangoproject.com/en/5.0/ref/models/instances/#str"><code>__str__</code> method</a> tells Django what the string representation of the model should be: this is how specific model instances will be represented in the Django admin app, in the shell, in the error messages, in the templates, etc. Here, we specify that we want our profiles to be referenced by the associated user's username.</li>
 </ul>
-<p>Now that we have a <code>Profile</code> model, we want to create one for our
-existing user (the <code>admin</code> superuser). Later on, we will automate the
-creation of a profile for every new user, but this is not implemented
-yet, so we need to do it manually. Well, thankfully Django allows us to
-interact with it <a href="https://docs.djangoproject.com/en/4.0/ref/django-admin/#shell">through a Python
-shell</a>.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>(django) django_tutorial$ python manage.py shell
+<p>Now that we have a <code>Profile</code> model, we want to create one for our existing user (the <code>admin</code> superuser). Later on, we will automate the creation of a profile for every new user, but this is not implemented yet, so we need to do it manually. Well, thankfully Django allows us to interact with it <a href="https://docs.djangoproject.com/en/5.0/ref/django-admin/#shell">through a Python shell</a>.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span><span class="w"> </span>django_tutorial$<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>shell
 </code></pre></div></td></tr></table></div>
-<p>And now that we're in the IPython shell, we will interact with the
-Django ORM: we will get our <code>admin</code> user from the <code>User</code> objects and
-then create a <code>Profile</code> instance.</p>
+<p>And now that we're in the IPython shell, we will interact with the Django ORM: we will get our <code>admin</code> user from the <code>User</code> objects and then create a <code>Profile</code> instance.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span>
-<span class="normal">7</span>
-<span class="normal">8</span>
-<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">Python</span> <span class="mf">3.9.7</span> <span class="o">|</span> <span class="n">packaged</span> <span class="n">by</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="o">|</span> <span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">Sep</span> <span class="mi">29</span> <span class="mi">2021</span><span class="p">,</span> <span class="mi">19</span><span class="p">:</span><span class="mi">20</span><span class="p">:</span><span class="mi">46</span><span class="p">)</span>
-<span class="n">Type</span> <span class="s1">&#39;copyright&#39;</span><span class="p">,</span> <span class="s1">&#39;credits&#39;</span> <span class="ow">or</span> <span class="s1">&#39;license&#39;</span> <span class="k">for</span> <span class="n">more</span> <span class="n">information</span>
-<span class="n">IPython</span> <span class="mf">7.30.1</span> <span class="o">--</span> <span class="n">An</span> <span class="n">enhanced</span> <span class="n">Interactive</span> <span class="n">Python</span><span class="o">.</span> <span class="n">Type</span> <span class="s1">&#39;?&#39;</span> <span class="k">for</span> <span class="n">help</span><span class="o">.</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">django.contrib.auth</span> <span class="kn">import</span> <span class="n">get_user_model</span>
 
-<span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">conduit.users.models</span> <span class="kn">import</span> <span class="n">User</span><span class="p">,</span> <span class="n">Profile</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">conduit.users.models</span> <span class="kn">import</span> <span class="n">Profile</span>
 
-<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s1">&#39;admin&#39;</span><span class="p">)</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">user</span> <span class="o">=</span> <span class="n">get_user_model</span><span class="p">()</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s1">&#39;admin&#39;</span><span class="p">)</span>
 
-<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">user</span><span class="o">.</span><span class="n">profile</span> <span class="o">=</span> <span class="n">Profile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">user</span><span class="o">.</span><span class="n">profile</span> <span class="o">=</span> <span class="n">Profile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
-<p>If you've been following up to now… you should have gotten an error
-above. Namely, you should have gotten:</p>
+<p>You might wonder why we're importing <code>get_user_model</code> instead of the <code>User</code> model directly: this is <a href="https://docs.djangoproject.com/en/5.0/topics/auth/customizing/#django.contrib.auth.get_user_model">best practice</a> and ensures we're working with the currently active user model.</p>
+<p>However, if you've been following up to now… you should have gotten an error above. Namely, you should have gotten:</p>
 <blockquote>
 <p>OperationalError: no such table: users_profile</p>
 </blockquote>
-<p>90% of programming is writing code, and the other 90% of programming is
-debugging, as the saying goes, so we might as well learn to deal with
-Django's errors while learning Django. The error above says that our
-database has no table <code>users_profile</code>: why might that be? Because we
-didn't sync our database after modifying our models!</p>
+<p>90% of programming is writing code, and the other 90% of programming is debugging, as the saying goes, so we might as well learn to deal with Django's errors while learning Django. The error above says that our database has no table <code>users_profile</code>: why might that be? Because we didn't sync our database after modifying our models!</p>
 <p>Open a new terminal session and run migrations:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
@@ -1217,35 +1268,31 @@ didn't sync our database after modifying our models!</p>
 <span class="normal">6</span>
 <span class="normal">7</span>
 <span class="normal">8</span>
-<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span> django_tutorial$ python manage.py makemigrations
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span><span class="w"> </span>django_tutorial$<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>makemigrations
 <span class="c1"># Migrations for &#39;users&#39;:</span>
 <span class="c1">#   conduit/users/migrations/0002_profile.py</span>
 <span class="c1">#     - Create model Profile</span>
-<span class="o">(</span>django<span class="o">)</span> django_tutorial$ python manage.py migrate
+<span class="o">(</span>django<span class="o">)</span><span class="w"> </span>django_tutorial$<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>migrate
 <span class="c1"># Operations to perform:</span>
 <span class="c1">#   Apply all migrations: admin, auth, contenttypes, sessions, users</span>
 <span class="c1"># Running migrations:</span>
 <span class="c1">#   Applying users.0002_profile... OK</span>
 </code></pre></div></td></tr></table></div>
-<p>Now return to the previous session and rerun the shell command: there
-should be no error this time.</p>
+<p>Now return to the previous session and rerun the shell command: there should be no error this time.</p>
 <h2 id="start-the-server">Start the server<a class="headerlink" href="#start-the-server" title="Permanent link">#</a></h2>
-<p>We have everything we need to actually run our app. Let's <a href="https://docs.djangoproject.com/en/4.0/ref/django-admin/#runserver">start the
-server</a>!</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span> django_tutorial$ python manage.py runserver
+<p>We have everything we need to actually run our app. Let's <a href="https://docs.djangoproject.com/en/5.0/ref/django-admin/#runserver">start the server</a>!</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span><span class="w"> </span>django_tutorial$<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>runserver
 </code></pre></div></td></tr></table></div>
 <p>You should see this:</p>
-<figure>
-<img src="./assets/server - run.png" width="600"
-alt="python manage.py runserver" />
-<figcaption aria-hidden="true">python manage.py runserver</figcaption>
+<figure width="600">
+<img src="./assets/server - run.png" />
+<figcaption>python manage.py runserver</figcaption>
 </figure>
 
 <p>Our app, <em>Conduit</em>, is online!</p>
 <h2 id="article-model"><code>Article</code> model<a class="headerlink" href="#article-model" title="Permanent link">#</a></h2>
 <p>We'll start by making a model for our articles.</p>
-<p>When creating a model, we need to think of what fields the model will
-need. Let's take 2 seconds to think. Any article needs:</p>
+<p>When creating a model, we need to think of what fields the model will need. Let's take 2 seconds to think. Any article needs:</p>
 <ul>
 <li>a title</li>
 <li>a body (the text)</li>
@@ -1275,7 +1322,7 @@ need. Let's take 2 seconds to think. Any article needs:</p>
 
 
 <span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Article model.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Article model.&quot;&quot;&quot;</span>
 
     <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">db_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
     <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
@@ -1292,26 +1339,13 @@ need. Let's take 2 seconds to think. Any article needs:</p>
 </code></pre></div></td></tr></table></div>
 <p>Let's explain everything step by step:</p>
 <ul>
-<li>the article's <code>title</code> will be used as <code>db_index</code>: when we do queries
-    on articles in our database, we'll often be looking at the <code>title</code>,
-    so having this field as index will speed the queries</li>
+<li>the article's <code>title</code> will be used as <code>db_index</code>: when we do queries on articles in our database, we'll often be looking at the <code>title</code>, so having this field as index will speed the queries</li>
 <li><code>description</code> and <code>body</code> are self-explanatory</li>
-<li><code>author</code> is a bit more complicated:<ul>
-<li>the <a href="https://docs.djangoproject.com/en/4.0/ref/models/fields/#django.db.models.ForeignKey"><code>ForeignKey</code> model
-    field</a>
-    allows us to have a many-to-one relationship: multiple articles
-    for every profile</li>
-<li>we have seen <code>on_delete</code>, but not
-    <a href="https://docs.djangoproject.com/en/4.0/ref/models/fields/#django.db.models.ForeignKey.related_name"><code>related_name</code></a>:
-    <code>related_name="articles"</code> allows us to access a user's (or
-    rather profile's) articles through an <code>articles</code> attribute (for
-    example, <code>User.articles.all()</code> to get the <code>admin</code> user's
-    articles)</li>
-</ul>
-</li>
+<li><code>author</code> is a bit more complicated:</li>
+<li>the <a href="https://docs.djangoproject.com/en/5.0/ref/models/fields/#django.db.models.ForeignKey"><code>ForeignKey</code> model field</a> allows us to have a many-to-one relationship: multiple articles for every profile</li>
+<li>we have seen <code>on_delete</code>, but not <a href="https://docs.djangoproject.com/en/5.0/ref/models/fields/#django.db.models.ForeignKey.related_name"><code>related_name</code></a>: <code>related_name="articles"</code> allows us to access a user's (or rather profile's) articles through an <code>articles</code> attribute (for example, <code>User.articles.all()</code> to get the <code>admin</code> user's articles)</li>
 <li><code>auto_now_add</code> simply records the time of creation for <code>created_at</code></li>
-<li>the <code>__str__</code> method says that the string representation of an
-    article will be its title</li>
+<li>the <code>__str__</code> method says that the string representation of an article will be its title</li>
 </ul>
 <p>Let's sync the database again:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
@@ -1322,23 +1356,19 @@ need. Let's take 2 seconds to think. Any article needs:</p>
 <span class="normal">6</span>
 <span class="normal">7</span>
 <span class="normal">8</span>
-<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span> django_tutorial$ python manage.py makemigrations
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span><span class="w"> </span>django_tutorial$<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>makemigrations
 <span class="c1"># Migrations for &#39;articles&#39;:</span>
 <span class="c1">#   conduit/articles/migrations/0001_initial.py</span>
 <span class="c1">#     - Create model Article</span>
-<span class="o">(</span>django<span class="o">)</span> django_tutorial$ python manage.py migrate
+<span class="o">(</span>django<span class="o">)</span><span class="w"> </span>django_tutorial$<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>migrate
 <span class="c1"># Operations to perform:</span>
 <span class="c1">#   Apply all migrations: admin, articles, auth, contenttypes, sessions, users</span>
 <span class="c1"># Running migrations:</span>
 <span class="c1">#   Applying articles.0001_initial... OK</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="using-the-django-admin">Using the Django admin<a class="headerlink" href="#using-the-django-admin" title="Permanent link">#</a></h2>
-<p>In order to have something to work with for the rest of the tutorial, we
-need to create some posts. Because we can't yet do it through <em>Conduit</em>,
-we will do so through Django admin.</p>
-<p>In order for the Django admin to <a href="https://docs.djangoproject.com/en/4.0/ref/contrib/admin/#modeladmin-objects">have access to the <code>Article</code>
-model</a>,
-we need to register it in <code>articles/admin.py</code>:</p>
+<p>In order to have something to work with for the rest of the tutorial, we need to create some posts. Because we can't yet do it through <em>Conduit</em>, we will do so through Django admin.</p>
+<p>In order for the Django admin to <a href="https://docs.djangoproject.com/en/5.0/ref/contrib/admin/#modeladmin-objects">have access to the <code>Article</code> model</a>, we need to register it in <code>articles/admin.py</code>:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1347,68 +1377,42 @@ we need to register it in <code>articles/admin.py</code>:</p>
 </span>
 <span class="hll"><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Article</span><span class="p">)</span>            <span class="c1"># new</span>
 </span></code></pre></div></td></tr></table></div>
-<p>That's it, the <code>Article</code> model is now editable through the Django admin.
-The server should still be running (otherwise restart it). We will go to
-the Django admin app (<a href="http://127.0.0.1:8000/admin/">http://127.0.0.1:8000/admin/</a>) and log in as the
-superuser (<code>admin</code> in my case) that we created earlier.</p>
+<p>That's it, the <code>Article</code> model is now editable through the Django admin. The server should still be running (otherwise restart it). We will go to the Django admin app (<a href="http://127.0.0.1:8000/admin/">http://127.0.0.1:8000/admin/</a>) and log in as the superuser (<code>admin</code> in my case) that we created earlier.</p>
 <p>Once we're logged in, we will create three articles in Django admin:</p>
 <ol>
 <li>click “:heavy-plus-sign: Add” in the <code>Articles</code> section</li>
-<li>specify a title, a description, a body, and the author (you) for the
-    article</li>
+<li>specify a title, a description, a body, and the author (you) for the article</li>
 <li>click “Save and add another”</li>
 </ol>
 
-              
-            </article>
-            
-          </div>
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
-          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
-            Back to top
-          </a>
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
         
       </main>
       
         <footer class="md-footer">
-  
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Readme" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Readme
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../02_home_page/" class="md-footer__link md-footer__link--next" aria-label="Next: Home page" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Home page
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1426,8 +1430,10 @@ superuser (<code>admin</code> in my case) that we created earlier.</p>
   
     
     
+    
+    
     <a href="https://github.com/harabat/django-htmx" target="_blank" rel="noopener" title="Django + HTMX tutorial on GitHub" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
     </a>
   
 </div>
@@ -1440,10 +1446,12 @@ superuser (<code>admin</code> in my case) that we created earlier.</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.expand", "navigation.top", "search.suggest"], "search": "../assets/javascripts/workers/search.b97dbffb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.0238f547.min.js"></script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.expand", "navigation.top", "search.suggest"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.1e8ae164.min.js"></script>
       
     
   </body>

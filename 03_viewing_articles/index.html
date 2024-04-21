@@ -10,8 +10,15 @@
       
       
       
+      
+        <link rel="prev" href="../02_home_page/">
+      
+      
+        <link rel="next" href="../04_slugs/">
+      
+      
       <link rel="icon" href="../assets/django-logo.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.8">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
     
     
       
@@ -19,14 +26,17 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.1d29e8d0.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.bcfcd587.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.cbb835fc.min.css">
-        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
       
       
+
+
     
+    
+      
     
     
       
@@ -38,11 +48,12 @@
       
     
     
-    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
     <script data-goatcounter="https://django-htmx.goatcounter.com/count"
             async src="//gc.zgo.at/count.js"></script>
 
+    
     
   </head>
   
@@ -54,11 +65,8 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="indigo">
   
-    
-    
-      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -78,7 +86,9 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="Django + HTMX tutorial" class="md-header__button md-logo" aria-label="Django + HTMX tutorial" data-md-component="logo">
       
@@ -86,6 +96,7 @@
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
+      
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
@@ -105,31 +116,39 @@
       </div>
     </div>
     
-      <form class="md-header__option" data-md-component="palette">
-        
-          
-          
-          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
-          
-            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-            </label>
-          
-        
-          
-          
-          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
-          
-            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
-            </label>
-          
-        
-      </form>
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
       <label class="md-header__button md-icon" for="__search">
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
@@ -138,12 +157,15 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
@@ -157,7 +179,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -169,7 +191,7 @@
         <a href="https://github.com/harabat/django-htmx" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
   </div>
   <div class="md-source__repository">
     harabat/django-htmx
@@ -199,6 +221,7 @@
                     
 
 
+
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href=".." title="Django + HTMX tutorial" class="md-nav__button md-logo" aria-label="Django + HTMX tutorial" data-md-component="logo">
@@ -213,7 +236,7 @@
       <a href="https://github.com/harabat/django-htmx" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
   </div>
   <div class="md-source__repository">
     harabat/django-htmx
@@ -225,14 +248,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href=".." class="md-nav__link">
-        Readme
+        
+  
+  <span class="md-ellipsis">
+    Readme
+  </span>
+  
+
       </a>
     </li>
   
@@ -240,14 +268,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../01_starting_the_project/" class="md-nav__link">
-        Starting the project
+        
+  
+  <span class="md-ellipsis">
+    Starting the project
+  </span>
+  
+
       </a>
     </li>
   
@@ -255,14 +288,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../02_home_page/" class="md-nav__link">
-        Home page
+        
+  
+  <span class="md-ellipsis">
+    Home page
+  </span>
+  
+
       </a>
     </li>
   
@@ -270,28 +308,39 @@
     
       
       
-      
-
   
   
     
   
   
+  
     <li class="md-nav__item md-nav__item--active">
       
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
         
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Viewing Articles
+          
+  
+  <span class="md-ellipsis">
+    Viewing Articles
+  </span>
+  
+
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Viewing Articles
+        
+  
+  <span class="md-ellipsis">
+    Viewing Articles
+  </span>
+  
+
       </a>
       
         
@@ -311,35 +360,45 @@
       
         <li class="md-nav__item">
   <a href="#introduction" class="md-nav__link">
-    Introduction
+    <span class="md-ellipsis">
+      Introduction
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#article-view" class="md-nav__link">
-    Article view
+    <span class="md-ellipsis">
+      Article view
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#article-urls-and-primary-keys" class="md-nav__link">
-    Article URLs and primary keys
+    <span class="md-ellipsis">
+      Article URLs and primary keys
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#get_absolute_url-method" class="md-nav__link">
-    get_absolute_url method
+    <span class="md-ellipsis">
+      get_absolute_url method
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#article-templates" class="md-nav__link">
-    Article templates
+    <span class="md-ellipsis">
+      Article templates
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Article templates">
@@ -347,28 +406,36 @@
         
           <li class="md-nav__item">
   <a href="#article_detailhtml" class="md-nav__link">
-    article_detail.html
+    <span class="md-ellipsis">
+      article_detail.html
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#article_metahtml" class="md-nav__link">
-    article_meta.html
+    <span class="md-ellipsis">
+      article_meta.html
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#article_previewhtml" class="md-nav__link">
-    article_preview.html
+    <span class="md-ellipsis">
+      article_preview.html
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#results" class="md-nav__link">
-    Results
+    <span class="md-ellipsis">
+      Results
+    </span>
   </a>
   
 </li>
@@ -388,14 +455,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../04_slugs/" class="md-nav__link">
-        Slugs
+        
+  
+  <span class="md-ellipsis">
+    Slugs
+  </span>
+  
+
       </a>
     </li>
   
@@ -403,14 +475,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../05_creating_editing_and_deleting_articles/" class="md-nav__link">
-        Creating, editing, and deleting Articles
+        
+  
+  <span class="md-ellipsis">
+    Creating, editing, and deleting Articles
+  </span>
+  
+
       </a>
     </li>
   
@@ -418,14 +495,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../06_comments/" class="md-nav__link">
-        Comments
+        
+  
+  <span class="md-ellipsis">
+    Comments
+  </span>
+  
+
       </a>
     </li>
   
@@ -433,14 +515,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../07_users_and_profiles/" class="md-nav__link">
-        Users and Profiles
+        
+  
+  <span class="md-ellipsis">
+    Users and Profiles
+  </span>
+  
+
       </a>
     </li>
   
@@ -448,14 +535,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../08_authentication_i_login_logout_signup/" class="md-nav__link">
-        Login, Logout, Signup
+        
+  
+  <span class="md-ellipsis">
+    Login, Logout, Signup
+  </span>
+  
+
       </a>
     </li>
   
@@ -463,14 +555,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../09_authentication_ii_securing_the_app/" class="md-nav__link">
-        Securing the app
+        
+  
+  <span class="md-ellipsis">
+    Securing the app
+  </span>
+  
+
       </a>
     </li>
   
@@ -478,14 +575,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../10_profile_features/" class="md-nav__link">
-        Profile features
+        
+  
+  <span class="md-ellipsis">
+    Profile features
+  </span>
+  
+
       </a>
     </li>
   
@@ -493,14 +595,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../11_editing_profiles/" class="md-nav__link">
-        Editing profiles
+        
+  
+  <span class="md-ellipsis">
+    Editing profiles
+  </span>
+  
+
       </a>
     </li>
   
@@ -508,14 +615,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../12_follows/" class="md-nav__link">
-        Follows
+        
+  
+  <span class="md-ellipsis">
+    Follows
+  </span>
+  
+
       </a>
     </li>
   
@@ -523,14 +635,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../13_favourites/" class="md-nav__link">
-        Favourites
+        
+  
+  <span class="md-ellipsis">
+    Favourites
+  </span>
+  
+
       </a>
     </li>
   
@@ -538,14 +655,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../14_tags_coming_soon/" class="md-nav__link">
-        Tags
+        
+  
+  <span class="md-ellipsis">
+    Tags
+  </span>
+  
+
       </a>
     </li>
   
@@ -553,14 +675,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../15_htmx_coming_soon/" class="md-nav__link">
-        HTMX
+        
+  
+  <span class="md-ellipsis">
+    HTMX
+  </span>
+  
+
       </a>
     </li>
   
@@ -568,14 +695,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../16_future_extensions/" class="md-nav__link">
-        Future extensions
+        
+  
+  <span class="md-ellipsis">
+    Future extensions
+  </span>
+  
+
       </a>
     </li>
   
@@ -609,35 +741,45 @@
       
         <li class="md-nav__item">
   <a href="#introduction" class="md-nav__link">
-    Introduction
+    <span class="md-ellipsis">
+      Introduction
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#article-view" class="md-nav__link">
-    Article view
+    <span class="md-ellipsis">
+      Article view
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#article-urls-and-primary-keys" class="md-nav__link">
-    Article URLs and primary keys
+    <span class="md-ellipsis">
+      Article URLs and primary keys
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#get_absolute_url-method" class="md-nav__link">
-    get_absolute_url method
+    <span class="md-ellipsis">
+      get_absolute_url method
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#article-templates" class="md-nav__link">
-    Article templates
+    <span class="md-ellipsis">
+      Article templates
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Article templates">
@@ -645,28 +787,36 @@
         
           <li class="md-nav__item">
   <a href="#article_detailhtml" class="md-nav__link">
-    article_detail.html
+    <span class="md-ellipsis">
+      article_detail.html
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#article_metahtml" class="md-nav__link">
-    article_meta.html
+    <span class="md-ellipsis">
+      article_meta.html
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#article_previewhtml" class="md-nav__link">
-    article_preview.html
+    <span class="md-ellipsis">
+      article_preview.html
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#results" class="md-nav__link">
-    Results
+    <span class="md-ellipsis">
+      Results
+    </span>
   </a>
   
 </li>
@@ -684,20 +834,19 @@
               </div>
             
           
-          <div class="md-content" data-md-component="content">
-            <article class="md-content__inner md-typeset">
-              
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
                 
-  <a href="https://github.com/harabat/django-htmx/edit/master/docs/03_viewing_articles.md" title="Edit this page" class="md-content__button md-icon">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+                  
 
+  
+  
 
 
 <h1 id="viewing-articles">Viewing Articles<a class="headerlink" href="#viewing-articles" title="Permanent link">#</a></h1>
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">#</a></h2>
-<p>In this chapter, we'll let our users navigate to and read individual
-articles.</p>
+<p>In this chapter, we'll let our users navigate to and read individual articles.</p>
 <h2 id="article-view">Article view<a class="headerlink" href="#article-view" title="Permanent link">#</a></h2>
 <p>First, we need to implement the article view.</p>
 <p>First, we create a view in <code>views.py</code>:</p>
@@ -714,16 +863,12 @@ articles.</p>
 <span class="c1"># ...</span>
 
 <span class="hll"><span class="k">class</span> <span class="nc">ArticleDetailView</span><span class="p">(</span><span class="n">DetailView</span><span class="p">):</span>
-</span><span class="hll">    <span class="sd">&quot;&quot;&quot;Detail view for individual articles.&quot;&quot;&quot;</span>
+</span><span class="hll"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Detail view for individual articles.&quot;&quot;&quot;</span>
 </span><span class="hll">
 </span><span class="hll">    <span class="n">model</span> <span class="o">=</span> <span class="n">Article</span>
 </span><span class="hll">    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;article_detail.html&quot;</span>
 </span></code></pre></div></td></tr></table></div>
-<p>We're continuing to work with class-based views here. The <a href="https://docs.djangoproject.com/en/4.0/ref/class-based-views/generic-display/#detailview"><code>DetailView</code>
-generic display
-view</a>
-allows to view a single instance of an object. We specify the model this
-view will be associated to and the template name.</p>
+<p>We're continuing to work with class-based views here. The <a href="https://docs.djangoproject.com/en/5.0/ref/class-based-views/generic-display/#detailview"><code>DetailView</code> generic display view</a> allows to view a single instance of an object. We specify the model this view will be associated to and the template name.</p>
 <h2 id="article-urls-and-primary-keys">Article URLs and primary keys<a class="headerlink" href="#article-urls-and-primary-keys" title="Permanent link">#</a></h2>
 <p>We now match a URL to the <code>ArticleDetailView</code> in <code>articles/urls.py</code>:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
@@ -739,21 +884,9 @@ view will be associated to and the template name.</p>
 </span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
 <p>This is the first time we're actually specifying a URL with arguments.</p>
-<p>Django's <a href="https://docs.djangoproject.com/en/4.0/topics/http/urls/">URL dispatcher
-docs</a> have a
-lot of information on the ins and outs, but for now we only need to know
-that the current URL comprises an <code>articles/</code> prefix and the article's
-key.</p>
-<p>The <code>&lt;int:pk&gt;</code> parameter here matches any integer, and transfers the
-captured value to <code>ArticleDetailView</code>, which tries to identify the
-article based on its primary key (<code>pk</code>): primary keys are a way to
-uniquely specify a record in a database. Since we didn't specify how to
-generate primary keys for the <code>Article</code> objects in our database, this
-will default to an incrementing integer (the first article will have a
-<code>pk</code> of 1, the next will have a <code>pk</code> of 2, etc.).</p>
-<p>To have an idea, and to practice your shell skills, launch the
-interactive shell (by running <code>python manage.py shell</code>) and run the
-following commands:</p>
+<p>Django's <a href="https://docs.djangoproject.com/en/5.0/topics/http/urls/">URL dispatcher docs</a> have a lot of information on the ins and outs, but for now we only need to know that the current URL comprises an <code>articles/</code> prefix and the article's key.</p>
+<p>The <code>&lt;int:pk&gt;</code> parameter here matches any integer, and transfers the captured value to <code>ArticleDetailView</code>, which tries to identify the article based on its primary key (<code>pk</code>): primary keys are a way to uniquely specify a record in a database. Since we didn't specify how to generate primary keys for the <code>Article</code> objects in our database, this will default to an incrementing integer (the first article will have a <code>pk</code> of 1, the next will have a <code>pk</code> of 2, etc.).</p>
+<p>To have an idea, and to practice your shell skills, launch the interactive shell (by running <code>python manage.py shell</code>) and run the following commands:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -763,15 +896,7 @@ following commands:</p>
 <span class="normal"> 7</span>
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">Python</span> <span class="mf">3.9.13</span> <span class="o">|</span> <span class="n">packaged</span> <span class="n">by</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="o">|</span> <span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="n">May</span> <span class="mi">27</span> <span class="mi">2022</span><span class="p">,</span> <span class="mi">16</span><span class="p">:</span><span class="mi">56</span><span class="p">:</span><span class="mi">21</span><span class="p">)</span>
-<span class="n">Type</span> <span class="s1">&#39;copyright&#39;</span><span class="p">,</span> <span class="s1">&#39;credits&#39;</span> <span class="ow">or</span> <span class="s1">&#39;license&#39;</span> <span class="k">for</span> <span class="n">more</span> <span class="n">information</span>
-<span class="n">IPython</span> <span class="mf">7.33.0</span> <span class="o">--</span> <span class="n">An</span> <span class="n">enhanced</span> <span class="n">Interactive</span> <span class="n">Python</span><span class="o">.</span> <span class="n">Type</span> <span class="s1">&#39;?&#39;</span> <span class="k">for</span> <span class="n">help</span><span class="o">.</span>
-
-<span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">conduit.articles.models</span> <span class="kn">import</span> <span class="n">Article</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">conduit.articles.models</span> <span class="kn">import</span> <span class="n">Article</span>
 
 <span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">QuerySet</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">Article</span><span class="p">:</span> <span class="n">ForeignKey</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Article</span><span class="p">:</span> <span class="n">ManyToManyField</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Article</span><span class="p">:</span> <span class="n">OneToOneField</span><span class="o">&gt;</span><span class="p">]</span><span class="o">&gt;</span>
@@ -782,15 +907,9 @@ following commands:</p>
 <span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">last</span><span class="p">()</span><span class="o">.</span><span class="n">pk</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="mi">3</span>
 </code></pre></div></td></tr></table></div>
-<p>The concept of incrementing integers as the primary key has several
-flaws, the main one being that anyone can infer how many articles you
-publish, how many users you have, etc. just by looking at the URL. And
-the URLs are plain unclear. We'll change the primary keys later on.</p>
+<p>The concept of incrementing integers as the primary key has several flaws, the main one being that anyone can infer how many articles you publish, how many users you have, etc. just by looking at the URL. And the URLs are plain unclear. We'll change the primary keys later on.</p>
 <h2 id="get_absolute_url-method">get_absolute_url method<a class="headerlink" href="#get_absolute_url-method" title="Permanent link">#</a></h2>
-<p>In order for <code>ArticleDetailView</code> to be able to identify an <code>Article</code>
-object from its <code>pk</code>, we need to modify the <code>Article</code> model in
-<code>articles/models.py</code> (don't forget to sync the database immediately
-after):</p>
+<p>In order for <code>ArticleDetailView</code> to be able to identify an <code>Article</code> object from its <code>pk</code>, we need to modify the <code>Article</code> model in <code>articles/models.py</code> (don't forget to sync the database immediately after):</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -806,20 +925,14 @@ after):</p>
 </span>
 
 <span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Article model.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Article model.&quot;&quot;&quot;</span>
 
     <span class="c1"># ...</span>
 
 <span class="hll">    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>                                     <span class="c1"># new</span>
 </span><span class="hll">        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;article_detail&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">})</span>    <span class="c1">#</span>
 </span></code></pre></div></td></tr></table></div>
-<p>The <a href="https://docs.djangoproject.com/en/4.0/ref/models/instances/#get-absolute-url"><code>get_absolute_url</code>
-method</a>
-tells Django how to generate the URL for the instance. The <a href="https://docs.djangoproject.com/en/4.0/ref/urlresolvers/#reverse"><code>reverse</code>
-function</a>
-takes a <code>urlpattern</code> (<code>article_detail</code> here), required kwargs (the
-instance's <code>pk</code> here), and returns a URL, which avoids having to
-hardcode it.</p>
+<p>The <a href="https://docs.djangoproject.com/en/5.0/ref/models/instances/#get-absolute-url"><code>get_absolute_url</code> method</a> tells Django how to generate the URL for the instance. The <a href="https://docs.djangoproject.com/en/5.0/ref/urlresolvers/#reverse"><code>reverse</code> function</a> takes a <code>urlpattern</code> (<code>article_detail</code> here), required kwargs (the instance's <code>pk</code> here), and returns a URL, which avoids having to hardcode it.</p>
 <p>You can have a look at how it works in the shell:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
@@ -838,11 +951,9 @@ hardcode it.</p>
 <span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="s1">&#39;/article/1&#39;</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="article-templates">Article templates<a class="headerlink" href="#article-templates" title="Permanent link">#</a></h2>
-<p>Like in the previous chapter, after making a view and setting the URL,
-we will now work on templates.</p>
+<p>Like in the previous chapter, after making a view and setting the URL, we will now work on templates.</p>
 <h3 id="article_detailhtml">article_detail.html<a class="headerlink" href="#article_detailhtml" title="Permanent link">#</a></h3>
-<p>We create the <code>templates/article_detail.html</code> template with the
-following code:</p>
+<p>We create the <code>templates/article_detail.html</code> template with the following code:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -891,34 +1002,15 @@ following code:</p>
 </code></pre></div></td></tr></table></div>
 <p>Not much to explain:</p>
 <ul>
-<li>we're overriding the <code>title</code> block of <code>base.html</code> with a
-    <code>{% block title %}</code> to display the title of the article (and our
-    app's name): this is an illustration of template inheritance, which
-    we mentioned earlier</li>
-<li>in the <code>content</code> block of <code>base.html</code>:<ul>
-<li>we refer to our object as <code>article</code>: the <a href="https://docs.djangoproject.com/en/4.0/ref/class-based-views/mixins-single-object/#django.views.generic.detail.SingleObjectMixin.get_context_object_name">default
-    <code>context_object_name</code>
-    variable</a>
-    (the way you refer to the object that the view is manipulating)
-    in for <code>DetailView</code> (among others) is the model's name
-    (<code>Article</code>) in lowercase</li>
+<li>we're overriding the <code>title</code> block of <code>base.html</code> with a <code>{% block title %}</code> to display the title of the article (and our app's name): this is an illustration of template inheritance, which we mentioned earlier</li>
+<li>in the <code>content</code> block of <code>base.html</code>:</li>
+<li>we refer to our object as <code>article</code>: the <a href="https://docs.djangoproject.com/en/5.0/ref/class-based-views/mixins-single-object/#django.views.generic.detail.SingleObjectMixin.get_context_object_name">default <code>context_object_name</code> variable</a> (the way you refer to the object that the view is manipulating) in for <code>DetailView</code> (among others) is the model's name (<code>Article</code>) in lowercase</li>
 <li>we're showing the article's title</li>
-<li>we're including a <code>templates/article_meta.html</code> template simply
-    because we're following Svelte implementation's
-    [[<a href="https://github.com/sveltejs/realworld/blob/master/src/routes/article/%5Bslug%5D/index.svelte">https://github.com/sveltejs/realworld/blob/master/src/routes/article/%5Bslug%5D/index.svelte</a>][article/[slug]/index.svelte]]
-    and we might as well keep to their structure if you ever need to
-    quickly compare things</li>
-<li>the <a href="https://docs.djangoproject.com/en/4.0/ref/templates/builtins/#linebreaks"><code>linebreaks</code> template
-    filter</a>
-    ensures that the line breaks in our articles are properly
-    translated to HTML and rendered.</li>
-</ul>
-</li>
+<li>we're including a <code>templates/article_meta.html</code> template simply because we're following Svelte implementation's [[<a href="https://github.com/sveltejs/realworld/blob/master/src/routes/article/%5Bslug%5D/index.svelte">https://github.com/sveltejs/realworld/blob/master/src/routes/article/%5Bslug%5D/index.svelte</a>][article/[slug]/index.svelte]] and we might as well keep to their structure if you ever need to quickly compare things</li>
+<li>the <a href="https://docs.djangoproject.com/en/5.0/ref/templates/builtins/#linebreaks"><code>linebreaks</code> template filter</a> ensures that the line breaks in our articles are properly translated to HTML and rendered.</li>
 </ul>
 <h3 id="article_metahtml">article_meta.html<a class="headerlink" href="#article_metahtml" title="Permanent link">#</a></h3>
-<p>We create <code>templates/article_meta.html</code>, based on the Svelte
-implementation's
-[[<a href="https://github.com/sveltejs/realworld/blob/master/src/routes/article/\%5Bslug\%5D/_ArticleMeta.svelte">https://github.com/sveltejs/realworld/blob/master/src/routes/article/\[slug\]/_ArticleMeta.svelte</a>][_ArticleMeta.svelte]]:</p>
+<p>We create <code>templates/article_meta.html</code>, based on the Svelte implementation's [[<a href="https://github.com/sveltejs/realworld/blob/master/src/routes/article/\%5Bslug\%5D/_ArticleMeta.svelte">https://github.com/sveltejs/realworld/blob/master/src/routes/article/\slug\/_ArticleMeta.svelte</a>][_ArticleMeta.svelte]]:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -939,12 +1031,9 @@ implementation's
   <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 </code></pre></div></td></tr></table></div>
-<p>We display the author's username and the article's creation date
-(properly formatted with the <a href="https://docs.djangoproject.com/en/4.0/ref/templates/builtins/#date"><code>date</code> template
-filter</a>).</p>
+<p>We display the author's username and the article's creation date (properly formatted with the <a href="https://docs.djangoproject.com/en/5.0/ref/templates/builtins/#date"><code>date</code> template filter</a>).</p>
 <h3 id="article_previewhtml">article_preview.html<a class="headerlink" href="#article_previewhtml" title="Permanent link">#</a></h3>
-<p>Finally, we modify <code>template/article_preview.html</code> so that article
-previews redirect to the full articles:</p>
+<p>Finally, we modify <code>template/article_preview.html</code> so that article previews redirect to the full articles:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -961,79 +1050,50 @@ previews redirect to the full articles:</p>
 <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
 <span class="cm">&lt;!-- ... --&gt;</span>
 </code></pre></div></td></tr></table></div>
-<p>We implemented the <code>get_absolute_url</code> method in our <code>Article</code> model
-earlier, which allows to specify the URLs to instances by calling the
-instance's <code>get_absolute_url</code> method.</p>
+<p>We implemented the <code>get_absolute_url</code> method in our <code>Article</code> model earlier, which allows to specify the URLs to instances by calling the instance's <code>get_absolute_url</code> method.</p>
 <h3 id="results">Results<a class="headerlink" href="#results" title="Permanent link">#</a></h3>
-<p>Seems like we're ready, doesn't it? If you try to navigate to an article
-in your <em>Conduit</em> app, you should be able to view your articles.</p>
+<p>Seems like we're ready, doesn't it? If you try to navigate to an article in your <em>Conduit</em> app, you should be able to view your articles.</p>
 <p>Let's see what it looks like:</p>
-<figure>
-<img src="./assets/article_detail.png" width="600"
-alt="Individual article in our app" />
-<figcaption aria-hidden="true">Individual article in our
-app</figcaption>
+<figure width="600">
+<img src="./assets/article_detail.png" />
+<figcaption>Individual article in our app</figcaption>
 </figure>
 
-<figure>
-<img src="./assets/article_detail - realworld.png" width="600"
-alt="Individual article in RealWorld app" />
-<figcaption aria-hidden="true">Individual article in RealWorld
-app</figcaption>
+<figure width="600">
+<img src="./assets/article_detail - realworld.png" />
+<figcaption>Individual article in RealWorld app</figcaption>
 </figure>
 
 <p>Getting pretty close!</p>
 
-              
-            </article>
-            
-          </div>
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
-          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
-            Back to top
-          </a>
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
         
       </main>
       
         <footer class="md-footer">
-  
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../02_home_page/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Home page" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Home page
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../04_slugs/" class="md-footer__link md-footer__link--next" aria-label="Next: Slugs" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Slugs
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1051,8 +1111,10 @@ app</figcaption>
   
     
     
+    
+    
     <a href="https://github.com/harabat/django-htmx" target="_blank" rel="noopener" title="Django + HTMX tutorial on GitHub" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
     </a>
   
 </div>
@@ -1065,10 +1127,12 @@ app</figcaption>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.expand", "navigation.top", "search.suggest"], "search": "../assets/javascripts/workers/search.b97dbffb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.0238f547.min.js"></script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.expand", "navigation.top", "search.suggest"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.1e8ae164.min.js"></script>
       
     
   </body>

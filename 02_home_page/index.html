@@ -10,8 +10,15 @@
       
       
       
+      
+        <link rel="prev" href="../01_starting_the_project/">
+      
+      
+        <link rel="next" href="../03_viewing_articles/">
+      
+      
       <link rel="icon" href="../assets/django-logo.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.8">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
     
     
       
@@ -19,14 +26,17 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.1d29e8d0.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.bcfcd587.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.cbb835fc.min.css">
-        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
       
       
+
+
     
+    
+      
     
     
       
@@ -38,11 +48,12 @@
       
     
     
-    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
     <script data-goatcounter="https://django-htmx.goatcounter.com/count"
             async src="//gc.zgo.at/count.js"></script>
 
+    
     
   </head>
   
@@ -54,11 +65,8 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="indigo">
   
-    
-    
-      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -78,7 +86,9 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="Django + HTMX tutorial" class="md-header__button md-logo" aria-label="Django + HTMX tutorial" data-md-component="logo">
       
@@ -86,6 +96,7 @@
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
+      
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
@@ -105,31 +116,39 @@
       </div>
     </div>
     
-      <form class="md-header__option" data-md-component="palette">
-        
-          
-          
-          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
-          
-            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-            </label>
-          
-        
-          
-          
-          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
-          
-            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
-            </label>
-          
-        
-      </form>
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
       <label class="md-header__button md-icon" for="__search">
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
@@ -138,12 +157,15 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
@@ -157,7 +179,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -169,7 +191,7 @@
         <a href="https://github.com/harabat/django-htmx" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
   </div>
   <div class="md-source__repository">
     harabat/django-htmx
@@ -199,6 +221,7 @@
                     
 
 
+
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href=".." title="Django + HTMX tutorial" class="md-nav__button md-logo" aria-label="Django + HTMX tutorial" data-md-component="logo">
@@ -213,7 +236,7 @@
       <a href="https://github.com/harabat/django-htmx" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
   </div>
   <div class="md-source__repository">
     harabat/django-htmx
@@ -225,14 +248,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href=".." class="md-nav__link">
-        Readme
+        
+  
+  <span class="md-ellipsis">
+    Readme
+  </span>
+  
+
       </a>
     </li>
   
@@ -240,14 +268,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../01_starting_the_project/" class="md-nav__link">
-        Starting the project
+        
+  
+  <span class="md-ellipsis">
+    Starting the project
+  </span>
+  
+
       </a>
     </li>
   
@@ -255,28 +288,39 @@
     
       
       
-      
-
   
   
     
   
   
+  
     <li class="md-nav__item md-nav__item--active">
       
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
         
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Home page
+          
+  
+  <span class="md-ellipsis">
+    Home page
+  </span>
+  
+
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Home page
+        
+  
+  <span class="md-ellipsis">
+    Home page
+  </span>
+  
+
       </a>
       
         
@@ -296,56 +340,72 @@
       
         <li class="md-nav__item">
   <a href="#introduction" class="md-nav__link">
-    Introduction
+    <span class="md-ellipsis">
+      Introduction
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#home-view" class="md-nav__link">
-    Home view
+    <span class="md-ellipsis">
+      Home view
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#home-url" class="md-nav__link">
-    Home URL
+    <span class="md-ellipsis">
+      Home URL
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#templates-and-static-files" class="md-nav__link">
-    Templates and static files
+    <span class="md-ellipsis">
+      Templates and static files
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#base-template" class="md-nav__link">
-    Base template
+    <span class="md-ellipsis">
+      Base template
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#home-template" class="md-nav__link">
-    Home template
+    <span class="md-ellipsis">
+      Home template
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#breaking-templates-into-subtemplates" class="md-nav__link">
-    Breaking templates into subtemplates
+    <span class="md-ellipsis">
+      Breaking templates into subtemplates
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#navbar" class="md-nav__link">
-    Navbar
+    <span class="md-ellipsis">
+      Navbar
+    </span>
   </a>
   
 </li>
@@ -360,14 +420,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../03_viewing_articles/" class="md-nav__link">
-        Viewing Articles
+        
+  
+  <span class="md-ellipsis">
+    Viewing Articles
+  </span>
+  
+
       </a>
     </li>
   
@@ -375,14 +440,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../04_slugs/" class="md-nav__link">
-        Slugs
+        
+  
+  <span class="md-ellipsis">
+    Slugs
+  </span>
+  
+
       </a>
     </li>
   
@@ -390,14 +460,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../05_creating_editing_and_deleting_articles/" class="md-nav__link">
-        Creating, editing, and deleting Articles
+        
+  
+  <span class="md-ellipsis">
+    Creating, editing, and deleting Articles
+  </span>
+  
+
       </a>
     </li>
   
@@ -405,14 +480,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../06_comments/" class="md-nav__link">
-        Comments
+        
+  
+  <span class="md-ellipsis">
+    Comments
+  </span>
+  
+
       </a>
     </li>
   
@@ -420,14 +500,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../07_users_and_profiles/" class="md-nav__link">
-        Users and Profiles
+        
+  
+  <span class="md-ellipsis">
+    Users and Profiles
+  </span>
+  
+
       </a>
     </li>
   
@@ -435,14 +520,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../08_authentication_i_login_logout_signup/" class="md-nav__link">
-        Login, Logout, Signup
+        
+  
+  <span class="md-ellipsis">
+    Login, Logout, Signup
+  </span>
+  
+
       </a>
     </li>
   
@@ -450,14 +540,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../09_authentication_ii_securing_the_app/" class="md-nav__link">
-        Securing the app
+        
+  
+  <span class="md-ellipsis">
+    Securing the app
+  </span>
+  
+
       </a>
     </li>
   
@@ -465,14 +560,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../10_profile_features/" class="md-nav__link">
-        Profile features
+        
+  
+  <span class="md-ellipsis">
+    Profile features
+  </span>
+  
+
       </a>
     </li>
   
@@ -480,14 +580,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../11_editing_profiles/" class="md-nav__link">
-        Editing profiles
+        
+  
+  <span class="md-ellipsis">
+    Editing profiles
+  </span>
+  
+
       </a>
     </li>
   
@@ -495,14 +600,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../12_follows/" class="md-nav__link">
-        Follows
+        
+  
+  <span class="md-ellipsis">
+    Follows
+  </span>
+  
+
       </a>
     </li>
   
@@ -510,14 +620,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../13_favourites/" class="md-nav__link">
-        Favourites
+        
+  
+  <span class="md-ellipsis">
+    Favourites
+  </span>
+  
+
       </a>
     </li>
   
@@ -525,14 +640,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../14_tags_coming_soon/" class="md-nav__link">
-        Tags
+        
+  
+  <span class="md-ellipsis">
+    Tags
+  </span>
+  
+
       </a>
     </li>
   
@@ -540,14 +660,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../15_htmx_coming_soon/" class="md-nav__link">
-        HTMX
+        
+  
+  <span class="md-ellipsis">
+    HTMX
+  </span>
+  
+
       </a>
     </li>
   
@@ -555,14 +680,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../16_future_extensions/" class="md-nav__link">
-        Future extensions
+        
+  
+  <span class="md-ellipsis">
+    Future extensions
+  </span>
+  
+
       </a>
     </li>
   
@@ -596,56 +726,72 @@
       
         <li class="md-nav__item">
   <a href="#introduction" class="md-nav__link">
-    Introduction
+    <span class="md-ellipsis">
+      Introduction
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#home-view" class="md-nav__link">
-    Home view
+    <span class="md-ellipsis">
+      Home view
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#home-url" class="md-nav__link">
-    Home URL
+    <span class="md-ellipsis">
+      Home URL
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#templates-and-static-files" class="md-nav__link">
-    Templates and static files
+    <span class="md-ellipsis">
+      Templates and static files
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#base-template" class="md-nav__link">
-    Base template
+    <span class="md-ellipsis">
+      Base template
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#home-template" class="md-nav__link">
-    Home template
+    <span class="md-ellipsis">
+      Home template
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#breaking-templates-into-subtemplates" class="md-nav__link">
-    Breaking templates into subtemplates
+    <span class="md-ellipsis">
+      Breaking templates into subtemplates
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#navbar" class="md-nav__link">
-    Navbar
+    <span class="md-ellipsis">
+      Navbar
+    </span>
   </a>
   
 </li>
@@ -658,27 +804,22 @@
               </div>
             
           
-          <div class="md-content" data-md-component="content">
-            <article class="md-content__inner md-typeset">
-              
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
                 
-  <a href="https://github.com/harabat/django-htmx/edit/master/docs/02_home_page.md" title="Edit this page" class="md-content__button md-icon">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+                  
 
+  
+  
 
 
 <h1 id="home-page">Home page<a class="headerlink" href="#home-page" title="Permanent link">#</a></h1>
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">#</a></h2>
-<p>In this chapter, we'll bring an MVP of our app online: it'll have a
-landing page, some articles, and even a navbar! To achieve this, we will
-need to write our first view, templates, and URLs.</p>
+<p>In this chapter, we'll bring an MVP of our app online: it'll have a landing page, some articles, and even a navbar! To achieve this, we will need to write our first view, templates, and URLs.</p>
 <h2 id="home-view">Home view<a class="headerlink" href="#home-view" title="Permanent link">#</a></h2>
-<p>Up to now, <a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> still shows the rocket celebrating a
-successful install, but what we want is to see our own app.</p>
-<p>In <em>Conduit</em>, the default view that the unauthenticated user sees on the
-home page is the “global feed”, or the list of all articles. That's what
-we need to implement.</p>
+<p>Up to now, <a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> still shows the rocket celebrating a successful install, but what we want is to see our own app.</p>
+<p>In <em>Conduit</em>, the default view that the unauthenticated user sees on the home page is the “global feed”, or the list of all articles. That's what we need to implement.</p>
 <p>In <code>articles/views.py</code>, we add the following:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
@@ -695,39 +836,20 @@ we need to implement.</p>
 
 
 <span class="k">class</span> <span class="nc">Home</span><span class="p">(</span><span class="n">ListView</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;View all published articles for the global feed.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;View all published articles for the global feed.&quot;&quot;&quot;</span>
 
     <span class="n">queryset</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-created_at&quot;</span><span class="p">)</span>
     <span class="n">context_object_name</span> <span class="o">=</span> <span class="s2">&quot;articles&quot;</span>
 </code></pre></div></td></tr></table></div>
 <p>Step by step:</p>
 <ul>
-<li>The <a href="https://docs.djangoproject.com/en/4.0/ref/class-based-views/generic-display/#listview"><code>ListView</code> generic display
-    view</a>
-    displays list of objects: the <em>Django Girls</em> tutorial only presents
-    Function-Based Views, which are arguably a more intuitive option,
-    but <a href="https://docs.djangoproject.com/en/4.0/topics/class-based-views/">Class-Based
-    Views</a>
-    (or CBVs) are considered to be best practice, at least according to
-    <em>Two Scoops of Django</em>, and simplify a <em>lot</em> of work</li>
-<li>the <code>queryset</code> attribute (which is shorthand for the <code>get_queryset</code>
-    method) allows us to <a href="https://docs.djangoproject.com/en/4.0/topics/class-based-views/generic-display/#viewing-subsets-of-objects">filter the list of
-    objects</a>
-    returned by <code>ListView</code> the way we need (here, we order them from
-    most to least recent), while the default would be to simply specify
-    <code>model = Article</code> and get <code>Article.objects.all()</code></li>
-<li>the <code>context_object_name</code> attribute provides a <a href="https://docs.djangoproject.com/en/4.0/topics/class-based-views/generic-display/#making-friendly-template-contexts">human-friendly name
-    for the
-    context</a>
-    for us to use in the template (by default, the context would be
-    stored in a variable named <code>object_list</code>).</li>
+<li>The <a href="https://docs.djangoproject.com/en/5.0/ref/class-based-views/generic-display/#listview"><code>ListView</code> generic display view</a> displays list of objects: the <em>Django Girls</em> tutorial only presents Function-Based Views, which are arguably a more intuitive option, but <a href="https://docs.djangoproject.com/en/5.0/topics/class-based-views/">Class-Based Views</a> (or CBVs) are considered to be best practice, at least according to <em>Two Scoops of Django</em>, and simplify a <em>lot</em> of work</li>
+<li>the <code>queryset</code> attribute (which is shorthand for the <code>get_queryset</code> method) allows us to <a href="https://docs.djangoproject.com/en/5.0/topics/class-based-views/generic-display/#viewing-subsets-of-objects">filter the list of objects</a> returned by <code>ListView</code> the way we need (here, we order them from most to least recent), while the default would be to simply specify <code>model = Article</code> and get <code>Article.objects.all()</code></li>
+<li>the <code>context_object_name</code> attribute provides a <a href="https://docs.djangoproject.com/en/5.0/topics/class-based-views/generic-display/#making-friendly-template-contexts">human-friendly name for the context</a> for us to use in the template (by default, the context would be stored in a variable named <code>object_list</code>).</li>
 </ul>
 <h2 id="home-url">Home URL<a class="headerlink" href="#home-url" title="Permanent link">#</a></h2>
-<p>If you followed any previous tutorial, you will remember that, in order
-to display a view, we need to specify what URL it corresponds to.</p>
-<p>To keep our app logic clear, we will be keeping everything segregated
-across our apps: since we want to implement a view of the list of all
-articles, we will specify the URLs in our <code>articles</code> folder.</p>
+<p>If you followed any previous tutorial, you will remember that, in order to display a view, we need to specify what URL it corresponds to.</p>
+<p>To keep our app logic clear, we will be keeping everything segregated across our apps: since we want to implement a view of the list of all articles, we will specify the URLs in our <code>articles</code> folder.</p>
 <p>Let's create a <code>articles/urls.py</code>, and add the following:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
@@ -743,14 +865,8 @@ articles, we will specify the URLs in our <code>articles</code> folder.</p>
     <span class="n">path</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">Home</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;home&quot;</span><span class="p">),</span>
 <span class="p">]</span>
 </code></pre></div></td></tr></table></div>
-<p>We're telling our <code>Articles</code> app that the root URL
-(<a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a>) should return the view <code>Home</code> that we created
-in the previous section.</p>
-<p>However, Django doesn't know to look into <code>articles/urls.py</code>: it is only
-aware of the default <code>urls.py</code> file created earlier in the previous
-chapter. We add the following line in <code>config/urls.py</code>, so that the
-project-level <code>urls.py</code> is aware of the app-level URLs defined in
-<code>articles/urls.py</code>:</p>
+<p>We're telling our <code>Articles</code> app that the root URL (<a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a>) should return the view <code>Home</code> that we created in the previous section. The <code>as_view()</code> method for class-based views returns a callable instance of the view, same as if we were calling a function-based view.</p>
+<p>However, Django doesn't know to look into <code>articles/urls.py</code>: it is only aware of the default <code>urls.py</code> file created earlier in the previous chapter. We add the following line in <code>config/urls.py</code>, so that the project-level <code>urls.py</code> is aware of the app-level URLs defined in <code>articles/urls.py</code>:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -766,35 +882,22 @@ project-level <code>urls.py</code> is aware of the app-level URLs defined in
 </span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="templates-and-static-files">Templates and static files<a class="headerlink" href="#templates-and-static-files" title="Permanent link">#</a></h2>
-<p>We have a Home view and URL: we need a template now. In keeping with our
-commitment to keeping the structure of our project clear and logical, we
-will create a single project-wide folder for all templates, and we'll do
-the same for static files (icons, CSS, etc.): this kind of code is going
-to be heavily shared by both <code>articles</code> and <code>users</code> apps, so it's better
-to have a folder for the whole project than one for each app (all the
-more so that our apps are not expected to be plugged into other
-projects).</p>
+<p>We have a Home view and URL: we need a template now. In keeping with our commitment to keeping the structure of our project clear and logical, we will create a single project-wide folder for all templates, and we'll do the same for static files (icons, CSS, etc.): this kind of code is going to be heavily shared by both <code>articles</code> and <code>users</code> apps, so it's better to have a folder for the whole project than one for each app (all the more so that our apps are not expected to be plugged into other projects).</p>
 <p>Let's create the <code>templates</code> and <code>static</code> folders:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
-<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span> conduit$ mkdir templates
-<span class="o">(</span>django<span class="o">)</span> conduit$ mkdir static
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span><span class="w"> </span>conduit$<span class="w"> </span>mkdir<span class="w"> </span>templates
+<span class="o">(</span>django<span class="o">)</span><span class="w"> </span>conduit$<span class="w"> </span>mkdir<span class="w"> </span>static
 </code></pre></div></td></tr></table></div>
-<p>We need to modify <code>config/settings.py</code> so Django is aware of our
-project's architecture.</p>
-<p>Let's define the <code>APPS_DIR</code> below <code>BASE_DIR</code> first: it will point to our
-<code>conduit</code> folder and will make the next modifications a bit shorter.</p>
+<p>We need to modify <code>config/settings.py</code> so Django is aware of our project's architecture.</p>
+<p>Let's define the <code>APPS_DIR</code> below <code>BASE_DIR</code> first: it will point to our <code>conduit</code> folder and will make the next modifications a bit shorter.</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># ...</span>
 <span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
 <span class="hll"><span class="n">APPS_DIR</span> <span class="o">=</span> <span class="n">BASE_DIR</span> <span class="o">/</span> <span class="s2">&quot;conduit&quot;</span>                     <span class="c1"># new</span>
 </span></code></pre></div></td></tr></table></div>
-<p>The <a href="https://docs.djangoproject.com/en/4.0/ref/settings/#templates"><code>TEMPLATES</code>
-section</a>
-of <code>config/settings.py</code> holds the template-related settings: that's
-where we need to notify Django about where our templates are.</p>
-<p>The <code>DIRS</code> setting, which indicates the location of template source
-files should point to our new <code>conduit/templates</code> folder:</p>
+<p>The <a href="https://docs.djangoproject.com/en/5.0/ref/settings/#templates"><code>TEMPLATES</code> section</a> of <code>config/settings.py</code> holds the template-related settings: that's where we need to notify Django about where our templates are.</p>
+<p>The <code>DIRS</code> setting, which indicates the location of template source files should point to our new <code>conduit/templates</code> folder:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -809,10 +912,7 @@ files should point to our new <code>conduit/templates</code> folder:</p>
 </span>    <span class="p">},</span>
 <span class="hll"><span class="p">]</span>
 </span></code></pre></div></td></tr></table></div>
-<p>We will also change the <a href="https://docs.djangoproject.com/en/4.0/ref/settings/#staticfiles-dirs"><code>STATICFILES_DIRS</code>
-setting</a>
-in the static files section of <code>config/settings.py</code> so that it points to
-our new <code>conduit/static</code> folder:</p>
+<p>We will also change the <a href="https://docs.djangoproject.com/en/5.0/ref/settings/#staticfiles-dirs"><code>STATICFILES_DIRS</code> setting</a> in the static files section of <code>config/settings.py</code> so that it points to our new <code>conduit/static</code> folder:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># ...</span>
@@ -820,27 +920,11 @@ our new <code>conduit/static</code> folder:</p>
 <span class="hll"><span class="n">STATICFILES_DIRS</span> <span class="o">=</span> <span class="p">[</span><span class="n">APPS_DIR</span> <span class="o">/</span> <span class="s2">&quot;static&quot;</span><span class="p">]</span>    <span class="c1"># new</span>
 </span></code></pre></div></td></tr></table></div>
 <h2 id="base-template">Base template<a class="headerlink" href="#base-template" title="Permanent link">#</a></h2>
-<p>Before we start writing the templates, a few words. As stated in the
-introduction, the HTML is adapted from other RealWorld projects: mostly
-the <a href="https://github.com/sveltejs/realworld/">Svelte implementation</a>
-(because Svelte is unexpectedly close to Django's templating language),
-but we also picked and chose from other projects, both in situations
-where the code or the file structure were more in line with what we
-needed here, or when the UI of one implementation was better in some
-way. However, because we're building the app from scratch (adding
-features, changing the UI, etc.), our file structure and code will be
-affected. The HTML of the finished <em>Conduit</em> app should be almost
-identical to any other implementation's HTML (take or leave some
-specificities of our chosen frameworks). Because this is not an HTML or
-UI tutorial, we won't be explaining the HTML files' structure, the
-classes, the CSS, etc. Onwards!</p>
-<p>The groundwork is completed: Django knows where to find our templates.
-Let's create the base template then.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span> conduit$ touch templates/base.html
+<p>Before we start writing the templates, a few words. As stated in the introduction, the HTML is adapted from other RealWorld projects: mostly the <a href="https://github.com/sveltejs/realworld/">Svelte implementation</a> (because Svelte is unexpectedly close to Django's templating language), but we also picked and chose from other projects, both in situations where the code or the file structure were more in line with what we needed here, or when the UI of one implementation was better in some way. However, because we're building the app from scratch (adding features, changing the UI, etc.), our file structure and code will be affected. The HTML of the finished <em>Conduit</em> app should be almost identical to any other implementation's HTML (take or leave some specificities of our chosen frameworks). Because this is not an HTML or UI tutorial, we won't be explaining the HTML files' structure, the classes, the CSS, etc. Onwards!</p>
+<p>The groundwork is completed: Django knows where to find our templates. Let's create the base template then.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">(</span>django<span class="o">)</span><span class="w"> </span>conduit$<span class="w"> </span>touch<span class="w"> </span>templates/base.html
 </code></pre></div></td></tr></table></div>
-<p>The <code>templates/base.html</code> template, copied from <a href="https://github.com/sveltejs/realworld/blob/master/src/app.html">Svelte's app.html
-file</a>,
-will contain the following:</p>
+<p>The <code>templates/base.html</code> template, copied from <a href="https://github.com/sveltejs/realworld/blob/master/src/app.html">Svelte's app.html file</a>, will contain the following:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -891,27 +975,14 @@ will contain the following:</p>
 </code></pre></div></td></tr></table></div>
 <p>Step by step:</p>
 <ul>
-<li>the <code>{% load static %}</code> tag allows to make available the static
-    files located in the <code>static</code> folder</li>
-<li><code>{% block title %}</code> and <code>{% block content %}</code> are <a href="https://docs.djangoproject.com/en/4.0/ref/templates/builtins/#std-templatetag-block"><code>block</code>
-    tags</a>
-    and define the parts of the template that will be overridden by
-    child templates through Django's <a href="https://docs.djangoproject.com/en/4.0/ref/templates/language/#template-inheritance">template
-    inheritance</a>,
-    which will be illustrated in the very next section</li>
+<li>the <code>{% load static %}</code> tag allows to make available the static files located in the <code>static</code> folder</li>
+<li><code>{% block title %}</code> and <code>{% block content %}</code> are <a href="https://docs.djangoproject.com/en/5.0/ref/templates/builtins/#std-templatetag-block"><code>block</code> tags</a> and define the parts of the template that will be overridden by child templates through Django's <a href="https://docs.djangoproject.com/en/5.0/ref/templates/language/#template-inheritance">template inheritance</a>, which will be illustrated in the very next section</li>
 </ul>
-<p>We also need to download the favicon referenced in our template:
-download the file located at the URL below to
-<code>static/icons/favicon.ico</code>:</p>
+<p>We also need to download the favicon referenced in our template: download the file located at the URL below to <code>static/icons/favicon.ico</code>:</p>
 <p><a href="https://github.com/gothinkster/react-redux-realworld-example-app/blob/master/public/favicon.ico">https://github.com/gothinkster/react-redux-realworld-example-app/blob/master/public/favicon.ico</a></p>
 <h2 id="home-template">Home template<a class="headerlink" href="#home-template" title="Permanent link">#</a></h2>
-<p>Time to make the <code>home.html</code> template: for now it only needs to display
-our “global feed”.</p>
-<p>Let's create the <code>templates/home.html</code> template (based on Svelte's
-<a href="https://github.com/sveltejs/realworld/blob/master/src/routes/index.svelte">index.svelte</a>
-and
-<a href="https://github.com/sveltejs/realworld/blob/master/src/lib/ArticleList/">ArticleList</a>
-templates) and add the following to it:</p>
+<p>Time to make the <code>home.html</code> template: for now it only needs to display our “global feed”.</p>
+<p>Let's create the <code>templates/home.html</code> template (based on Svelte's <a href="https://github.com/sveltejs/realworld/blob/master/src/routes/index.svelte">index.svelte</a> and <a href="https://github.com/sveltejs/realworld/blob/master/src/lib/ArticleList/">ArticleList</a> templates) and add the following to it:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1003,84 +1074,51 @@ templates) and add the following to it:</p>
 <p>A quick explanation:</p>
 <ul>
 <li>we show the classic <em>Conduit</em> banner</li>
-<li>with an <a href="https://docs.djangoproject.com/en/4.0/ref/templates/builtins/#if"><code>if</code> template
-    tag</a>
-    and the <a href="https://docs.djangoproject.com/en/4.0/ref/templates/builtins/#length-is"><code>length_is</code> template
-    filter</a>
-    we check that our <code>articles</code> variable (which we have named with
-    <code>context_object_name = "articles"</code> in the <code>Home</code> view, remember?)
-    has at least 1 article:<ul>
+<li>with an <a href="https://docs.djangoproject.com/en/5.0/ref/templates/builtins/#if"><code>if</code> template tag</a> and the <a href="https://docs.djangoproject.com/en/5.0/ref/templates/builtins/#length-is"><code>length_is</code> template filter</a> we check that our <code>articles</code> variable (which we have named with <code>context_object_name = "articles"</code> in the <code>Home</code> view, remember?) has at least 1 article:</li>
 <li>if there are no articles, we show a message</li>
-<li>otherwise, we iterate through the articles with a <a href="https://docs.djangoproject.com/en/4.0/ref/templates/builtins/#for"><code>for</code>
-    template
-    tag</a>
-    (the syntax is the same as for a normal Python <code>for</code> loop) and
-    show a preview:<ul>
-<li>the preview contains the article's author's username,
-    creation date, title, and description</li>
-<li>the preview redirects to nothing for now (even though we
-    don't have any links to show yet, we need to have a link
-    there for CSS reasons)</li>
+<li>otherwise, we iterate through the articles with a <a href="https://docs.djangoproject.com/en/5.0/ref/templates/builtins/#for"><code>for</code> template tag</a> (the syntax is the same as for a normal Python <code>for</code> loop) and show a preview:<ul>
+<li>the preview contains the article's author's username, creation date, title, and description</li>
+<li>the preview redirects to nothing for now (even though we don't have any links to show yet, we need to have a link there for CSS reasons)</li>
 </ul>
 </li>
 </ul>
-</li>
-</ul>
-<p>Let's go to our server and reload the page: surely we can finally
-contemplate our glorious creation? No. If you've been following, you
-should see the error below:</p>
+<p>Let's go to our server and reload the page: surely we can finally contemplate our glorious creation? No. If you've been following, you should see the error below:</p>
 <blockquote>
 <p>TemplateDoesNotExist at /</p>
 <p>articles/article_list.html</p>
-<p>Request Method: GET Request URL: <a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> Django
-Version: 4.0.4 Exception Type: TemplateDoesNotExist Exception Value:</p>
+<p>Request Method: GET Request URL: <a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a> Django Version: 4.0.4 Exception Type: TemplateDoesNotExist Exception Value:</p>
 <p>articles/article_list.html</p>
 </blockquote>
-<p>What the error says is that the template is missing, even though we know
-that it definitely <em>is</em> there. The issue is that Django expects a
-template named article_list.html, which is the default template expected
-by our <code>Home</code> view, which is a <code>ListView</code> for the <code>Article</code> model. To
-fix that, we need to go to <code>articles/views.py</code> and add the following:</p>
+<p>What the error says is that the template is missing, even though we know that it definitely <em>is</em> there. The issue is that Django expects a template named article_list.html, which is the default template expected by our <code>Home</code> view, which is a <code>ListView</code> for the <code>Article</code> model. To fix that, we need to go to <code>articles/views.py</code> and add the following:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
 <span class="normal">5</span>
 <span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Home</span><span class="p">(</span><span class="n">ListView</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;View all published articles for the global feed.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;View all published articles for the global feed.&quot;&quot;&quot;</span>
 
 <span class="hll">    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;home.html&quot;</span>                         <span class="c1"># new</span>
 </span>    <span class="n">queryset</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-created_at&quot;</span><span class="p">)</span>
     <span class="n">context_object_name</span> <span class="o">=</span> <span class="s2">&quot;articles&quot;</span>
 </code></pre></div></td></tr></table></div>
 <p>Try reloading again and this is what you should see:</p>
-<figure>
-<img src="./assets/home - global feed.png" width="600"
-alt="Global feed in our app" />
-<figcaption aria-hidden="true">Global feed in our app</figcaption>
+<figure width="600">
+<img src="./assets/home - global feed.png" />
+<figcaption>Global feed in our app</figcaption>
 </figure>
 
-<figure>
-<img src="./assets/home - global feed - realworld.png" width="600"
-alt="Global feed in the RealWorld app" />
-<figcaption aria-hidden="true">Global feed in the RealWorld
-app</figcaption>
+<figure width="600">
+<img src="./assets/home - global feed - realworld.png" />
+<figcaption>Global feed in the RealWorld app</figcaption>
 </figure>
 
-<p>It's starting to look like something! However we can improve the
-template a bit.</p>
+<p>It's starting to look like something! However we can improve the template a bit.</p>
 <h2 id="breaking-templates-into-subtemplates">Breaking templates into subtemplates<a class="headerlink" href="#breaking-templates-into-subtemplates" title="Permanent link">#</a></h2>
-<p>We want to keep our templates as modular as possible, to simplify the
-structure of our project and make it easier to think about.</p>
-<p>The structure of the Svelte implementation makes a lot of sense and
-avoids us having to reinvent the wheel, so we'll take advantage of it.</p>
-<p>Specifically, we will copy the Svelte implementation's <a href="https://github.com/sveltejs/realworld/tree/master/src/lib/ArticleList">ArticleList
-structure</a>
-by moving the whole <code>{% if articles|length_is:"0" %}...{% endif %}</code>
-clause HTML out of <code>templates/home.html</code> and into two separate files.</p>
-<p>In <code>templates/home.html</code>, we remove the <code>if</code> clause and replace it with
-an <a href="https://docs.djangoproject.com/en/4.0/ref/templates/builtins/#include"><code>include</code>
-tag</a>:</p>
+<p>We want to keep our templates as modular as possible, to simplify the structure of our project and make it easier to think about.</p>
+<p>The structure of the Svelte implementation makes a lot of sense and avoids us having to reinvent the wheel, so we'll take advantage of it.</p>
+<p>Specifically, we will copy the Svelte implementation's <a href="https://github.com/sveltejs/realworld/tree/master/src/lib/ArticleList">ArticleList structure</a> by moving the whole <code>{% if articles|length_is:"0" %}...{% endif %}</code> clause HTML out of <code>templates/home.html</code> and into two separate files.</p>
+<p>In <code>templates/home.html</code>, we remove the <code>if</code> clause and replace it with an <a href="https://docs.djangoproject.com/en/5.0/ref/templates/builtins/#include"><code>include</code> tag</a>:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1099,8 +1137,7 @@ tag</a>:</p>
   <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 </code></pre></div></td></tr></table></div>
-<p>We create <code>templates/article_list.html</code> and add the code that we removed
-earlier, except the contents of the <code>for</code> clause:</p>
+<p>We create <code>templates/article_list.html</code> and add the code that we removed earlier, except the contents of the <code>for</code> clause:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1123,8 +1160,7 @@ earlier, except the contents of the <code>for</code> clause:</p>
 </span>  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 {% endif %}
 </code></pre></div></td></tr></table></div>
-<p>The <code>templates/article_preview.html</code> template will contain the remaining
-code:</p>
+<p>The <code>templates/article_preview.html</code> template will contain the remaining code:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1161,9 +1197,7 @@ code:</p>
 </code></pre></div></td></tr></table></div>
 <p>Reload the <em>Conduit</em> app to check that everything's still working.</p>
 <h2 id="navbar">Navbar<a class="headerlink" href="#navbar" title="Permanent link">#</a></h2>
-<p>Let's create a simple navigation bar now. Because we have yet to
-implement authentication and profiles, the navbar will just contain a
-link to <code>Home</code>, the page we just finished building.</p>
+<p>Let's create a simple navigation bar now. Because we have yet to implement authentication and profiles, the navbar will just contain a link to <code>Home</code>, the page we just finished building.</p>
 <p>Let's add the following lines to <code>templates/base.html</code>:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
@@ -1179,9 +1213,7 @@ link to <code>Home</code>, the page we just finished building.</p>
   <span class="p">&lt;/</span><span class="nt">main</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
 </code></pre></div></td></tr></table></div>
-<p>Let's create <code>templates/nav.html</code> and add the following to it (copying
-Svelte's <a href="https://github.com/sveltejs/realworld/blob/master/src/lib/Nav.svelte">Nav.svelte
-template</a>):</p>
+<p>Let's create <code>templates/nav.html</code> and add the following to it (copying Svelte's <a href="https://github.com/sveltejs/realworld/blob/master/src/lib/Nav.svelte">Nav.svelte template</a>):</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1206,66 +1238,38 @@ template</a>):</p>
   <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">nav</span><span class="p">&gt;</span>
 </code></pre></div></td></tr></table></div>
-<p>The <a href="https://docs.djangoproject.com/en/4.0/ref/templates/builtins/#url"><code>url</code>
-tag</a>
-is new to us: it enables us to specify URLs by name, instead of writing
-them every time we need to make a link in our HTML.</p>
-<p>In this case, we want our navbar to redirect users to the <code>Home</code> view,
-which is matched by the URL named <code>home</code> (as specified in
-<code>articles/urls.py</code>).</p>
-<p>Try clicking on the link: your page should reload (because you're
-redirected to it).</p>
+<p>The <a href="https://docs.djangoproject.com/en/5.0/ref/templates/builtins/#url"><code>url</code> tag</a> is new to us: it enables us to specify URLs by name, instead of writing them every time we need to make a link in our HTML.</p>
+<p>In this case, we want our navbar to redirect users to the <code>Home</code> view, which is matched by the URL named <code>home</code> (as specified in <code>articles/urls.py</code>).</p>
+<p>Try clicking on the link: your page should reload (because you're redirected to it).</p>
 
-              
-            </article>
-            
-          </div>
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
-          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
-            Back to top
-          </a>
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
         
       </main>
       
         <footer class="md-footer">
-  
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../01_starting_the_project/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Starting the project" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Starting the project
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../03_viewing_articles/" class="md-footer__link md-footer__link--next" aria-label="Next: Viewing Articles" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Viewing Articles
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1283,8 +1287,10 @@ redirected to it).</p>
   
     
     
+    
+    
     <a href="https://github.com/harabat/django-htmx" target="_blank" rel="noopener" title="Django + HTMX tutorial on GitHub" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
     </a>
   
 </div>
@@ -1297,10 +1303,12 @@ redirected to it).</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.expand", "navigation.top", "search.suggest"], "search": "../assets/javascripts/workers/search.b97dbffb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.0238f547.min.js"></script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.expand", "navigation.top", "search.suggest"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.1e8ae164.min.js"></script>
       
     
   </body>
