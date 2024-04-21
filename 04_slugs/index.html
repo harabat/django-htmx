@@ -890,7 +890,7 @@
 </code></pre></div></td></tr></table></div>
 <p>No error. We can go the Django admin, then set a unique slug for each <code>Article</code> manually: you can just slugify the titles you came up by hand, so “Making Slugs by Hand” would become “making-slugs-by-hand” for example.</p>
 <figure width="600">
-<img src="./assets/admin - editing_slugs.png" />
+<img src="../assets/admin - editing_slugs.png" />
 <figcaption>Editing slugs</figcaption>
 </figure>
 
@@ -1157,7 +1157,7 @@
 <p>When the URL dispatcher gets a request at a specific URL, it passes the data from the request (the URL itself, whether the user's logged in, whether the user's on a premium plan, etc.) to the view. Inside the view, we can access this data. The request data is included into the <code>self</code> argument that the <a href="https://docs.djangoproject.com/en/5.0/ref/class-based-views/mixins-single-object/#django.views.generic.detail.SingleObjectMixin.get_object"><code>get_object</code> method</a> gets. From the request, we can extract the keyword arguments, or the kwargs. We're interested in the <code>slug_uuid</code> kwarg, specifically. Once we have the <code>slug_uuid</code> value, we can retrieve the desired <code>Article</code> model instance.</p>
 <p>When going back to <a href="http://localhost:8000/">http://localhost:8000/</a> (where your app is running), you will see that your new article has a <code>slug_uuid</code> consisting of its slugified title and a UUID:</p>
 <figure width="600">
-<img src="./assets/article_detail - slug_uuid.png" />
+<img src="../assets/article_detail - slug_uuid.png" />
 <figcaption><code>slug_uuid</code> fields</figcaption>
 </figure>
 

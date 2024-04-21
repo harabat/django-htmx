@@ -802,12 +802,12 @@
 <p>The <code>ProfileForm</code> is self-explanatory.</p>
 <p>The <code>UserForm</code> is a bit more complicated. Let's go through it in detail. We want our user to be able to update three types of information: the username, the email, and the password. We also want to expose the current username and email values in the template, but we don't want to expose any information about the password. The screenshot below clarifies what we mean here: the screenshot on the right could leak information about the number of characters in our user's password, even though the characters themselves are masked, while the screenshot on the right exposes no information about the password.</p>
 <figure width="200">
-<img src="./assets/settings - password field.png" />
+<img src="../assets/settings - password field.png" />
 <figcaption>Password field with masked characters</figcaption>
 </figure>
 
 <figure width="200">
-<img src="./assets/settings.png" />
+<img src="../assets/settings.png" />
 <figcaption>Empty password field</figcaption>
 </figure>
 
